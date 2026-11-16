@@ -18,6 +18,42 @@
         ],
         "createdAt": "2026-11-16T07:09:28.095Z",
         "reason": "Agent: contact sheet of 480x300 miniatures of full screens; small type is the scaled-down page, not body copy"
+      },
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          "design-demos/thumbs.html"
+        ],
+        "createdAt": "2026-11-16T07:21:08.480Z",
+        "reason": "Agent: contact sheet of 480x300 miniatures of full pages; sizes are the scaled-down page, not shipped UI"
+      },
+      {
+        "rule": "tight-leading",
+        "value": "*",
+        "files": [
+          "design-demos/thumbs.html"
+        ],
+        "createdAt": "2026-11-16T07:21:09.120Z",
+        "reason": "Agent: contact sheet of 480x300 miniatures of full pages; sizes are the scaled-down page, not shipped UI"
+      },
+      {
+        "rule": "undersized-ui-text",
+        "value": "*",
+        "files": [
+          "design-demos/thumbs.html"
+        ],
+        "createdAt": "2026-11-16T07:21:09.805Z",
+        "reason": "Agent: contact sheet of 480x300 miniatures of full pages; sizes are the scaled-down page, not shipped UI"
+      },
+      {
+        "rule": "wide-tracking",
+        "value": "*",
+        "files": [
+          "design-demos/thumbs.html"
+        ],
+        "createdAt": "2026-11-16T07:21:10.528Z",
+        "reason": "Agent: contact sheet of 480x300 miniatures of full pages; sizes are the scaled-down page, not shipped UI"
       }
     ]
   }
