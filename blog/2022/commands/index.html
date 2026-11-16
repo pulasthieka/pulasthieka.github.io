@@ -1,0 +1,72 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Some useful Linux commands — Pulasthi Ekanayake</title><meta name="description" content="A quick reference of some not so commonly used, but useful linux commands"><link rel="canonical" href="https://www.pulasthi.dev/blog/2022/commands/"><meta property="og:title" content="Some useful Linux commands — Pulasthi Ekanayake"><meta property="og:description" content="A quick reference of some not so commonly used, but useful linux commands"><meta property="og:type" content="website"><meta property="og:url" content="https://www.pulasthi.dev/blog/2022/commands/"><meta name="theme-color" content="#f4f1ea" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#171512" media="(prefers-color-scheme: dark)"><link rel="icon" href="/favicon.ico" sizes="any"><link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="alternate" type="application/rss+xml" title="Pulasthi Ekanayake — blog" href="/rss.xml"><link rel="sitemap" href="/sitemap-index.xml"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200;0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,300;1,6..72,400&family=Archivo:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"><link rel="stylesheet" href="/_astro/about.DcqMCcXz.css"></head> <body> <a class="skip mono" href="#main">Skip to content</a> <header class="top"> <a class="logo" href="/" aria-label="Pulasthi Ekanayake — home">PE</a> <nav class="mono" aria-label="Primary"> <a class="link accent-blue" href="/research/"> Researcher </a><a class="link accent-blue" href="/blog/" aria-current="page"> Blog </a><a class="link accent-plum" href="/lab/"> Lab </a><a class="link accent-rust" href="/creative/"> Creative </a><a class="link accent-green" href="/about/"> About </a> <a class="pill" href="mailto:hello@pulasthi.dev">hello@pulasthi.dev</a> </nav> </header> <main id="main" class="accent-blue">  <article class="page page--narrow"> <a class="back mono" href="/blog/">← Blog</a> <div class="post-meta mono">Jan 2022 · programming · 1 min read</div> <h1 class="post-title">Some useful Linux commands</h1> <p class="post-dek">A quick reference of some not so commonly used, but useful linux commands</p> <img class="post-cover" src="/covers/commands.svg" alt="" width="1600" height="900"> <div class="prose"> <h2 id="quick-reference">Quick Reference</h2>
+<ul>
+<li>Check IP address <code>ifconfig -a</code></li>
+<li>Run commands quickly with  <strong>Alt + F2</strong></li>
+<li>Mount disk <code>udisksctl mount --block-device /dev/disk/by-uuid/&#x3C;uuid></code></li>
+<li>View startup applications - <code>gnome-session-properties</code></li>
+<li>Closing a port <code>sudo ss --kill state listening src :1234</code></li>
+<li>Making files executable <code>sudo chmod +x filename</code></li>
+</ul>
+<h2 id="fixing-temporary-failure-in-name-resolution">Fixing Temporary Failure in Name Resolution</h2>
+<pre class="astro-code astro-code-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>sudo chmod o+r /etc/resolv.conf</span></span>
+<span class="line"><span>sudo nano /etc/resolv.conf</span></span></code></pre>
+<p>Replace the nameserver with Google DNS <code>8.8.8.8</code>
+Save file <code>Crtl + X</code></p>
+<h2 id="freeing-ports-in-use">Freeing ports in Use</h2>
+<pre class="astro-code astro-code-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>lsof -i:8080</span></span>
+<span class="line"><span>kill &#x3C;PROCESSID></span></span>
+<span class="line"><span># or</span></span>
+<span class="line"><span>kill $(lsof -t -i:8080)</span></span></code></pre>
+<h2 id="fixing-garbeled-audio">Fixing garbeled Audio</h2>
+<p>Uninstall speech dispatcher</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">sudo</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> apt</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> remove</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> speech-dispatcher</span></span></code></pre>
+<pre class="astro-code astro-code-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">pulseaudio</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> --check</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> </span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D"># should exit with no message if running</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">pulseaudio</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> --k</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">pulseaudio</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> --start</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">pulseaudio</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> --check</span></span></code></pre>
+<h2 id="installing-appimage-files">Installing .AppImage Files</h2>
+<p>Eg: if the AppImage file name was Obsidian-0.12.3</p>
+<pre class="astro-code astro-code-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>chmod a+x Obsidian-0.12.3.AppImage</span></span>
+<span class="line"><span>./Obsidian-0.12.3.AppImage</span></span></code></pre>
+<h2 id="installing-deb-files">Installing .deb Files</h2>
+<p><code>sudo apt install ./zoom\_amd64.deb</code>
+OR <code>sudo dpkg -i package\_file.deb</code></p>
+<h2 id="uninstalling">Uninstalling</h2>
+<pre class="astro-code astro-code-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">sudo</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> apt-get</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> remove</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> packageName</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">dpkg</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> --remove</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> packageName</span></span></code></pre>
+<h2 id="installing-via-cmake">Installing via CMake</h2>
+<pre class="astro-code astro-code-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>./configure</span></span>
+<span class="line"><span>make</span></span>
+<span class="line"><span>make install</span></span></code></pre>
+<h2 id="unzip-files">Unzip files</h2>
+<h3 id="tar">Tar</h3>
+<p><code>tar xvzf PACKAGE.tar.gz</code>
+<code>tar -xf package.tar.gz </code></p>
+<h3 id="rar">RAR</h3>
+<p><code>unrar e &#x3C;filename></code></p>
+<h2 id="mounting-drives">Mounting drives</h2>
+<pre class="astro-code astro-code-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D"># unmounting</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">umount</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> /dev/sdb1</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D"># mounting</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">sudo</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> mount</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> /dev/sdb1</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> -t</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> ntfs-3g</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> -o</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> permissions</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> /media/pulasthi/Files/</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D"># setting permissions for all</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">sudo</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> chmod</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> ugo+wx</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> /media/pulasthi/Files/</span></span></code></pre>
+<p>ledev14 us-east-2</p>
+<h2 id="tracing-packet-path">Tracing Packet path</h2>
+<p>Use traceroute. <code>sudo apt install traceroute</code>
+Using dig <code>sudo apt-get install dnsutils</code>
+<a href="https://phoenixnap.com/kb/linux-dig-command-examples">https://phoenixnap.com/kb/linux-dig-command-examples</a></p>
+<h2 id="switching-java-versions">Switching JAVA versions</h2>
+<pre class="astro-code astro-code-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">sudo</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> update-alternatives</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> --config</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> java</span></span>
+<span class="line"><span style="color:#6A737D;--shiki-dark:#6A737D"># exporting java home</span></span>
+<span class="line"><span style="color:#D73A49;--shiki-dark:#F97583">export</span><span style="color:#24292E;--shiki-dark:#E1E4E8"> JAVA_HOME</span><span style="color:#D73A49;--shiki-dark:#F97583">=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"/usr/lib/jvm/java-1.8.0-openjdk-amd64"</span></span></code></pre>
+<h2 id="getting-the-fingerprint-sensor-to-work">Getting the Fingerprint sensor to work</h2>
+<p><a href="https://askubuntu.com/questions/1239134/fingerprint-sensor-not-working-ubuntu-20-04">https://askubuntu.com/questions/1239134/fingerprint-sensor-not-working-ubuntu-20-04</a></p>
+<h2 id="cycle-swap-memory">Cycle swap memory</h2>
+<pre class="astro-code astro-code-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">sudo</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> swapoff</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> -a</span><span style="color:#24292E;--shiki-dark:#E1E4E8">; </span><span style="color:#6F42C1;--shiki-dark:#B392F0">sudo</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> swapon</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> -a</span></span></code></pre>
+<h2 id="start-chrome-without-cors">Start Chrome without CORS</h2>
+<pre class="astro-code astro-code-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">google-chrome</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> --disable-site-isolation-trials</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> --disable-web-security</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> --user-data-dir=</span><span style="color:#032F62;--shiki-dark:#9ECBFF">"~/tmp"</span></span></code></pre>
+<h2 id="reduce-external-monitor-brightness">Reduce external monitor brightness</h2>
+<pre class="astro-code astro-code-themes github-light github-dark" style="background-color:#fff;--shiki-dark-bg:#24292e;color:#24292e;--shiki-dark:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">xrandr</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> -q</span><span style="color:#D73A49;--shiki-dark:#F97583"> |</span><span style="color:#6F42C1;--shiki-dark:#B392F0"> grep</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> " connected"</span></span>
+<span class="line"><span style="color:#6F42C1;--shiki-dark:#B392F0">xrandr</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> --output</span><span style="color:#032F62;--shiki-dark:#9ECBFF"> HDMI-A-0</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> --brightness</span><span style="color:#005CC5;--shiki-dark:#79B8FF"> 0.5</span></span></code></pre> </div> <div class="post-end mono"> <span>linux · programming</span> <a href="/blog/">All posts →</a> </div> </article>  </main> <footer class="foot mono"> <span> Pulasthi Ekanayake · Colombo → Melbourne </span> <nav aria-label="Secondary"> <a href="/talks/">Talks</a> <a href="/rss.xml">RSS</a> <a href="https://github.com/pulasthieka" rel="noopener">GitHub</a> <a href="https://linkedin.com/in/pulasthi-ekanayake" rel="noopener">LinkedIn</a> <a href="mailto:hello@pulasthi.dev">hello@pulasthi.dev</a> </nav> </footer> </body></html>
