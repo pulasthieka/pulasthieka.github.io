@@ -11,6 +11,8 @@ const blog = defineCollection({
     tags: z.array(z.string()).default([]),
     category: z.string().optional(),
     draft: z.boolean().default(false),
+    // Folder name under public/interactive/ — embeds that page in the article
+    interactive: z.string().optional(),
     // Generated cover art — see design/cover-art/philosophy.md
     cover: z
       .object({

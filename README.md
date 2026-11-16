@@ -44,8 +44,9 @@ up in `npm run dev`.
 
 1. Save the page (for example an exported Claude artifact) as
    `public/interactive/<slug>/index.html`. It should be self-contained.
-2. Add an entry with the same `slug` to the `lab` list in `src/data/site.ts`.
 
-It then appears on `/lab/` and is framed by the site at `/lab/<slug>/`.
+
+2. Add `interactive: <slug>` to the frontmatter of a blog post. The page is
+   embedded at the top of that article, with a full-screen link.
 
 The previous Jekyll site is kept on the `jekyll-archive` branch.

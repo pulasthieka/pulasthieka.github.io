@@ -33,3 +33,11 @@ cover:
 ```
 
 Posts without a `cover` block get one derived from their filename.
+
+## The portrait
+
+The profile image is the same instrument pointed at a photograph. The photo
+becomes the hidden field; each of 58 channels records how dark it is along one
+row, so hair and shoulders rise into ridges and the lit face stays calm.
+`npm run portrait` regenerates `public/img/portrait.svg` from
+`design/portrait/source.webp` (the photo is kept in the repo but not served on the site).

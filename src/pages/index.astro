@@ -1,10 +1,12 @@
 ---
 import Base from '../layouts/Base.astro';
-import { site, lab } from '../data/site';
+import { site } from '../data/site';
 import { getPosts, postUrl } from '../lib/posts';
 
-const [latest] = await getPosts();
-const piece = lab[0];
+const posts = await getPosts();
+// Band under the fork: the newest interactive piece and the newest article.
+const piece = posts.find((p) => p.data.interactive);
+const latest = posts.find((p) => p !== piece);
 ---
 <Base footer={false}>
   <div class="home">
@@ -22,7 +24,7 @@ const piece = lab[0];
         </div>
         <div class="path__foot">
           <div class="path__thumb">
-            <img src="/img/portrait.webp" alt="" width="490" height="489" style="object-position:50% 32%" />
+            <img src="/img/portrait.svg" alt="" width="800" height="1000" style="object-position:50% 30%" />
           </div>
           <span class="path__go mono">Read the research →</span>
         </div>
@@ -61,9 +63,9 @@ const piece = lab[0];
       }
       {
         piece && (
-          <a class="accent-plum" href={`/lab/${piece.slug}/`}>
-            <span class="band__k mono">From the lab</span>
-            <span class="band__v">{piece.title}</span>
+          <a class="accent-plum" href={postUrl(piece)}>
+            <span class="band__k mono">Interactive</span>
+            <span class="band__v">{piece.data.title}</span>
             <span class="band__go mono">Open →</span>
           </a>
         )

@@ -19,7 +19,6 @@ export const site = {
 export const nav = [
   { href: '/research/', label: 'Researcher', accent: 'blue' },
   { href: '/blog/', label: 'Blog', accent: 'blue' },
-  { href: '/lab/', label: 'Lab', accent: 'plum' },
   { href: '/creative/', label: 'Creative', accent: 'rust' },
   { href: '/about/', label: 'About', accent: 'green' },
 ] as const;
@@ -65,21 +64,20 @@ export const timeline = [
   { when: '2016 — 2021', role: 'BSc Eng (Hons) Biomedical Engineering — First Class', org: 'University of Moratuwa' },
 ];
 
-// Interactive pieces. Each one is a self-contained HTML page in
-// public/interactive/<slug>/index.html, framed by the site at /lab/<slug>/.
-export const lab = [
-  {
-    slug: 'ml-notation-atlas',
-    title: 'ML Notation Atlas',
-    kind: 'Reference',
-    date: 'Nov 2026',
-    summary:
-      'A searchable atlas of the symbols and equations machine-learning papers use without explaining — from 𝔼 and ∇ to the ELBO, attention and diffusion.',
-    glyphs: ['∇', '𝔼', 'θ', 'Σ'],
-  },
-];
+// Creative work. `img` is a file in public/img/work/ (covers pulled from
+// Behance); without one the tile falls back to the typographic `mark`.
+// `href` is the Behance project or an internal case study.
+const be = (path: string) => `https://www.behance.net/gallery/${path}`;
 
-export const works = [
+export const works: {
+  title: string;
+  kind: string;
+  body: string;
+  mark: string;
+  img?: string;
+  href?: string;
+  cta?: string;
+}[] = [
   {
     title: 'Virtual Career Fair',
     kind: 'React · UX',
@@ -90,33 +88,67 @@ export const works = [
   },
   {
     title: 'µMora Mathematics',
-    kind: 'Web app',
+    kind: 'Web app · UI',
     body: 'Multilingual web app supporting a 5,000+ participant mathematics olympiad.',
     mark: 'µ',
+    img: 'umora.webp',
+    href: be('142240881/Mora-Online-Mathematics-Competition-UI'),
+  },
+  {
+    title: 'Redesigns',
+    kind: 'UI',
+    body: 'A collection of redesign exercises.',
+    mark: 'Re',
+    img: 'redesigns.webp',
+    href: be('210597927/Redesigns'),
   },
   {
     title: 'Mora Fitness Challenge',
     kind: 'Poster',
     body: 'Event branding and print for the university rowing club.',
     mark: 'MFC',
+    img: 'mora-fitness.webp',
+    href: be('72457441/Mora-Fitness-Challenge'),
   },
   {
     title: 'UI Experiments',
     kind: 'Case study',
     body: 'Interface studies published as Behance case studies.',
     mark: 'UI',
+    img: 'ui-experiments.webp',
+    href: be('142236985/UI-Experiments'),
   },
   {
-    title: 'AcneAid',
+    title: 'AcneAid Plasters',
     kind: 'Pitch deck',
     body: 'Narrative and slide design for a healthcare product pitch.',
     mark: 'Aa',
+    img: 'acneaid.webp',
+    href: be('142238209/A-Pitch-Deck-AcneAid-Plasters'),
   },
   {
-    title: 'Field Notes',
-    kind: 'Photography',
-    body: 'Colombo, mostly at dusk. A running personal series.',
-    mark: 'ƒ/2',
+    title: 'Biomedical Innovations',
+    kind: 'Pitch deck',
+    body: 'Slides for a talk series on innovation in biomedical engineering.',
+    mark: 'Bi',
+    img: 'biomedical-innovations.webp',
+    href: be('142239625/Biomedical-Innovations-Pitch-Deck'),
+  },
+  {
+    title: 'Ceygiri Labs',
+    kind: 'UI',
+    body: 'Interface design for Ceygiri Labs.',
+    mark: 'CL',
+    img: 'ceygiri-labs.webp',
+    href: be('139333187/Ceygiri-Labs-UI'),
+  },
+  {
+    title: 'Chemistry Magazine',
+    kind: 'Cover design',
+    body: 'Cover artwork for a chemistry magazine.',
+    mark: 'Ch',
+    img: 'chemistry-magazine.webp',
+    href: be('139335411/Chemistry-Magazine-Cover'),
   },
 ];
 

@@ -13,6 +13,7 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props;
 const { Content } = await render(post);
+const interactive = post.data.interactive && `/interactive/${post.data.interactive}/index.html`;
 const meta = [shortDate(post.data.date), post.data.category, `${readingTime(post.body)} min read`].filter(Boolean);
 ---
 <Base title={post.data.title} description={post.data.description} accent="blue">
@@ -21,7 +22,19 @@ const meta = [shortDate(post.data.date), post.data.category, `${readingTime(post
     <div class="post-meta mono">{meta.join(' · ')}</div>
     <h1 class="post-title">{post.data.title}</h1>
     <p class="post-dek">{post.data.description}</p>
-    <img class="post-cover" src={`/covers/${post.id}.svg`} alt="" width="1600" height="900" />
+    {
+      interactive ? (
+        <div class="embed">
+          <div class="embed__bar mono">
+            <span><i></i>Interactive · runs in your browser</span>
+            <a href={interactive} target="_blank" rel="noopener">Open full screen ↗</a>
+          </div>
+          <iframe src={interactive} title={post.data.title} allow="clipboard-write" />
+        </div>
+      ) : (
+        <img class="post-cover" src={`/covers/${post.id}.svg`} alt="" width="1600" height="900" />
+      )
+    }
     <div class="prose">
       <Content />
     </div>
