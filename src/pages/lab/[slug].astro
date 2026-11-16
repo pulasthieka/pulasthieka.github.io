@@ -1,0 +1,23 @@
+---
+import Base from '../../layouts/Base.astro';
+import { lab } from '../../data/site';
+
+export function getStaticPaths() {
+  return lab.map((item) => ({ params: { slug: item.slug }, props: { item } }));
+}
+
+const { item } = Astro.props;
+const src = `/interactive/${item.slug}/index.html`;
+---
+<Base title={item.title} description={item.summary} accent="plum" footer={false}>
+  <div class="embed">
+    <div class="embed__bar">
+      <div>
+        <a class="mono" href="/lab/">← Lab</a>
+        <h1>{item.title}</h1>
+      </div>
+      <a class="mono" href={src} target="_blank" rel="noopener">Open full screen ↗</a>
+    </div>
+    <iframe src={src} title={item.title} loading="eager" allow="clipboard-write"></iframe>
+  </div>
+</Base>

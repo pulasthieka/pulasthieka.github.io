@@ -1,0 +1,21 @@
+---
+import Base from '../../layouts/Base.astro';
+import LabCard from '../../components/LabCard.astro';
+import { lab } from '../../data/site';
+---
+<Base title="Lab" accent="plum" description="Interactive explainers and reference tools — things that are easier to poke at than to read about.">
+  <section class="page page--mid">
+    <div class="eyebrow mono">Lab · Interactive</div>
+    <h1 class="display">Things that are easier to <em>poke at</em> than to read about.</h1>
+    <p class="lede">
+      Explainers, reference tools and small experiments that run in the browser. They sit next to the blog: the posts
+      make the argument, these let you try it.
+    </p>
+
+    <h2 class="section-label mono">{lab.length} {lab.length === 1 ? 'piece' : 'pieces'}</h2>
+    <div class="lab-grid">
+      {lab.map((item, i) => <LabCard item={item} delay={i * 70} />)}
+    </div>
+    <p class="fineprint mono">More on the way — new pieces land here as they're built.</p>
+  </section>
+</Base>

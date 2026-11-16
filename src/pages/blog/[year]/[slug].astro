@@ -1,0 +1,33 @@
+---
+import { render } from 'astro:content';
+import Base from '../../../layouts/Base.astro';
+import { getPosts, shortDate, readingTime } from '../../../lib/posts';
+
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  return posts.map((post) => ({
+    params: { year: String(post.data.date.getUTCFullYear()), slug: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const meta = [shortDate(post.data.date), post.data.category, `${readingTime(post.body)} min read`].filter(Boolean);
+---
+<Base title={post.data.title} description={post.data.description} accent="blue">
+  <article class="page page--narrow">
+    <a class="back mono" href="/blog/">← Blog</a>
+    <div class="post-meta mono">{meta.join(' · ')}</div>
+    <h1 class="post-title">{post.data.title}</h1>
+    <p class="post-dek">{post.data.description}</p>
+    <img class="post-cover" src={`/covers/${post.id}.svg`} alt="" width="1600" height="900" />
+    <div class="prose">
+      <Content />
+    </div>
+    <div class="post-end mono">
+      <span>{post.data.tags.join(' · ')}</span>
+      <a href="/blog/">All posts →</a>
+    </div>
+  </article>
+</Base>

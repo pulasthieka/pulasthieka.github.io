@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Latent Traces — cover art viewer</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Lora:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        /* Anthropic Brand Colors */
+        :root {
+            --anthropic-dark: #141413;
+            --anthropic-light: #faf9f5;
+            --anthropic-mid-gray: #b0aea5;
+            --anthropic-light-gray: #e8e6dc;
+            --anthropic-orange: #d97757;
+            --anthropic-blue: #6a9bcc;
+            --anthropic-green: #788c5d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--anthropic-light) 0%, #f5f3ee 100%);
+            min-height: 100vh;
+            color: var(--anthropic-dark);
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+            padding: 20px;
+            gap: 20px;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 320px;
+            flex-shrink: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(20, 20, 19, 0.1);
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        .sidebar h1 {
+            font-family: 'Lora', serif;
+            font-size: 24px;
+            font-weight: 500;
+            color: var(--anthropic-dark);
+            margin-bottom: 8px;
+        }
+
+        .sidebar .subtitle {
+            color: var(--anthropic-mid-gray);
+            font-size: 14px;
+            margin-bottom: 32px;
+            line-height: 1.4;
+        }
+
+        /* Control Sections */
+        .control-section {
+            margin-bottom: 32px;
+        }
+
+        .control-section h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--anthropic-dark);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .control-section h3::before {
+            content: '•';
+            color: var(--anthropic-orange);
+            font-weight: bold;
+        }
+
+        /* Seed Controls */
+        .seed-input {
+            width: 100%;
+            background: var(--anthropic-light);
+            padding: 12px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            margin-bottom: 12px;
+            border: 1px solid var(--anthropic-light-gray);
+            text-align: center;
+        }
+
+        .seed-input:focus {
+            outline: none;
+            border-color: var(--anthropic-orange);
+            box-shadow: 0 0 0 2px rgba(217, 119, 87, 0.1);
+            background: white;
+        }
+
+        .seed-controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .regen-button {
+            margin-bottom: 0;
+        }
+
+        /* Parameter Controls */
+        .control-group {
+            margin-bottom: 20px;
+        }
+
+        .control-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--anthropic-dark);
+            margin-bottom: 8px;
+        }
+
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .slider-container input[type="range"] {
+            flex: 1;
+            height: 4px;
+            background: var(--anthropic-light-gray);
+            border-radius: 2px;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .slider-container input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            background: var(--anthropic-orange);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .slider-container input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.1);
+            background: #c86641;
+        }
+
+        .slider-container input[type="range"]::-moz-range-thumb {
+            width: 16px;
+            height: 16px;
+            background: var(--anthropic-orange);
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .value-display {
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            color: var(--anthropic-mid-gray);
+            min-width: 60px;
+            text-align: right;
+        }
+
+        /* Color Pickers */
+        .color-group {
+            margin-bottom: 16px;
+        }
+
+        .color-group label {
+            display: block;
+            font-size: 12px;
+            color: var(--anthropic-mid-gray);
+            margin-bottom: 4px;
+        }
+
+        .color-picker-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .color-picker-container input[type="color"] {
+            width: 32px;
+            height: 32px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            background: none;
+            padding: 0;
+        }
+
+        .color-value {
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            color: var(--anthropic-mid-gray);
+        }
+
+        /* Buttons */
+        .button {
+            background: var(--anthropic-orange);
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            width: 100%;
+        }
+
+        .button:hover {
+            background: #c86641;
+            transform: translateY(-1px);
+        }
+
+        .button:active {
+            transform: translateY(0);
+        }
+
+        .button.secondary {
+            background: var(--anthropic-blue);
+        }
+
+        .button.secondary:hover {
+            background: #5a8bb8;
+        }
+
+        .button.tertiary {
+            background: var(--anthropic-green);
+        }
+
+        .button.tertiary:hover {
+            background: #6b7b52;
+        }
+
+        .button-row {
+            display: flex;
+            gap: 8px;
+        }
+
+        .button-row .button {
+            flex: 1;
+        }
+
+        /* Canvas Area */
+        .canvas-area {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 0;
+        }
+
+        #canvas-container {
+            width: 100%;
+            max-width: 1000px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(20, 20, 19, 0.1);
+            background: white;
+        }
+
+        #canvas-container canvas {
+            display: block;
+            width: 100% !important;
+            height: auto !important;
+        }
+
+        /* Loading State */
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: var(--anthropic-mid-gray);
+        }
+
+        /* Responsive - Stack on mobile */
+        @media (max-width: 600px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+            }
+
+            .canvas-area {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <h1>Latent Traces</h1>
+            <div class="subtitle">Cover art for pulasthi.dev. A hidden field is disturbed by a few events; many channels write down what they saw.</div>
+
+            <div class="control-section">
+                <h3>Seed</h3>
+                <input type="number" id="seed-input" class="seed-input" value="2310" onchange="updateSeed()">
+                <div class="seed-controls">
+                    <button class="button secondary" onclick="previousSeed()">← Prev</button>
+                    <button class="button secondary" onclick="nextSeed()">Next →</button>
+                </div>
+                <button class="button tertiary regen-button" onclick="randomSeedAndUpdate()">↻ Random</button>
+            </div>
+
+            <div class="control-section">
+                <h3>Post presets</h3>
+                <div class="control-group">
+                    <select id="preset" class="seed-input" style="text-align:left;margin-bottom:0" onchange="applyPreset(this.value)"></select>
+                </div>
+            </div>
+
+            <div class="control-section">
+                <h3>Parameters</h3>
+                <div class="control-group">
+                    <label>Geometry</label>
+                    <select id="mode" class="seed-input" style="text-align:left;margin-bottom:0" onchange="updateParam('mode', this.value)">
+                        <option value="linear">Linear — stacked traces</option>
+                        <option value="radial">Radial — ring systems</option>
+                    </select>
+                </div>
+                <div class="control-group"><label>Channels</label><div class="slider-container">
+                    <input type="range" id="channels" min="4" max="44" step="1" oninput="updateParam('channels', this.value)">
+                    <span class="value-display" id="channels-value"></span></div></div>
+                <div class="control-group"><label>Events (stimuli)</label><div class="slider-container">
+                    <input type="range" id="events" min="1" max="6" step="1" oninput="updateParam('events', this.value)">
+                    <span class="value-display" id="events-value"></span></div></div>
+                <div class="control-group"><label>Coupling between channels</label><div class="slider-container">
+                    <input type="range" id="coupling" min="0" max="1" step="0.05" oninput="updateParam('coupling', this.value)">
+                    <span class="value-display" id="coupling-value"></span></div></div>
+                <div class="control-group"><label>Quantize (0 = analogue)</label><div class="slider-container">
+                    <input type="range" id="quantize" min="0" max="8" step="1" oninput="updateParam('quantize', this.value)">
+                    <span class="value-display" id="quantize-value"></span></div></div>
+                <div class="control-group"><label>Cells (radial only)</label><div class="slider-container">
+                    <input type="range" id="cells" min="1" max="3" step="1" oninput="updateParam('cells', this.value)">
+                    <span class="value-display" id="cells-value"></span></div></div>
+                <div class="control-group"><label>Accent channels</label><div class="slider-container">
+                    <input type="range" id="accents" min="0" max="6" step="1" oninput="updateParam('accents', this.value)">
+                    <span class="value-display" id="accents-value"></span></div></div>
+            </div>
+
+            <div class="control-section">
+                <h3>Colors</h3>
+                <div class="color-group"><label>Paper</label><div class="color-picker-container">
+                    <input type="color" id="bg" onchange="updateColor('bg', this.value)"><span class="color-value" id="bg-value"></span></div></div>
+                <div class="color-group"><label>Ink</label><div class="color-picker-container">
+                    <input type="color" id="ink" onchange="updateColor('ink', this.value)"><span class="color-value" id="ink-value"></span></div></div>
+                <div class="color-group"><label>Accent</label><div class="color-picker-container">
+                    <input type="color" id="accent" onchange="updateColor('accent', this.value)"><span class="color-value" id="accent-value"></span></div></div>
+                <button class="button secondary" onclick="toggleTheme()">Light / dark page</button>
+            </div>
+
+            <div class="control-section">
+                <h3>Actions</h3>
+                <div class="button-row" style="margin-bottom:8px">
+                    <button class="button" onclick="initializeSystem()">Regenerate</button>
+                    <button class="button" onclick="resetParameters()">Reset</button>
+                </div>
+                <button class="button tertiary" onclick="saveCanvas('latent-traces-' + params.seed, 'png')">Download PNG</button>
+                <pre id="frontmatter" style="margin-top:16px;padding:12px;background:var(--anthropic-light);border:1px solid var(--anthropic-light-gray);border-radius:8px;font:12px/1.5 'Courier New',monospace;white-space:pre-wrap"></pre>
+            </div>
+        </div>
+
+        <div class="canvas-area">
+            <div id="canvas-container">
+                <div class="loading">Initializing generative art...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ═══ Latent Traces core — identical to src/lib/cover.js ═══════════════
+        // Latent Traces — the generative system behind the blog cover images.
+        // Pure, dependency-free and seeded: the same options always give the same
+        // drawing. Used at build time (src/pages/covers/[slug].svg.js) and inlined
+        // into the interactive viewer (design/cover-art/viewer.html).
+        // See design/cover-art/philosophy.md.
+        
+        const W = 1600;
+        const H = 900;
+        
+        const defaults = {
+          seed: 1,
+          mode: 'linear', // 'linear' = stacked traces, 'radial' = concentric rings
+          channels: 22, // how many traces / rings
+          events: 2, // stimuli that disturb the field
+          coupling: 0.5, // 0 = every channel on its own, 1 = neighbours move together
+          quantize: 0, // 0 = analogue; 3..8 = number of discrete levels
+          cells: 1, // radial only: number of ring systems
+          accents: 1, // channels drawn in the accent colour
+        };
+        
+        function hashSeed(str) {
+          let h = 2166136261;
+          for (let i = 0; i < str.length; i++) {
+            h ^= str.charCodeAt(i);
+            h = Math.imul(h, 16777619);
+          }
+          return (h >>> 0) % 999983 + 1;
+        }
+        
+        function mulberry32(a) {
+          return function () {
+            a |= 0;
+            a = (a + 0x6d2b79f5) | 0;
+            let t = Math.imul(a ^ (a >>> 15), 1 | a);
+            t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+            return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+          };
+        }
+        
+        // Seeded 2D value noise in [0, 1], smooth-stepped.
+        function makeNoise(rand) {
+          const perm = new Uint8Array(512);
+          const vals = new Float32Array(256);
+          for (let i = 0; i < 256; i++) {
+            perm[i] = i;
+            vals[i] = rand();
+          }
+          for (let i = 255; i > 0; i--) {
+            const j = Math.floor(rand() * (i + 1));
+            const t = perm[i];
+            perm[i] = perm[j];
+            perm[j] = t;
+          }
+          for (let i = 0; i < 256; i++) perm[i + 256] = perm[i];
+          const at = (x, y) => vals[perm[(perm[x & 255] + y) & 255]];
+          const fade = (t) => t * t * (3 - 2 * t);
+          return function (x, y) {
+            const xi = Math.floor(x);
+            const yi = Math.floor(y);
+            const u = fade(x - xi);
+            const v = fade(y - yi);
+            const a = at(xi, yi) + (at(xi + 1, yi) - at(xi, yi)) * u;
+            const b = at(xi, yi + 1) + (at(xi + 1, yi + 1) - at(xi, yi + 1)) * u;
+            return a + (b - a) * v;
+          };
+        }
+        
+        // A stimulus: sharp onset, slow recovery with a damped ripple.
+        function response(d, onset, tau) {
+          if (d < 0) return Math.exp(-(d * d) / (2 * onset * onset));
+          return Math.exp(-d / tau) * (0.82 + 0.18 * Math.cos(d / (tau * 0.16)));
+        }
+        
+        function generate(options) {
+          const p = Object.assign({}, defaults, options);
+          const rand = mulberry32(p.seed >>> 0);
+          const noise = makeNoise(rand);
+          const R = (a, b) => a + (b - a) * rand();
+          const C = Math.max(3, Math.round(p.channels));
+          const E = Math.max(1, Math.round(p.events));
+          const q = Math.round(p.quantize);
+          const k = 1.7 + (0.12 - 1.7) * Math.min(1, Math.max(0, p.coupling));
+          const nAcc = Math.max(0, Math.round(p.accents));
+          const shapes = [];
+          const marks = [];
+          const dots = [];
+        
+          const accentSet = (events) => {
+            const set = new Set();
+            if (nAcc <= events.length) {
+              for (let j = 0; j < nAcc; j++) set.add(Math.round(events[j].c));
+            } else {
+              for (let j = 0; j < nAcc; j++) set.add(Math.round(((j + 0.5) / nAcc) * (C - 1)));
+            }
+            return set;
+          };
+        
+          if (p.mode === 'radial') {
+            const layouts = {
+              1: { r: 0.4, c: [[0.5, 0.5]] },
+              2: { r: 0.34, c: [[0.33, 0.53], [0.67, 0.47]] },
+              3: { r: 0.29, c: [[0.24, 0.57], [0.5, 0.42], [0.76, 0.58]] },
+            };
+            const layout = layouts[Math.min(3, Math.max(1, Math.round(p.cells)))];
+            const centers = layout.c.map(([x, y]) => [x * W + R(-18, 18), y * H + R(-14, 14)]);
+            const Rad = layout.r * H;
+            const sp = (Rad * 0.9) / (C - 1);
+            const N = 132;
+        
+            centers.forEach((ctr, ci) => {
+              const events = [];
+              for (let e = 0; e < E; e++) {
+                let th = R(0, Math.PI * 2);
+                if (e === 0 && centers.length > 1) {
+                  // the first stimulus of every cell reaches toward its neighbour
+                  const o = centers[ci === centers.length - 1 ? ci - 1 : ci + 1];
+                  th = Math.atan2(o[1] - ctr[1], o[0] - ctr[0]) + R(-0.18, 0.18);
+                }
+                events.push({
+                  th,
+                  c: R(0.5, 0.95) * (C - 1),
+                  sc: R(0.2, 0.45) * C,
+                  onset: R(0.07, 0.14),
+                  tau: R(0.45, 1.0),
+                  amp: sp * R(1.8, 3.4),
+                  ph: R(0, 90),
+                });
+              }
+              const acc = accentSet(events);
+              const radius = (c, th) => {
+                const nx = 4 + 1.3 * Math.cos(th);
+                const ny = 4 + 1.3 * Math.sin(th);
+                let d = sp * 0.5 * (noise(nx + c * k * 0.35, ny + ci * 9) - 0.5);
+                d += sp * 0.22 * (noise(nx * 3.1 + c * k * 0.6, ny * 3.1 + 30 + ci * 9) - 0.5);
+                for (const ev of events) {
+                  let dt = th - ev.th;
+                  dt = Math.atan2(Math.sin(dt), Math.cos(dt));
+                  const g = Math.exp(-((c - ev.c) ** 2) / (2 * ev.sc * ev.sc));
+                  d += ev.amp * g * response(dt, ev.onset, ev.tau) * (0.55 + 0.45 * noise(nx + ev.ph, ny + c * k * 0.5));
+                }
+                if (q > 0) {
+                  const step = (sp * 2.4) / q;
+                  d = Math.round(d / step) * step;
+                }
+                return Rad * 0.1 + c * sp + d;
+              };
+              for (let c = C - 1; c >= 0; c--) {
+                const pts = [];
+                for (let i = 0; i < N; i++) {
+                  const th = (i / N) * Math.PI * 2;
+                  const r = radius(c, th);
+                  pts.push([ctr[0] + r * Math.cos(th), ctr[1] + r * Math.sin(th)]);
+                }
+                shapes.push({ pts, accent: acc.has(c), close: 'loop' });
+              }
+              for (const ev of events) {
+                const far = Rad * 1.22;
+                marks.push([ctr[0], ctr[1], ctr[0] + far * Math.cos(ev.th), ctr[1] + far * Math.sin(ev.th)]);
+                const c = Math.round(ev.c);
+                const r = radius(c, ev.th);
+                dots.push([ctr[0] + r * Math.cos(ev.th), ctr[1] + r * Math.sin(ev.th)]);
+              }
+            });
+          } else {
+            const top = H * 0.2;
+            const bot = H * 0.93;
+            const sp = (bot - top) / (C - 1);
+            const N = 120;
+            const hold = q > 0 ? 2 : 1;
+            const events = [];
+            for (let e = 0; e < E; e++) {
+              events.push({
+                x: W * (0.14 + ((e + R(0.15, 0.85)) / E) * 0.6),
+                c: R(0.15, 0.85) * (C - 1),
+                sc: R(0.16, 0.4) * C,
+                onset: R(16, 38),
+                tau: R(150, 420),
+                amp: sp * R(2.4, 4.6),
+                ph: R(0, 90),
+              });
+            }
+            const acc = accentSet(events);
+            const level = (c, x) => {
+              let d = sp * 0.5 * (noise(x * 0.011, c * k + 3.1) - 0.5);
+              d += sp * 0.36 * (noise(x * 0.045, c * k * 1.6 + 40) - 0.5);
+              for (const ev of events) {
+                const g = Math.exp(-((c - ev.c) ** 2) / (2 * ev.sc * ev.sc));
+                d += ev.amp * g * response(x - ev.x, ev.onset, ev.tau) * (0.55 + 0.45 * noise(x * 0.014 + ev.ph, c * k * 0.8 + ev.ph));
+              }
+              if (q > 0) {
+                const step = (sp * 2.4) / q;
+                d = Math.round(d / step) * step;
+              }
+              return top + c * sp - d;
+            };
+            for (let c = 0; c < C; c++) {
+              const pts = [];
+              let prev = null;
+              for (let i = 0; i <= N; i += hold) {
+                const x = -20 + (i * (W + 40)) / N;
+                const y = level(c, x);
+                if (q > 0 && prev !== null && prev !== y) pts.push([x, prev]);
+                pts.push([x, y]);
+                prev = y;
+              }
+              shapes.push({ pts, accent: acc.has(c), close: 'floor' });
+            }
+            for (const ev of events) {
+              marks.push([ev.x, H * 0.06, ev.x, H * 0.96]);
+              dots.push([ev.x, level(Math.round(ev.c), ev.x)]);
+            }
+          }
+        
+          return { shapes, marks, dots };
+        }
+        
+        const palette = {
+          light: { bg: '#e8e4d9', ink: '#1c1a17', accent: '#2d5e9c' },
+          dark: { bg: '#24211c', ink: '#ece7dc', accent: '#8fb8ee' },
+        };
+        
+        // Standalone SVG. Colours follow the viewer's light/dark preference, so the
+        // same file works in both themes when used as an <img>.
+        function renderSVG(options) {
+          const { shapes, marks, dots } = generate(options);
+          const n = (v) => Math.round(v);
+          const { light, dark } = palette;
+          let out =
+            `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid slice">` +
+            `<style>.b,.l{fill:${light.bg}}.l{stroke:${light.ink};stroke-width:1.5;stroke-linejoin:round}` +
+            `.a{stroke:${light.accent};stroke-width:3}.m{stroke:${light.ink};stroke-opacity:.38;stroke-dasharray:2 8;fill:none}` +
+            `.d{fill:${light.accent}}@media(prefers-color-scheme:dark){.b,.l{fill:${dark.bg}}.l,.m{stroke:${dark.ink}}` +
+            `.a{stroke:${dark.accent}}.d{fill:${dark.accent}}}</style><rect class="b" width="${W}" height="${H}"/>`;
+          for (const s of shapes) {
+            let d = 'M' + s.pts.map((pt) => `${n(pt[0])} ${n(pt[1])}`).join('L');
+            d += s.close === 'loop' ? 'Z' : `V${H + 20}H-20Z`;
+            out += `<path class="l${s.accent ? ' a' : ''}" d="${d}"/>`;
+          }
+          for (const m of marks) out += `<path class="m" d="M${n(m[0])} ${n(m[1])}L${n(m[2])} ${n(m[3])}"/>`;
+          for (const pt of dots) out += `<circle class="d" cx="${n(pt[0])}" cy="${n(pt[1])}" r="7"/>`;
+          return out + '</svg>';
+        }
+        
+        /** Cover options for a post: explicit `cover` frontmatter over a slug-derived default. */
+        function coverOptions(slug, cover) {
+          const seed = hashSeed(slug);
+          const auto = {
+            seed,
+            mode: seed % 3 === 0 ? 'radial' : 'linear',
+            channels: 14 + (seed % 13),
+            events: 1 + (seed % 3),
+            coupling: 0.3 + ((seed % 50) / 100),
+          };
+          return Object.assign({}, defaults, auto, cover || {});
+        }
+
+        // ═══ Parameters ════════════════════════════════════════════════════════
+        const PRESETS = {
+            'semantic-decoding': { seed: 2310, mode: 'linear', channels: 30, events: 4, coupling: 0.25 },
+            'estimating-osteaarthritis': { seed: 2412, mode: 'radial', cells: 1, channels: 22, events: 2, coupling: 0.8 },
+            'explainable-ai': { seed: 2305, mode: 'radial', cells: 2, channels: 13, events: 2, coupling: 0.6 },
+            'setup-webserver': { seed: 2201, mode: 'linear', channels: 12, events: 2, coupling: 0.7, quantize: 5 },
+            'commands': { seed: 2202, mode: 'linear', channels: 8, events: 3, coupling: 0.3, quantize: 3 },
+            'what-endo-mass-measures (draft)': { seed: 2608, mode: 'linear', channels: 16, events: 1, coupling: 0.85, accents: 4 }
+        };
+        const SLIDERS = ['channels', 'events', 'coupling', 'quantize', 'cells', 'accents'];
+        const COLORS = ['bg', 'ink', 'accent'];
+
+        let params = Object.assign({}, defaults, PRESETS['semantic-decoding'], palette.light);
+        let defaultParams = {...params};
+        let theme = 'light';
+
+        // ═══ p5.js ═════════════════════════════════════════════════════════════
+        function setup() {
+            let canvas = createCanvas(W, H);
+            canvas.parent('canvas-container');
+            noLoop();
+            document.querySelector('.loading').style.display = 'none';
+            const sel = document.getElementById('preset');
+            Object.keys(PRESETS).forEach(k => sel.add(new Option(k, k)));
+            syncUI();
+            initializeSystem();
+        }
+
+        function initializeSystem() { redraw(); }
+
+        function draw() {
+            const model = generate(params);
+            background(params.bg);
+            strokeJoin(ROUND);
+            for (const s of model.shapes) {
+                fill(params.bg);
+                stroke(s.accent ? params.accent : params.ink);
+                strokeWeight(s.accent ? 3 : 1.5);
+                beginShape();
+                for (const pt of s.pts) vertex(pt[0], pt[1]);
+                if (s.close === 'floor') { vertex(W + 20, H + 20); vertex(-20, H + 20); }
+                endShape(CLOSE);
+            }
+            const ink = color(params.ink); ink.setAlpha(97);
+            stroke(ink); strokeWeight(1.5); noFill();
+            drawingContext.setLineDash([2, 8]);
+            for (const m of model.marks) line(m[0], m[1], m[2], m[3]);
+            drawingContext.setLineDash([]);
+            noStroke(); fill(params.accent);
+            for (const d of model.dots) circle(d[0], d[1], 14);
+            showFrontmatter();
+        }
+
+        function showFrontmatter() {
+            const keys = ['seed', 'mode', 'channels', 'events', 'coupling', 'quantize', 'cells', 'accents'];
+            document.getElementById('frontmatter').textContent =
+                'cover:\n' + keys.map(k => '  ' + k + ': ' + params[k]).join('\n');
+        }
+
+        // ═══ UI handlers ═══════════════════════════════════════════════════════
+        function syncUI() {
+            document.getElementById('seed-input').value = params.seed;
+            document.getElementById('mode').value = params.mode;
+            SLIDERS.forEach(id => {
+                document.getElementById(id).value = params[id];
+                document.getElementById(id + '-value').textContent = params[id];
+            });
+            COLORS.forEach(id => {
+                document.getElementById(id).value = params[id];
+                document.getElementById(id + '-value').textContent = params[id];
+            });
+        }
+
+        function updateParam(paramName, value) {
+            params[paramName] = paramName === 'mode' ? value : parseFloat(value);
+            if (paramName !== 'mode') document.getElementById(paramName + '-value').textContent = value;
+            initializeSystem();
+        }
+
+        function updateColor(colorId, value) {
+            params[colorId] = value;
+            document.getElementById(colorId + '-value').textContent = value;
+            initializeSystem();
+        }
+
+        function toggleTheme() {
+            theme = theme === 'light' ? 'dark' : 'light';
+            Object.assign(params, palette[theme]);
+            syncUI();
+            initializeSystem();
+        }
+
+        function applyPreset(name) {
+            params = Object.assign({}, defaults, PRESETS[name], palette[theme]);
+            syncUI();
+            initializeSystem();
+        }
+
+        // ═══ Seed controls ═════════════════════════════════════════════════════
+        function updateSeedDisplay() { document.getElementById('seed-input').value = params.seed; }
+
+        function updateSeed() {
+            let newSeed = parseInt(document.getElementById('seed-input').value);
+            if (newSeed && newSeed > 0) { params.seed = newSeed; initializeSystem(); }
+            else updateSeedDisplay();
+        }
+        function previousSeed() { params.seed = Math.max(1, params.seed - 1); updateSeedDisplay(); initializeSystem(); }
+        function nextSeed() { params.seed = params.seed + 1; updateSeedDisplay(); initializeSystem(); }
+        function randomSeedAndUpdate() { params.seed = Math.floor(Math.random() * 999999) + 1; updateSeedDisplay(); initializeSystem(); }
+
+        function resetParameters() {
+            theme = 'light';
+            params = {...defaultParams};
+            document.getElementById('preset').selectedIndex = 0;
+            syncUI();
+            initializeSystem();
+        }
+    </script>
+</body>
+</html>

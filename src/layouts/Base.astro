@@ -1,0 +1,78 @@
+---
+import '../styles/global.css';
+import { site, nav } from '../data/site';
+
+interface Props {
+  title?: string;
+  description?: string;
+  accent?: 'blue' | 'rust' | 'green' | 'plum';
+  footer?: boolean;
+}
+const { title, description = site.description, accent, footer = true } = Astro.props;
+const pageTitle = title ? `${title} — ${site.name}` : site.title;
+const path = Astro.url.pathname;
+const canonical = new URL(path, Astro.site);
+const isCurrent = (href: string) => path === href || path.startsWith(href);
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta name="theme-color" content="#f4f1ea" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#171512" media="(prefers-color-scheme: dark)" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="alternate" type="application/rss+xml" title={`${site.name} — blog`} href="/rss.xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200;0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,300;1,6..72,400&family=Archivo:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <a class="skip mono" href="#main">Skip to content</a>
+    <header class="top">
+      <a class="logo" href="/" aria-label={`${site.name} — home`}>{site.initials}</a>
+      <nav class="mono" aria-label="Primary">
+        {
+          nav.map((n) => (
+            <a class={`link accent-${n.accent}`} href={n.href} aria-current={isCurrent(n.href) ? 'page' : undefined}>
+              {n.label}
+            </a>
+          ))
+        }
+        <a class="pill" href={`mailto:${site.email}`}>{site.email}</a>
+      </nav>
+    </header>
+    <main id="main" class={accent ? `accent-${accent}` : undefined}>
+      <slot />
+    </main>
+    {
+      footer && (
+        <footer class="foot mono">
+          <span>
+            {site.name} · {site.location}
+          </span>
+          <nav aria-label="Secondary">
+            <a href="/talks/">Talks</a>
+            <a href="/rss.xml">RSS</a>
+            <a href={site.links.github} rel="noopener">GitHub</a>
+            <a href={site.links.linkedin} rel="noopener">LinkedIn</a>
+            <a href={`mailto:${site.email}`}>{site.email}</a>
+          </nav>
+        </footer>
+      )
+    }
+  </body>
+</html>

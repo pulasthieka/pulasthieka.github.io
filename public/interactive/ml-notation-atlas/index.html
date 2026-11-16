@@ -1,0 +1,1231 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>ML Notation Atlas</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a reference atlas — sticky slim header, home = search hero over graph paper + symbol index; symbol & topic pages list equation cards; a right-side drawer reads one equation in depth. */
+:root {
+  --bg: #f4f6f9;
+  --surface: #ffffff;
+  --ink: #131a2a;
+  --muted: #576178;
+  --line: #dbe0e9;
+  --grid: #e4e8f0;
+  --accent: #2c45c4;
+  --accent-ink: #ffffff;
+  --accent-soft: #e6eafc;
+  --mark: #ffe58a;
+  --scrim: rgba(15, 20, 35, .38);
+  --shadow: 0 18px 50px rgba(19, 26, 42, .18);
+  --f-display: "Bricolage Grotesque", "IBM Plex Sans", system-ui, sans-serif;
+  --f-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --r: 10px;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0e121a; --surface: #151b26; --ink: #e6eaf3; --muted: #9aa4b9; --line: #263042; --grid: #1a2130;
+    --accent: #93a5ff; --accent-ink: #0e121a; --accent-soft: #1d2645; --mark: #5c4b12; --scrim: rgba(0,0,0,.55);
+    --shadow: 0 18px 50px rgba(0,0,0,.5); color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0e121a; --surface: #151b26; --ink: #e6eaf3; --muted: #9aa4b9; --line: #263042; --grid: #1a2130;
+  --accent: #93a5ff; --accent-ink: #0e121a; --accent-soft: #1d2645; --mark: #5c4b12; --scrim: rgba(0,0,0,.55);
+  --shadow: 0 18px 50px rgba(0,0,0,.5); color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 15px; line-height: 1.55; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--surface); }
+a { color: var(--accent); }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+mark { background: var(--mark); color: inherit; border-radius: 2px; padding: 0 1px; }
+.wrap { max-width: 1120px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+
+/* header */
+.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: var(--surface); border-bottom: 1px solid var(--line); }
+.top .wrap { display: flex; align-items: center; gap: 16px; padding-block: 10px; }
+.brand { display: flex; align-items: baseline; gap: 8px; text-decoration: none; color: var(--ink); font-family: var(--f-display); font-weight: 700; font-size: 18px; letter-spacing: -.01em; white-space: nowrap; }
+.brand b { color: var(--accent); font-weight: 700; }
+.top-search { margin-left: auto; flex: 0 1 320px; min-width: 0; }
+.top-search input { width: 100%; }
+.top nav { display: flex; gap: 4px; }
+.navbtn { background: none; border: 0; padding: 6px 10px; border-radius: 6px; cursor: pointer; color: var(--muted); font-size: 14px; text-decoration: none; }
+.navbtn:hover { background: var(--accent-soft); color: var(--ink); }
+
+input[type="search"] { font: inherit; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 8px 12px; outline: none; }
+input[type="search"]:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+
+/* hero */
+.hero { border-bottom: 1px solid var(--line); background-color: var(--bg);
+  background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 24px 24px; background-position: -1px -1px; }
+.hero .wrap { padding-block: 48px 40px; display: grid; gap: 18px; }
+.eyebrow { font-family: var(--f-mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+h1, h2, h3 { font-family: var(--f-display); text-wrap: balance; letter-spacing: -.015em; margin: 0; }
+.hero h1 { font-size: clamp(30px, 5vw, 50px); line-height: 1.05; font-weight: 700; max-width: 18ch; }
+.hero h1 em { font-style: normal; color: var(--accent); }
+.hero p.lead { margin: 0; color: var(--muted); max-width: 60ch; font-size: 16px; }
+.bigsearch { position: relative; max-width: 720px; }
+.bigsearch input { width: 100%; font-size: 18px; padding: 16px 18px 16px 48px; border-radius: 12px; background: var(--surface); box-shadow: 0 2px 0 var(--line); }
+.bigsearch svg { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--muted); }
+.kbd { font-family: var(--f-mono); font-size: 12px; border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 4px; padding: 0 5px; background: var(--surface); }
+.try { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; color: var(--muted); font-size: 13px; }
+.chip { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 3px 11px; font-size: 13px; cursor: pointer; color: var(--ink); text-decoration: none; }
+.chip:hover { border-color: var(--accent); color: var(--accent); }
+.chip .g { font-family: var(--f-body); font-weight: 600; }
+.stats { font-family: var(--f-mono); font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+
+/* sections */
+main { padding-block: 32px 64px; }
+.section { display: grid; gap: 14px; margin-bottom: 40px; }
+.section-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.section h2 { font-size: 22px; font-weight: 700; }
+.section .note { color: var(--muted); font-size: 13px; }
+
+/* symbol tiles */
+.tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: 10px; }
+.tile { display: grid; grid-template-rows: auto auto; gap: 2px; text-align: left; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 12px 12px 10px; cursor: pointer; text-decoration: none; color: var(--ink); transition: border-color .12s, transform .12s; }
+.tile:hover { border-color: var(--accent); transform: translateY(-1px); }
+.tile .g { font-size: 30px; line-height: 1.15; height: 38px; display: flex; align-items: center; font-weight: 500; overflow: hidden; white-space: nowrap; }
+.tile .g.small { font-size: 18px; font-family: var(--f-mono); }
+.tile .n { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tile .c { font-family: var(--f-mono); font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums; }
+
+/* topic list */
+.topics { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; }
+.topic { display: grid; gap: 4px; padding: 14px 16px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); text-decoration: none; color: var(--ink); }
+.topic:hover { border-color: var(--accent); }
+.topic h3 { font-size: 16px; font-weight: 700; }
+.topic p { margin: 0; font-size: 13px; color: var(--muted); }
+.topic .c { font-family: var(--f-mono); font-size: 11px; color: var(--accent); }
+
+/* conventions */
+.tablewrap { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--r); background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+th, td { text-align: left; padding: 9px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-size: 11px; text-transform: uppercase; letter-spacing: .07em; color: var(--muted); font-weight: 600; }
+tr:last-child td { border-bottom: 0; }
+td.sym { font-size: 17px; white-space: nowrap; }
+
+/* search results */
+.results { display: grid; gap: 22px; }
+.rgroup h3 { font-size: 13px; font-family: var(--f-mono); text-transform: uppercase; letter-spacing: .08em; color: var(--muted); font-weight: 500; margin-bottom: 8px; }
+.rlist { display: grid; gap: 6px; }
+.rrow { display: grid; grid-template-columns: 1fr auto; gap: 4px 12px; align-items: baseline; text-align: left; width: 100%; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 10px 14px; cursor: pointer; }
+.rrow:hover { border-color: var(--accent); }
+.rrow .t { font-weight: 600; }
+.rrow .tp { font-family: var(--f-mono); font-size: 11px; color: var(--muted); white-space: nowrap; }
+.rrow .s { grid-column: 1 / -1; color: var(--muted); font-size: 13px; }
+.empty { color: var(--muted); padding: 20px 0; }
+
+/* page heads */
+.phead { border-bottom: 1px solid var(--line); background: var(--surface); }
+.phead .wrap { padding-block: 28px 24px; display: grid; gap: 10px; }
+.crumbs { font-size: 13px; color: var(--muted); display: flex; gap: 6px; flex-wrap: wrap; }
+.crumbs a { color: var(--muted); }
+.symhead { display: grid; grid-template-columns: auto 1fr; gap: 24px; align-items: center; }
+.bigglyph { width: 112px; height: 112px; border-radius: 16px; display: grid; place-items: center; background: var(--accent-soft); color: var(--accent); font-size: 60px; font-weight: 500; overflow: hidden; }
+.bigglyph.small { font-size: 26px; font-family: var(--f-mono); }
+.symhead h1 { font-size: clamp(26px, 4vw, 38px); }
+.texline { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 13px; color: var(--muted); }
+code { font-family: var(--f-mono); font-size: 13px; background: var(--bg); border: 1px solid var(--line); border-radius: 5px; padding: 1px 6px; }
+.copy { background: none; border: 1px solid var(--line); border-radius: 6px; padding: 2px 8px; font-size: 12px; cursor: pointer; color: var(--muted); }
+.copy:hover { color: var(--accent); border-color: var(--accent); }
+.meanings { margin: 0; padding-left: 20px; display: grid; gap: 4px; max-width: 75ch; }
+.topic-lead { color: var(--muted); max-width: 65ch; margin: 0; }
+
+/* equation cards */
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 12px; }
+.card { display: grid; grid-template-rows: auto auto 1fr auto; gap: 8px; text-align: left; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 14px 16px; cursor: pointer; min-width: 0; }
+.card:hover { border-color: var(--accent); }
+.card.active { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.card .meta { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; }
+.card h3 { font-size: 16px; font-weight: 700; }
+.card .tp { font-family: var(--f-mono); font-size: 11px; color: var(--muted); white-space: nowrap; }
+.card .f { overflow-x: auto; overflow-y: hidden; font-size: 13px; padding: 6px 0; min-width: 0; color: var(--ink); }
+.card .s { color: var(--muted); font-size: 13.5px; margin: 0; }
+.card .more { font-size: 13px; color: var(--accent); font-weight: 600; }
+.grouphead { font-family: var(--f-mono); font-size: 12px; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); margin-top: 8px; }
+
+/* drawer */
+.scrim { position: fixed; inset: 0; background: var(--scrim); z-index: 40; opacity: 0; pointer-events: none; transition: opacity .18s; }
+.scrim.on { opacity: 1; pointer-events: auto; }
+.drawer { position: fixed; top: 0; right: 0; bottom: 0; width: min(560px, 100%); z-index: 50; background: var(--surface); border-left: 1px solid var(--line); box-shadow: var(--shadow); transform: translateX(105%); transition: transform .22s ease; display: grid; grid-template-rows: auto 1fr auto; grid-template-columns: minmax(0, 1fr);
+  padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); padding-right: env(safe-area-inset-right, 0px); }
+.drawer.on { transform: none; }
+.dhead { display: flex; align-items: flex-start; gap: 12px; padding: 18px 20px 12px; border-bottom: 1px solid var(--line); }
+.dhead .ttl { flex: 1; min-width: 0; display: grid; gap: 4px; }
+.dhead h2 { font-size: 21px; font-weight: 700; }
+.iconbtn { flex: none; width: 34px; height: 34px; display: grid; place-items: center; border-radius: 8px; border: 1px solid var(--line); background: var(--surface); cursor: pointer; color: var(--muted); }
+.iconbtn:hover { color: var(--ink); border-color: var(--ink); }
+.dbody { overflow-y: auto; overflow-x: hidden; padding: 18px 20px 24px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 22px; align-content: start; min-width: 0; }
+.dsec { min-width: 0; }
+.dformula { overflow-x: auto; background: var(--bg); border: 1px solid var(--line); border-radius: var(--r); padding: 14px 12px; font-size: 15px; }
+.dsec { display: grid; gap: 8px; }
+.dsec h4 { margin: 0; font-family: var(--f-mono); font-size: 11px; letter-spacing: .09em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
+.dsec p { margin: 0; max-width: 62ch; }
+.where { display: grid; grid-template-columns: minmax(70px, auto) 1fr; gap: 6px 14px; align-items: baseline; font-size: 14px; }
+.where dt { overflow-x: auto; }
+.where dd { margin: 0; color: var(--muted); }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.dfoot { display: flex; justify-content: space-between; gap: 8px; padding: 12px 20px; border-top: 1px solid var(--line); }
+.navpill { border: 1px solid var(--line); background: var(--surface); border-radius: 8px; padding: 7px 12px; cursor: pointer; font-size: 13px; max-width: 48%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.navpill:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+.navpill:disabled { opacity: .4; cursor: default; }
+.src a { word-break: break-word; }
+
+.toast { position: fixed; left: 50%; bottom: calc(20px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); background: var(--ink); color: var(--bg); padding: 8px 14px; border-radius: 8px; font-size: 13px; z-index: 60; opacity: 0; transition: opacity .15s; pointer-events: none; }
+.toast.on { opacity: 1; }
+
+mjx-container { color: inherit; }
+mjx-container[display="true"] { margin: 0 !important; }
+.f mjx-container, .dformula mjx-container { max-width: none; }
+.f mjx-container[display="true"], .dformula mjx-container[display="true"] { text-align: left !important; }
+.dformula mjx-container[display="true"] { display: inline-block !important; }
+
+@media (max-width: 640px) {
+  .top nav { display: none; }
+  .top-search { flex: 1 1 auto; }
+  .hero .wrap { padding-block: 32px 28px; }
+  .symhead { grid-template-columns: 1fr; gap: 14px; }
+  .bigglyph { width: 84px; height: 84px; font-size: 44px; }
+  .cards { grid-template-columns: 1fr; }
+  .drawer { width: 100%; border-left: 0; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#home">ML Notation <b>Atlas</b></a>
+    <nav aria-label="Browse">
+      <a class="navbtn" href="#home">Symbols</a>
+      <a class="navbtn" href="#topics">Topics</a>
+    </nav>
+    <div class="top-search" id="topSearchWrap" hidden>
+      <input type="search" id="topSearch" placeholder="Search symbols and equations" aria-label="Search the atlas" autocomplete="off">
+    </div>
+  </div>
+</header>
+
+<div id="view"></div>
+
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" aria-hidden="true" aria-labelledby="dTitle" role="dialog">
+  <div class="dhead">
+    <div class="ttl">
+      <a class="eyebrow" id="dTopic" href="#home" style="text-decoration:none"></a>
+      <h2 id="dTitle"></h2>
+    </div>
+    <button class="iconbtn" id="dClose" aria-label="Close panel" title="Close (Esc)">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 3l10 10M13 3L3 13"/></svg>
+    </button>
+  </div>
+  <div class="dbody" id="dBody"></div>
+  <div class="dfoot">
+    <button class="navpill" id="dPrev">← Previous</button>
+    <button class="navpill" id="dNext">Next →</button>
+  </div>
+</aside>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+window.MathJax = {
+  tex: { inlineMath: [["\\(", "\\)"]], displayMath: [["\\[", "\\]"]] },
+  svg: { fontCache: "global" },
+  options: { enableMenu: false },
+  startup: {
+    typeset: false,
+    ready: function () {
+      MathJax.startup.defaultReady();
+      MathJax.startup.promise.then(function () { window.__mjReady = true; if (window.__flushMath) window.__flushMath(); });
+    }
+  }
+};
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.min.js" async></script>
+
+<script>
+/* ML Notation Atlas — content data. tex strings use String.raw so backslashes stay literal. */
+const R = String.raw;
+
+const SOURCES = {
+  gbc: { label: "Goodfellow, Bengio & Courville — Deep Learning, Notation", url: "https://book.huihoo.com/deep-learning/contents/notation.html" },
+  cookbook: { label: "Petersen & Pedersen — The Matrix Cookbook", url: "https://www2.imm.dtu.dk/pubdb/pubs/3274-full.html" },
+  rabiner: { label: "Rabiner (1989) — A Tutorial on Hidden Markov Models", url: "https://bibsonomy.org/bibtex/1cb553ab450ee9f15ab7aca585941f36a/kurtjx" },
+  vae: { label: "Kingma & Welling (2013) — Auto-Encoding Variational Bayes", url: "https://arxiv.org/pdf/1312.6114" },
+  hinton: { label: "Hinton, Vinyals & Dean (2015) — Distilling the Knowledge in a Neural Network", url: "https://arxiv.org/abs/1503.02531" },
+  vaswani: { label: "Vaswani et al. (2017) — Attention Is All You Need", url: "https://arxiv.org/pdf/1706.03762v3" },
+  ddpm: { label: "Ho, Jain & Abbeel (2020) — Denoising Diffusion Probabilistic Models", url: "https://arxiv.org/abs/2006.11239" },
+  song: { label: "Song et al. (2021) — Score-Based Generative Modeling through SDEs", url: "https://arxiv.org/pdf/2011.13456" },
+  rope: { label: "Su et al. (2021) — RoFormer: Rotary Position Embedding", url: "https://arxiv.org/abs/2104.09864" },
+  fm: { label: "Lipman et al. (2022) — Flow Matching for Generative Modeling", url: "https://huggingface.co/papers/2210.02747.md" },
+  dpo: { label: "Rafailov et al. (2023) — Direct Preference Optimization", url: "https://arxiv.org/abs/2305.18290" },
+  mamba: { label: "Gu & Dao (2023) — Mamba: Selective State Spaces", url: "https://arxiv.org/abs/2312.00752" },
+  survey: { label: "Yang et al. — Diffusion Models: A Comprehensive Survey", url: "https://arxiv.org/html/2209.00796v13" },
+  text: { label: "Standard textbook result (Bishop 2006; Goodfellow et al. 2016)", url: "https://book.huihoo.com/deep-learning/contents/notation.html" }
+};
+
+const TOPICS = [
+  { id: "probability", title: "Probability & expectation", blurb: "Expectations, conditionals, Bayes' rule and the two gradient estimators every generative model relies on." },
+  { id: "linalg", title: "Linear algebra & matrix calculus", blurb: "Gradients, Jacobians, Hessians and the matrix identities papers use without explanation." },
+  { id: "optim", title: "Optimization & learning theory", blurb: "Empirical risk, update rules from SGD to AdamW, Lagrangians and smoothness assumptions." },
+  { id: "info", title: "Information theory", blurb: "Entropy, cross-entropy, KL, mutual information and the ELBO: the losses behind most models." },
+  { id: "graphical", title: "Bayesian networks & graphical models", blurb: "How DAGs and undirected graphs factorise a joint distribution, and how inference runs on them." },
+  { id: "hmm", title: "Hidden Markov models", blurb: "Rabiner's λ = (A, B, π) notation: forward, backward, Viterbi and Baum–Welch, plus modern state-space models." },
+  { id: "autoenc", title: "Autoencoders & VAEs", blurb: "Reconstruction objectives, the VAE ELBO and the reparameterisation trick." },
+  { id: "transformer", title: "Transformers", blurb: "Scaled dot-product attention, normalisation, positional encodings, the LM loss and DPO." },
+  { id: "diffusion", title: "Diffusion & score models", blurb: "DDPM noising and denoising, score SDEs, classifier-free guidance and flow matching." },
+  { id: "distill", title: "Knowledge distillation & compression", blurb: "Temperature-softened KD losses, feature matching, quantisation, pruning and low-rank adaptation." },
+  { id: "theorems", title: "Foundational theorems", blurb: "Results cited, often without proof, to justify the equations in every other topic." }
+];
+
+/* cat: greek | operator | prob | linalg | decor */
+const SYMBOLS = [
+  { id: "alpha", glyph: "α", tex: R`\alpha`, name: "alpha", cat: "greek", meanings: ["Learning rate or step size", "HMM forward variable αₜ(i)", "Diffusion signal coefficient αₜ = 1 − βₜ (and cumulative ᾱₜ)", "Loss-mixing weight in knowledge distillation", "Attention weights α_ij; Dirichlet concentration"] },
+  { id: "beta", glyph: "β", tex: R`\beta`, name: "beta", cat: "greek", meanings: ["Adam moment decay rates β₁, β₂", "Diffusion noise schedule βₜ", "KL weight in β-VAE; KL strength in DPO / RLHF", "HMM backward variable βₜ(i)", "LayerNorm shift parameter"] },
+  { id: "gamma", glyph: "γ", tex: R`\gamma`, name: "gamma", cat: "greek", meanings: ["Discount factor in reinforcement learning", "LayerNorm / BatchNorm scale", "HMM state posterior γₜ(i)", "Transport plan γ in Wasserstein distance", "Margin; focal-loss exponent"] },
+  { id: "delta", glyph: "δ", tex: R`\delta`, name: "delta", cat: "greek", meanings: ["Small change or perturbation δw", "Backprop error signal δˡ", "Viterbi best-path score δₜ(i)", "Confidence in PAC bounds (holds with probability ≥ 1 − δ)", "Dirac δ(x) or Kronecker δᵢⱼ"] },
+  { id: "Delta", glyph: "Δ", tex: R`\Delta`, name: "Delta (capital)", cat: "greek", meanings: ["Finite change, e.g. a parameter step Δθ", "Laplacian Δ = ∇²", "Probability simplex Δᴷ", "Discretisation step Δ in state-space models (Mamba)"] },
+  { id: "epsilon", glyph: "ε", tex: R`\epsilon`, name: "epsilon", cat: "greek", meanings: ["Standard Gaussian noise ε ~ 𝒩(0, I)", "The network's noise prediction ε_θ in diffusion", "Tiny constant for numerical stability (1e−8 in Adam)", "Accuracy in PAC bounds; adversarial radius; clip range in PPO"] },
+  { id: "eta", glyph: "η", tex: R`\eta`, name: "eta", cat: "greek", meanings: ["Learning rate / step size"] },
+  { id: "theta", glyph: "θ", tex: R`\theta`, name: "theta", cat: "greek", meanings: ["Trainable parameters of the main model (all weights)", "Θ = the parameter space; Θ(·) = tight asymptotic bound", "Rotation frequency θᵢ in RoPE"] },
+  { id: "kappa", glyph: "κ", tex: R`\kappa`, name: "kappa", cat: "greek", meanings: ["Condition number of a matrix, λ_max / λ_min", "Sometimes a kernel function"] },
+  { id: "lambda", glyph: "λ", tex: R`\lambda`, name: "lambda", cat: "greek", meanings: ["Regularisation strength (weight decay)", "Lagrange multiplier", "Eigenvalue; Λ = diagonal matrix of eigenvalues", "HMM parameter tuple λ = (A, B, π)"] },
+  { id: "mu", glyph: "μ", tex: R`\mu`, name: "mu", cat: "greek", meanings: ["Mean of a distribution", "Encoder mean μ_φ(x) in a VAE", "Momentum coefficient", "Strong-convexity constant"] },
+  { id: "nu", glyph: "ν", tex: R`\nu`, name: "nu", cat: "greek", meanings: ["Lagrange multiplier for equality constraints", "Degrees of freedom of a Student-t"] },
+  { id: "xi", glyph: "ξ", tex: R`\xi`, name: "xi", cat: "greek", meanings: ["HMM transition posterior ξₜ(i, j)", "Slack variable in soft-margin SVMs"] },
+  { id: "pi", glyph: "π", tex: R`\pi`, name: "pi", cat: "greek", meanings: ["Initial-state distribution in an HMM", "Policy π(a | s) in RL and RLHF / DPO", "Mixture weights in a GMM", "The constant 3.14159…", "Π: set of couplings, or a product"] },
+  { id: "rho", glyph: "ρ", tex: R`\rho`, name: "rho", cat: "greek", meanings: ["Importance ratio ρₜ = π_θ / π_old (PPO)", "Correlation coefficient", "Spectral radius ρ(A)"] },
+  { id: "sigma", glyph: "σ", tex: R`\sigma`, name: "sigma", cat: "greek", meanings: ["Standard deviation; σ² variance", "Sigmoid σ(x) = 1 / (1 + e⁻ˣ)", "Singular value σᵢ", "Noise level σₜ in diffusion / score models"] },
+  { id: "Sigma", glyph: "Σ", tex: R`\Sigma`, name: "Sigma (capital)", cat: "greek", meanings: ["Covariance matrix", "Diagonal matrix of singular values in A = UΣVᵀ", "(As ∑) summation — see Sum"] },
+  { id: "tau", glyph: "τ", tex: R`\tau`, name: "tau", cat: "greek", meanings: ["Temperature in softmax, distillation and contrastive losses", "Time constant; EMA rate"] },
+  { id: "phi", glyph: "φ", tex: R`\phi`, name: "phi", cat: "greek", meanings: ["Encoder / variational parameters φ", "Feature map ϕ(x) for kernels or intermediate features", "Φ = standard-normal CDF (GELU = x·Φ(x))"] },
+  { id: "psi", glyph: "ψ", tex: R`\psi`, name: "psi", cat: "greek", meanings: ["Clique potential ψ_C in a Markov random field", "Viterbi back-pointer ψₜ(i)", "A second parameter set (critic, teacher)"] },
+  { id: "omega", glyph: "ω", tex: R`\omega`, name: "omega", cat: "greek", meanings: ["Frequency, e.g. ωᵢ in sinusoidal positional encodings", "Generic weights"] },
+  { id: "Omega", glyph: "Ω", tex: R`\Omega`, name: "Omega (capital)", cat: "greek", meanings: ["Regulariser Ω(θ)", "Ω(·) = asymptotic lower bound", "Sample space"] },
+
+  { id: "E", glyph: "𝔼", tex: R`\mathbb{E}`, name: "Expectation", cat: "prob", meanings: ["Average under a distribution. 𝔼_{x,y}[f] averages f over pairs (x, y) drawn from their joint distribution; the subscript names the random variables averaged over", "Computed in practice as a mini-batch or Monte-Carlo mean"] },
+  { id: "cond", glyph: "∣", tex: R`p(y \mid x)`, name: "Conditional bar", cat: "prob", meanings: ["\"Given\": p(y | x) is the distribution of y once x is known", "Separates the variable from the conditioning information or parameters"] },
+  { id: "sim", glyph: "~", tex: R`x \sim p`, name: "Sampled from", cat: "prob", meanings: ["x ~ p means x is drawn from distribution p", "Also read \"is distributed as\""] },
+  { id: "normal", glyph: "𝒩", tex: R`\mathcal{N}(\mu,\Sigma)`, name: "Gaussian", cat: "prob", meanings: ["Normal distribution with mean μ and covariance Σ", "𝒩(0, I) = standard Gaussian, the usual prior and noise source"] },
+  { id: "propto", glyph: "∝", tex: R`\propto`, name: "Proportional to", cat: "prob", meanings: ["Equal up to a constant factor, usually a normaliser that has been dropped"] },
+  { id: "perp", glyph: "⟂", tex: R`\perp`, name: "Independence", cat: "prob", meanings: ["A ⟂ B | C: A is independent of B given C (d-separation)"] },
+  { id: "kl", glyph: "D_KL", tex: R`D_{\mathrm{KL}}`, name: "KL divergence", cat: "prob", meanings: ["D_KL(p ‖ q) = 𝔼_p[log p − log q]: extra cost of using q in place of p", "Always ≥ 0, zero only when p = q, and not symmetric"] },
+  { id: "entropy", glyph: "H", tex: R`H(p)`, name: "Entropy / cross-entropy", cat: "prob", meanings: ["H(p) = −𝔼_p[log p]: average surprise", "H(p, q) = −𝔼_p[log q]: cross-entropy, the standard classification loss", "Do not confuse with the Hessian H"] },
+  { id: "data", glyph: "𝒟", tex: R`\mathcal{D}`, name: "Dataset", cat: "prob", meanings: ["The training set {(xᵢ, yᵢ)}ᵢ₌₁ᴺ; p_data is the distribution it was drawn from"] },
+  { id: "loss", glyph: "ℒ", tex: R`\mathcal{L}`, name: "Loss / objective", cat: "prob", meanings: ["ℒ, L or J: the objective being minimised", "ℓ: the per-example loss", "In a VAE context ℒ is often the ELBO (maximised)"] },
+  { id: "log", glyph: "log", tex: R`\log`, name: "Logarithm", cat: "prob", meanings: ["Natural log unless a base is stated", "log p = log-likelihood; −log p = negative log-likelihood (NLL) loss"] },
+  { id: "softmax", glyph: "softmax", tex: R`\mathrm{softmax}`, name: "Softmax", cat: "operator", meanings: ["softmax(z)ᵢ = exp(zᵢ) / ∑ⱼ exp(zⱼ): turns scores into a probability vector", "Applied row-wise in attention"] },
+  { id: "indicator", glyph: "𝟙", tex: R`\mathbb{1}[\cdot]`, name: "Indicator", cat: "operator", meanings: ["1 if the condition inside holds, else 0"] },
+
+  { id: "nabla", glyph: "∇", tex: R`\nabla`, name: "Nabla / gradient", cat: "operator", meanings: ["∇ₓf: vector of partial derivatives of a scalar f (the gradient)", "∇ₓ log p(x): the score, used in score-based diffusion", "∇² = Hessian (or Laplacian when traced)"] },
+  { id: "partial", glyph: "∂", tex: R`\partial`, name: "Partial derivative", cat: "operator", meanings: ["∂f/∂xᵢ: rate of change of f in coordinate i with the others held fixed"] },
+  { id: "jacobian", glyph: "J", tex: R`\mathbf{J}`, name: "Jacobian", cat: "operator", meanings: ["m × n matrix of first derivatives ∂fᵢ/∂xⱼ of a vector function f: ℝⁿ → ℝᵐ", "Backprop multiplies transposed Jacobians"] },
+  { id: "hessian", glyph: "H", tex: R`\mathbf{H}`, name: "Hessian", cat: "operator", meanings: ["n × n matrix of second derivatives ∂²f/∂xᵢ∂xⱼ of a scalar f", "Curvature: its eigenvalues decide minimum vs saddle", "Used in Newton's method and pruning / quantisation (OBS, GPTQ)"] },
+  { id: "argmin", glyph: "argmin", tex: R`\arg\min`, name: "argmin / argmax", cat: "operator", meanings: ["The input that minimises (maximises) a function, not the minimum value itself"] },
+  { id: "sum", glyph: "∑", tex: R`\sum`, name: "Sum", cat: "operator", meanings: ["Sum over an index range; ∑ᵢ₌₁ᴺ runs over N examples"] },
+  { id: "prod", glyph: "∏", tex: R`\prod`, name: "Product", cat: "operator", meanings: ["Product over an index range, e.g. a factorised joint distribution"] },
+  { id: "int", glyph: "∫", tex: R`\int`, name: "Integral", cat: "operator", meanings: ["Continuous sum, e.g. marginalising out a latent variable"] },
+  { id: "norm", glyph: "‖·‖", tex: R`\|\cdot\|`, name: "Norm", cat: "linalg", meanings: ["‖x‖₂ = Euclidean length; ‖x‖₁ = sum of absolute values", "‖A‖_F = Frobenius norm; ‖A‖₂ = largest singular value"] },
+  { id: "transpose", glyph: "ᵀ", tex: R`x^\top`, name: "Transpose", cat: "linalg", meanings: ["Flips rows and columns; wᵀx is a dot product"] },
+  { id: "inverse", glyph: "⁻¹", tex: R`A^{-1}`, name: "Inverse", cat: "linalg", meanings: ["A⁻¹A = I; A⁺ is the Moore–Penrose pseudoinverse", "A⁻ᵀ = (A⁻¹)ᵀ"] },
+  { id: "hadamard", glyph: "⊙", tex: R`\odot`, name: "Hadamard product", cat: "linalg", meanings: ["Element-wise multiplication of same-shaped arrays (masking, gating)"] },
+  { id: "kron", glyph: "⊗", tex: R`\otimes`, name: "Kronecker / outer product", cat: "linalg", meanings: ["A ⊗ B replaces each entry aᵢⱼ of A by aᵢⱼB", "K-FAC approximates the Fisher as A ⊗ G"] },
+  { id: "trace", glyph: "tr", tex: R`\operatorname{tr}`, name: "Trace", cat: "linalg", meanings: ["Sum of diagonal entries; tr(AB) = tr(BA)"] },
+  { id: "det", glyph: "det", tex: R`\det`, name: "Determinant", cat: "linalg", meanings: ["Product of eigenvalues; how much a linear map scales volume", "|det J| appears in normalising flows"] },
+
+  { id: "hat", glyph: "x̂", tex: R`\hat{x}`, name: "Hat", cat: "decor", meanings: ["Estimate or prediction: ŷ = f(x), θ̂ = fitted parameters", "Bias-corrected moments m̂, v̂ in Adam"] },
+  { id: "bar", glyph: "x̄", tex: R`\bar{x}`, name: "Bar", cat: "decor", meanings: ["Mean of samples", "Cumulative product ᾱₜ = ∏ αₛ in diffusion", "Discretised matrices Ā, B̄ in state-space models"] },
+  { id: "tilde", glyph: "x̃", tex: R`\tilde{x}`, name: "Tilde", cat: "decor", meanings: ["Corrupted, perturbed or modified version of x", "Guided prediction ε̃ in classifier-free guidance"] },
+  { id: "star", glyph: "θ*", tex: R`\theta^*`, name: "Star", cat: "decor", meanings: ["Optimal or true value, e.g. θ* = argmin ℒ(θ)"] }
+];
+
+const CATS = [
+  { id: "greek", title: "Greek letters" },
+  { id: "prob", title: "Probability & information" },
+  { id: "operator", title: "Operators & calculus" },
+  { id: "linalg", title: "Linear algebra" },
+  { id: "decor", title: "Decorations" }
+];
+
+const EQUATIONS = [
+  /* ---------- probability ---------- */
+  { id: "expected-risk", topic: "probability", title: "Expected risk and its empirical estimate",
+    tex: R`\mathbb{E}_{(x,y)\sim p_{\text{data}}}\big[\ell(f_\theta(x), y)\big] \;\approx\; \frac{1}{N}\sum_{i=1}^{N}\ell\big(f_\theta(x_i), y_i\big)`,
+    summary: "What 𝔼_{x,y} means: average the loss over pairs drawn from the data distribution.",
+    detail: R`The subscript under \(\mathbb{E}\) names the random variables being averaged over; everything else is held fixed. The integral form is \(\iint \ell\, p(x,y)\,dx\,dy\). You never know \(p_{\text{data}}\), so the right-hand side replaces it with an average over the training set or a mini-batch. Minimising that average is empirical risk minimisation (ERM).`,
+    terms: [[R`p_{\text{data}}`, "true data distribution"], [R`f_\theta`, "model with parameters θ"], [R`\ell`, "per-example loss"], [R`N`, "number of examples"]],
+    syms: ["E", "sim", "theta", "sum", "loss", "data"], src: "gbc" },
+  { id: "bayes-rule", topic: "probability", title: "Bayes' rule",
+    tex: R`\underbrace{p(\theta\mid\mathcal{D})}_{\text{posterior}} = \frac{\overbrace{p(\mathcal{D}\mid\theta)}^{\text{likelihood}}\;\overbrace{p(\theta)}^{\text{prior}}}{\underbrace{p(\mathcal{D})}_{\text{evidence}}},\qquad p(\mathcal{D}) = \int p(\mathcal{D}\mid\theta)\,p(\theta)\,d\theta`,
+    summary: "Turns a likelihood and a prior into a posterior over parameters.",
+    detail: R`Because the evidence does not depend on \(\theta\), papers often write \(p(\theta\mid\mathcal{D}) \propto p(\mathcal{D}\mid\theta)p(\theta)\). The evidence integral is usually intractable, which is why variational inference, MCMC and the ELBO exist.`,
+    terms: [[R`p(\theta)`, "prior belief before data"], [R`p(\mathcal{D}\mid\theta)`, "likelihood of the data"], [R`p(\mathcal{D})`, "evidence / marginal likelihood"]],
+    syms: ["cond", "theta", "data", "int", "propto"], src: "text" },
+  { id: "mle-map", topic: "probability", title: "Maximum likelihood and MAP estimation",
+    tex: R`\hat\theta_{\text{MLE}} = \arg\max_\theta \log p(\mathcal{D}\mid\theta),\qquad \hat\theta_{\text{MAP}} = \arg\max_\theta\big[\log p(\mathcal{D}\mid\theta) + \log p(\theta)\big]`,
+    summary: "Fitting = maximising log-likelihood; adding a log-prior gives MAP.",
+    detail: R`Minimising cross-entropy loss is exactly MLE. A Gaussian prior \(p(\theta)\propto e^{-\lambda\|\theta\|_2^2}\) makes the MAP term L2 weight decay; a Laplace prior gives L1.`,
+    terms: [[R`\hat\theta`, "the fitted estimate"]],
+    syms: ["hat", "argmin", "log", "cond", "theta", "data"], src: "text" },
+  { id: "marginal", topic: "probability", title: "Marginalisation",
+    tex: R`p(x) = \int p(x, z)\,dz = \int p(x\mid z)\,p(z)\,dz`,
+    summary: "Integrate a latent variable out of the joint to get the distribution of x alone.",
+    detail: R`This is the quantity latent-variable models (VAEs, HMMs, diffusion) want to maximise but cannot compute directly when \(z\) is high-dimensional. For discrete \(z\) the integral becomes a sum.`,
+    terms: [[R`z`, "latent (hidden) variable"]],
+    syms: ["int", "cond"], src: "text" },
+  { id: "gaussian-density", topic: "probability", title: "Multivariate Gaussian density",
+    tex: R`\mathcal{N}(x;\mu,\Sigma) = \frac{1}{(2\pi)^{d/2}\,|\Sigma|^{1/2}}\exp\!\Big(-\tfrac{1}{2}(x-\mu)^\top\Sigma^{-1}(x-\mu)\Big)`,
+    summary: "The distribution behind priors, noise models and most closed-form results.",
+    detail: R`The quadratic form \((x-\mu)^\top\Sigma^{-1}(x-\mu)\) is the squared Mahalanobis distance. With \(\Sigma=\sigma^2 I\), the negative log-density is mean-squared error plus a constant, which is why MSE losses are Gaussian likelihoods.`,
+    terms: [[R`d`, "dimension of x"], [R`|\Sigma|`, "determinant of the covariance"]],
+    syms: ["normal", "mu", "Sigma", "pi", "det", "transpose", "inverse"], src: "text" },
+  { id: "variance-cov", topic: "probability", title: "Variance, covariance and total expectation",
+    tex: R`\mathrm{Var}[x] = \mathbb{E}\big[(x-\mathbb{E}x)^2\big],\quad \Sigma = \mathbb{E}\big[(x-\mu)(x-\mu)^\top\big],\quad \mathbb{E}[x] = \mathbb{E}_y\big[\mathbb{E}[x\mid y]\big]`,
+    summary: "Spread of a variable, the covariance matrix, and the tower rule.",
+    detail: R`\(\sigma^2\) is the variance and \(\sigma\) the standard deviation. The law of total expectation lets you average in stages, which is how the ELBO and EM are derived.`,
+    terms: [],
+    syms: ["E", "Sigma", "mu", "sigma", "transpose", "cond"], src: "text" },
+  { id: "score-function", topic: "probability", title: "Score-function (REINFORCE) estimator",
+    tex: R`\nabla_\theta\,\mathbb{E}_{p_\theta(x)}[f(x)] = \mathbb{E}_{p_\theta(x)}\big[f(x)\,\nabla_\theta\log p_\theta(x)\big]`,
+    summary: "Gradient of an expectation when you can only sample, not differentiate, f.",
+    detail: R`Works for discrete samples and non-differentiable \(f\), which is why policy-gradient RL and RLHF use it. Its variance is high, so baselines are subtracted from \(f\).`,
+    terms: [[R`\nabla_\theta\log p_\theta`, "the score of the sampling distribution"]],
+    syms: ["nabla", "E", "log", "theta"], src: "text" },
+  { id: "reparam-general", topic: "probability", title: "Reparameterisation (pathwise) estimator",
+    tex: R`\mathbb{E}_{z\sim\mathcal{N}(\mu,\sigma^2)}[f(z)] = \mathbb{E}_{\epsilon\sim\mathcal{N}(0,1)}[f(\mu + \sigma\epsilon)]`,
+    summary: "Move the randomness into fixed noise ε so gradients flow through μ and σ.",
+    detail: R`The low-variance alternative to the score-function estimator, valid when \(f\) is differentiable. It is the trick that makes VAEs trainable.`,
+    terms: [[R`\epsilon`, "parameter-free standard noise"]],
+    syms: ["E", "normal", "mu", "sigma", "epsilon", "sim"], src: "vae" },
+
+  /* ---------- linalg ---------- */
+  { id: "gradient-def", topic: "linalg", title: "Gradient",
+    tex: R`\nabla_{\mathbf{x}} f = \begin{bmatrix} \dfrac{\partial f}{\partial x_1} & \cdots & \dfrac{\partial f}{\partial x_n} \end{bmatrix}^{\!\top},\qquad f:\mathbb{R}^n\to\mathbb{R}`,
+    summary: "Vector of partial derivatives of a scalar function: the direction of steepest ascent.",
+    detail: R`Gradient descent moves along \(-\nabla f\). The gradient is the transpose of the 1 × n Jacobian of \(f\).`,
+    terms: [], syms: ["nabla", "partial", "transpose"], src: "cookbook" },
+  { id: "jacobian-def", topic: "linalg", title: "Jacobian matrix",
+    tex: R`\mathbf{J}_{\mathbf{f}} = \frac{\partial \mathbf{f}}{\partial \mathbf{x}} = \begin{bmatrix} \frac{\partial f_1}{\partial x_1} & \cdots & \frac{\partial f_1}{\partial x_n} \\ \vdots & \ddots & \vdots \\ \frac{\partial f_m}{\partial x_1} & \cdots & \frac{\partial f_m}{\partial x_n} \end{bmatrix},\qquad \mathbf{f}:\mathbb{R}^n\to\mathbb{R}^m`,
+    summary: "All first derivatives of a vector-valued function, as an m × n matrix.",
+    detail: R`Row \(i\) is the gradient of output \(f_i\). Every layer of a network has a Jacobian; backprop multiplies their transposes. In normalising flows \(\log|\det\mathbf{J}|\) tracks how density changes.`,
+    terms: [[R`m, n`, "output and input dimensions"]], syms: ["jacobian", "partial"], src: "cookbook" },
+  { id: "hessian-def", topic: "linalg", title: "Hessian matrix",
+    tex: R`\mathbf{H}_f = \nabla^2 f = \begin{bmatrix} \frac{\partial^2 f}{\partial x_1^2} & \cdots & \frac{\partial^2 f}{\partial x_1\partial x_n} \\ \vdots & \ddots & \vdots \\ \frac{\partial^2 f}{\partial x_n\partial x_1} & \cdots & \frac{\partial^2 f}{\partial x_n^2} \end{bmatrix} = \mathbf{J}(\nabla f)`,
+    summary: "Second derivatives of a scalar function: the curvature of the loss surface.",
+    detail: R`Symmetric for smooth \(f\). All eigenvalues positive: local minimum; mixed signs: saddle. For a quadratic, gradient descent is stable only when \(\eta \lt 2/\lambda_{\max}(\mathbf{H})\). Hessian–vector products cost about two backward passes and power sharpness measures and SAM.`,
+    terms: [], syms: ["hessian", "partial", "nabla", "jacobian", "lambda", "eta"], src: "cookbook" },
+  { id: "chain-rule", topic: "linalg", title: "Chain rule = backpropagation",
+    tex: R`\frac{\partial\mathcal{L}}{\partial\mathbf{x}} = \Big(\frac{\partial\mathbf{h}}{\partial\mathbf{x}}\Big)^{\!\top}\frac{\partial\mathcal{L}}{\partial\mathbf{h}},\qquad \nabla_{\mathbf{x}}\mathcal{L} = \mathbf{J}_1^\top\mathbf{J}_2^\top\cdots\mathbf{J}_L^\top\,\nabla_{\mathbf{h}_L}\mathcal{L}`,
+    summary: "Gradients flow backwards as a product of transposed layer Jacobians.",
+    detail: R`Reverse mode computes vector–Jacobian products \(\mathbf{v}^\top\mathbf{J}\), cheap for one scalar loss and many parameters. Forward mode computes \(\mathbf{J}\mathbf{v}\). Vanishing or exploding gradients happen when the singular values of this product drift far below or above 1.`,
+    terms: [[R`\mathbf{h}`, "intermediate activations"], [R`\mathbf{J}_l`, "Jacobian of layer l"]],
+    syms: ["partial", "jacobian", "transpose", "loss", "nabla"], src: "gbc" },
+  { id: "taylor", topic: "linalg", title: "Second-order Taylor expansion",
+    tex: R`\mathcal{L}(\theta+\Delta) \approx \mathcal{L}(\theta) + \nabla\mathcal{L}(\theta)^\top\Delta + \tfrac{1}{2}\,\Delta^\top\mathbf{H}\,\Delta`,
+    summary: "Local quadratic model of the loss; the reason the Hessian matters.",
+    detail: R`Setting its derivative to zero gives Newton's step. Optimal Brain Damage/Surgeon and LLM quantisers such as GPTQ use the \(\tfrac12\Delta^\top\mathbf{H}\Delta\) term to judge which weights can be removed or rounded.`,
+    terms: [[R`\Delta`, "a small parameter change"]], syms: ["nabla", "hessian", "transpose", "Delta", "loss", "theta"], src: "text" },
+  { id: "newton", topic: "linalg", title: "Newton and natural-gradient steps",
+    tex: R`\theta \leftarrow \theta - \eta\,\mathbf{H}^{-1}\nabla\mathcal{L},\qquad \theta \leftarrow \theta - \eta\,\mathbf{F}^{-1}\nabla\mathcal{L}`,
+    summary: "Precondition the gradient by curvature (Hessian) or by the Fisher information.",
+    detail: R`Exact inverses are infeasible for large networks, so methods like K-FAC and Shampoo approximate them with Kronecker-factored blocks.`,
+    terms: [[R`\mathbf{F}`, "Fisher information matrix"]], syms: ["hessian", "inverse", "nabla", "eta", "theta"], src: "text" },
+  { id: "matrix-derivs", topic: "linalg", title: "Matrix derivative identities",
+    tex: R`\nabla_x(a^\top x) = a,\quad \nabla_x(x^\top A x) = (A + A^\top)x,\quad \nabla_A\operatorname{tr}(AB) = B^\top,\quad \nabla_A\log\det A = A^{-\top}`,
+    summary: "The handful of identities used to derive Gaussian, linear and flow-model gradients.",
+    detail: R`If \(A\) is symmetric the quadratic-form gradient is \(2Ax\). These come straight from The Matrix Cookbook.`,
+    terms: [], syms: ["nabla", "transpose", "trace", "det", "inverse", "log"], src: "cookbook" },
+  { id: "eig-svd", topic: "linalg", title: "Eigendecomposition and SVD",
+    tex: R`A = Q\Lambda Q^\top\ (A \text{ symmetric}),\qquad A = U\Sigma V^\top,\qquad \kappa(A) = \frac{\sigma_{\max}}{\sigma_{\min}}`,
+    summary: "Factor a matrix into rotations and scalings; the basis of PCA and low-rank compression.",
+    detail: R`\(\Lambda\) holds eigenvalues, \(\Sigma\) singular values. The condition number \(\kappa\) (equal to \(\lambda_{\max}/\lambda_{\min}\) for symmetric positive-definite \(A\)) measures how ill-conditioned an optimisation problem is.`,
+    terms: [[R`Q, U, V`, "orthogonal matrices"]], syms: ["lambda", "Sigma", "transpose", "sigma", "kappa"], src: "cookbook" },
+  { id: "norms", topic: "linalg", title: "Vector and matrix norms",
+    tex: R`\|x\|_p = \Big(\sum_i |x_i|^p\Big)^{1/p},\quad \|A\|_F = \sqrt{\textstyle\sum_{ij}A_{ij}^2},\quad \|A\|_2 = \sigma_{\max}(A),\quad \|A\|_* = \textstyle\sum_i\sigma_i`,
+    summary: "Ways to measure size: L1/L2 for vectors; Frobenius, spectral and nuclear for matrices.",
+    detail: R`The spectral norm is the Lipschitz constant of a linear layer (spectral normalisation). The nuclear norm is the convex surrogate for rank.`,
+    terms: [], syms: ["norm", "sigma", "sum"], src: "cookbook" },
+  { id: "fisher", topic: "linalg", title: "Fisher information",
+    tex: R`\mathbf{F} = \mathbb{E}_{p_\theta}\big[\nabla_\theta\log p_\theta(x)\,\nabla_\theta\log p_\theta(x)^\top\big] = -\,\mathbb{E}_{p_\theta}\big[\nabla^2_\theta\log p_\theta(x)\big]`,
+    summary: "Expected outer product of the score; equals the expected negative Hessian of the log-likelihood.",
+    detail: R`Used by natural gradient, K-FAC, elastic weight consolidation (EWC) and Fisher-based pruning and merging.`,
+    terms: [], syms: ["E", "nabla", "log", "transpose", "hessian", "theta"], src: "text" },
+  { id: "hadamard-kron", topic: "linalg", title: "Hadamard and Kronecker products",
+    tex: R`(a\odot b)_i = a_i b_i,\qquad A\otimes B = \begin{bmatrix} a_{11}B & \cdots & a_{1n}B \\ \vdots & \ddots & \vdots \\ a_{m1}B & \cdots & a_{mn}B\end{bmatrix}`,
+    summary: "Element-wise multiplication versus the block 'every entry times B' product.",
+    detail: R`\(\odot\) appears in gating (LSTMs, SwiGLU), masks and the VAE reparameterisation. \(\otimes\) appears in K-FAC and in vectorisation identities \(\operatorname{vec}(AXB) = (B^\top\otimes A)\operatorname{vec}(X)\).`,
+    terms: [], syms: ["hadamard", "kron", "transpose"], src: "cookbook" },
+  { id: "change-variables", topic: "linalg", title: "Change of variables",
+    tex: R`p_X(x) = p_Z\big(f(x)\big)\,\big|\det \mathbf{J}_f(x)\big|`,
+    summary: "How a density transforms under an invertible map; the core of normalising flows.",
+    detail: R`Flows choose layers whose Jacobian determinant is cheap (triangular or coupling layers) so that \(\log p_X\) can be computed exactly.`,
+    terms: [[R`f`, "invertible map from data to latent"]], syms: ["det", "jacobian"], src: "text" },
+  { id: "laplacian-div", topic: "linalg", title: "Laplacian and divergence",
+    tex: R`\Delta f = \nabla^2 f = \operatorname{tr}(\mathbf{H}_f) = \sum_i \frac{\partial^2 f}{\partial x_i^2},\qquad \nabla\cdot v = \operatorname{tr}(\mathbf{J}_v)`,
+    summary: "Traces of the Hessian and Jacobian; they appear in score matching and continuity equations.",
+    detail: R`Implicit score matching contains \(\operatorname{tr}(\nabla_x s_\theta)\); continuous normalising flows use the divergence of the velocity field to track log-density.`,
+    terms: [], syms: ["Delta", "nabla", "trace", "hessian", "jacobian", "partial", "sum"], src: "text" },
+
+  /* ---------- optim ---------- */
+  { id: "erm-reg", topic: "optim", title: "Regularised empirical risk minimisation",
+    tex: R`\theta^* = \arg\min_{\theta\in\Theta}\;\underbrace{\frac{1}{N}\sum_{i=1}^{N}\ell\big(f_\theta(x_i), y_i\big)}_{\hat R(\theta)} + \lambda\,\Omega(\theta)`,
+    summary: "The template almost every training objective follows.",
+    detail: R`\(\hat R\) is the empirical risk, \(\Omega\) a regulariser (for weight decay, \(\|\theta\|_2^2\)) and \(\lambda\) its strength. The star marks the optimum.`,
+    terms: [[R`\Theta`, "parameter space"], [R`\hat R`, "empirical risk"]],
+    syms: ["star", "argmin", "theta", "lambda", "Omega", "hat", "sum", "loss"], src: "gbc" },
+  { id: "sgd", topic: "optim", title: "Stochastic gradient descent",
+    tex: R`\theta_{t+1} \leftarrow \theta_t - \eta\,\nabla_\theta\mathcal{L}_{\mathcal{B}}(\theta_t)`,
+    summary: "Step against the mini-batch gradient, scaled by the learning rate.",
+    detail: R`\(\mathcal{B}\) is a random mini-batch, so the gradient is an unbiased but noisy estimate of the full one.`,
+    terms: [[R`\mathcal{B}`, "mini-batch"], [R`t`, "step index"]], syms: ["theta", "eta", "nabla", "loss"], src: "text" },
+  { id: "momentum", topic: "optim", title: "Momentum",
+    tex: R`v_{t+1} = \mu\,v_t + \nabla\mathcal{L}(\theta_t),\qquad \theta_{t+1} = \theta_t - \eta\,v_{t+1}`,
+    summary: "Accumulate a running velocity of gradients to damp oscillation.",
+    detail: R`\(\mu\) (often 0.9) is the momentum coefficient. Nesterov momentum evaluates the gradient at the look-ahead point \(\theta_t - \eta\mu v_t\).`,
+    terms: [[R`v`, "velocity"]], syms: ["mu", "eta", "nabla", "loss", "theta"], src: "text" },
+  { id: "adam", topic: "optim", title: "Adam",
+    tex: R`m_t = \beta_1 m_{t-1} + (1-\beta_1)g_t,\quad v_t = \beta_2 v_{t-1} + (1-\beta_2)g_t^2,\quad \hat m_t = \frac{m_t}{1-\beta_1^t},\quad \hat v_t = \frac{v_t}{1-\beta_2^t},\quad \theta_t = \theta_{t-1} - \eta\,\frac{\hat m_t}{\sqrt{\hat v_t}+\epsilon}`,
+    summary: "Per-parameter step sizes from running means of the gradient and its square.",
+    detail: R`\(g_t\) is the mini-batch gradient; squares and division are element-wise. The hats correct the bias from starting \(m\) and \(v\) at zero. Common defaults: \(\eta=10^{-3}, \beta_1=0.9, \beta_2=0.999, \epsilon=10^{-8}\) (Kingma & Ba, 2014).`,
+    terms: [[R`m_t`, "first-moment (mean) estimate"], [R`v_t`, "second-moment estimate"]],
+    syms: ["beta", "eta", "epsilon", "hat", "theta"], src: "text" },
+  { id: "adamw", topic: "optim", title: "AdamW (decoupled weight decay)",
+    tex: R`\theta_t = \theta_{t-1} - \eta\Big(\frac{\hat m_t}{\sqrt{\hat v_t}+\epsilon} + \lambda\,\theta_{t-1}\Big)`,
+    summary: "Apply weight decay directly to the weights, not through the adaptive gradient.",
+    detail: R`Adding \(\lambda\|\theta\|^2\) to the loss under Adam gets rescaled by \(\sqrt{\hat v}\); AdamW avoids this, and is the default optimiser for transformers.`,
+    terms: [], syms: ["lambda", "eta", "theta", "epsilon", "hat"], src: "text" },
+  { id: "lagrangian", topic: "optim", title: "Lagrangian and KKT conditions",
+    tex: R`\mathcal{L}(x,\lambda,\nu) = f(x) + \sum_i\lambda_i g_i(x) + \sum_j \nu_j h_j(x),\qquad \lambda_i\ge 0,\;\; \lambda_i g_i(x^*) = 0`,
+    summary: "Fold constraints g ≤ 0 and h = 0 into the objective with multipliers.",
+    detail: R`At the optimum the KKT conditions hold: stationarity \(\nabla_x\mathcal{L}=0\), feasibility, \(\lambda\ge0\) and complementary slackness. SVM duals, trust-region methods and the closed-form optimal policy behind DPO are derived this way.`,
+    terms: [[R`g_i, h_j`, "inequality and equality constraints"]], syms: ["lambda", "nu", "sum", "star"], src: "text" },
+  { id: "svm", topic: "optim", title: "Soft-margin SVM",
+    tex: R`\min_{w,b,\xi}\;\tfrac{1}{2}\|w\|^2 + C\sum_i\xi_i\quad\text{s.t.}\quad y_i(w^\top x_i + b)\ge 1-\xi_i,\;\; \xi_i\ge 0`,
+    summary: "Maximise the margin while paying C per unit of slack ξ.",
+    detail: R`Its dual depends on data only through dot products \(x_i^\top x_j\), which the kernel trick replaces by \(k(x_i,x_j)\).`,
+    terms: [[R`\xi_i`, "slack for example i"], [R`C`, "penalty on violations"]], syms: ["xi", "norm", "transpose", "sum"], src: "text" },
+  { id: "ppo", topic: "optim", title: "PPO clipped objective",
+    tex: R`\mathcal{L}^{\text{CLIP}}(\theta) = \mathbb{E}_t\Big[\min\big(\rho_t(\theta)A_t,\;\operatorname{clip}(\rho_t(\theta), 1-\epsilon, 1+\epsilon)A_t\big)\Big],\qquad \rho_t = \frac{\pi_\theta(a_t\mid s_t)}{\pi_{\theta_{\text{old}}}(a_t\mid s_t)}`,
+    summary: "Policy-gradient update that stops the new policy drifting far from the old one.",
+    detail: R`\(A_t\) is the advantage estimate. PPO was the standard RLHF optimiser before DPO-style methods.`,
+    terms: [[R`A_t`, "advantage"], [R`\epsilon`, "clip range, e.g. 0.2"]], syms: ["rho", "pi", "epsilon", "E", "cond", "theta"], src: "text" },
+  { id: "cross-entropy-loss", topic: "optim", title: "Softmax cross-entropy loss",
+    tex: R`\ell(z, y) = -\sum_{k=1}^{K} y_k\log\mathrm{softmax}(z)_k = -z_{y} + \log\sum_{k}e^{z_k}`,
+    summary: "The standard classification loss on logits z with one-hot label y.",
+    detail: R`Its gradient with respect to the logits is simply \(\mathrm{softmax}(z) - y\). Implementations use the log-sum-exp form for numerical stability.`,
+    terms: [[R`z`, "logits"], [R`K`, "number of classes"]], syms: ["log", "sum", "softmax", "entropy"], src: "gbc" },
+  { id: "smoothness", topic: "optim", title: "Smoothness and strong convexity",
+    tex: R`\|\nabla f(x) - \nabla f(y)\| \le L\|x-y\|,\qquad \mu I \preceq \nabla^2 f(x) \preceq L I`,
+    summary: "The assumptions behind convergence-rate proofs.",
+    detail: R`\(L\)-smooth caps curvature; \(\mu\)-strongly convex guarantees a minimum curvature. Their ratio \(L/\mu\) is the condition number that sets how fast gradient descent converges.`,
+    terms: [[R`\preceq`, "Loewner order: B − A is PSD"]], syms: ["nabla", "norm", "mu", "hessian", "kappa"], src: "text" },
+  { id: "bias-variance", topic: "optim", title: "Bias–variance decomposition",
+    tex: R`\mathbb{E}\big[(y-\hat f(x))^2\big] = \underbrace{\big(\mathbb{E}[\hat f(x)] - f(x)\big)^2}_{\text{bias}^2} + \underbrace{\mathrm{Var}[\hat f(x)]}_{\text{variance}} + \underbrace{\sigma^2}_{\text{noise}}`,
+    summary: "Expected squared error splits into bias, variance and irreducible noise.",
+    detail: R`The expectation is over training sets and noise. Classic intuition for under- vs over-fitting; modern over-parameterised networks show double descent instead of a simple U-curve.`,
+    terms: [], syms: ["E", "hat", "sigma"], src: "text" },
+
+  /* ---------- info ---------- */
+  { id: "entropy-def", topic: "info", title: "Entropy",
+    tex: R`H(p) = -\,\mathbb{E}_{x\sim p}[\log p(x)] = -\sum_x p(x)\log p(x)`,
+    summary: "Average surprise of samples from p; its uncertainty.",
+    detail: R`Measured in nats with natural log, bits with \(\log_2\). Maximal for a uniform distribution.`,
+    terms: [], syms: ["entropy", "E", "log", "sum", "sim"], src: "text" },
+  { id: "cross-entropy", topic: "info", title: "Cross-entropy",
+    tex: R`H(p, q) = -\,\mathbb{E}_{x\sim p}[\log q(x)] = H(p) + D_{\mathrm{KL}}(p\,\|\,q)`,
+    summary: "Cost of encoding samples from p with a code built for q.",
+    detail: R`With \(p\) the one-hot label and \(q\) the model's softmax, this is the classification loss. Since \(H(p)\) is fixed, minimising it minimises the KL.`,
+    terms: [], syms: ["entropy", "E", "log", "kl"], src: "text" },
+  { id: "kl-def", topic: "info", title: "KL divergence (forward and reverse)",
+    tex: R`D_{\mathrm{KL}}(p\,\|\,q) = \mathbb{E}_{x\sim p}\Big[\log\frac{p(x)}{q(x)}\Big] \ge 0`,
+    summary: "How far q is from p; asymmetric, zero only when they match.",
+    detail: R`Forward KL \(D_{\mathrm{KL}}(p_{\text{data}}\|p_\theta)\) is mode-covering and equals MLE. Reverse KL \(D_{\mathrm{KL}}(q\|p)\) is mode-seeking; variational inference and on-policy distillation use it.`,
+    terms: [], syms: ["kl", "E", "log"], src: "text" },
+  { id: "kl-gaussian", topic: "info", title: "KL between a diagonal Gaussian and 𝒩(0, I)",
+    tex: R`D_{\mathrm{KL}}\big(\mathcal{N}(\mu,\operatorname{diag}\sigma^2)\,\|\,\mathcal{N}(0,I)\big) = \tfrac{1}{2}\sum_{j=1}^{d}\big(\mu_j^2 + \sigma_j^2 - \log\sigma_j^2 - 1\big)`,
+    summary: "Closed-form regulariser used in every Gaussian VAE.",
+    detail: R`Encoders usually output \(\log\sigma^2\) directly, so the formula needs no exponent-then-log round trip.`,
+    terms: [[R`d`, "latent dimension"]], syms: ["kl", "normal", "mu", "sigma", "sum", "log"], src: "vae" },
+  { id: "mutual-info", topic: "info", title: "Mutual information",
+    tex: R`I(X;Y) = D_{\mathrm{KL}}\big(p(x,y)\,\|\,p(x)p(y)\big) = H(X) - H(X\mid Y)`,
+    summary: "Information shared between two variables.",
+    detail: R`Zero exactly when \(X\perp Y\). Contrastive objectives such as InfoNCE maximise a lower bound on it.`,
+    terms: [], syms: ["kl", "entropy", "cond", "perp"], src: "text" },
+  { id: "js-div", topic: "info", title: "Jensen–Shannon divergence",
+    tex: R`\mathrm{JS}(p, q) = \tfrac{1}{2}D_{\mathrm{KL}}(p\,\|\,m) + \tfrac{1}{2}D_{\mathrm{KL}}(q\,\|\,m),\qquad m = \tfrac{1}{2}(p+q)`,
+    summary: "Symmetric, bounded divergence; what the original GAN objective minimises.",
+    detail: R`Bounded by \(\log 2\). Generalised JSD with a mixing weight is used in on-policy LLM distillation.`,
+    terms: [], syms: ["kl"], src: "text" },
+  { id: "f-div", topic: "info", title: "f-divergence",
+    tex: R`D_f(p\,\|\,q) = \mathbb{E}_{x\sim q}\Big[f\Big(\frac{p(x)}{q(x)}\Big)\Big],\qquad f \text{ convex},\; f(1)=0`,
+    summary: "One family containing KL, reverse KL, JS, χ² and total variation.",
+    detail: R`\(f(t)=t\log t\) gives KL; \(f(t)=-\log t\) gives reverse KL. f-GAN and several distillation papers optimise general members of this family.`,
+    terms: [], syms: ["E"], src: "text" },
+  { id: "wasserstein", topic: "info", title: "Wasserstein-1 (earth mover's) distance",
+    tex: R`W_1(p, q) = \inf_{\gamma\in\Pi(p,q)}\mathbb{E}_{(x,y)\sim\gamma}\big[\|x-y\|\big]`,
+    summary: "Minimum cost of moving the mass of p onto q.",
+    detail: R`\(\Pi(p,q)\) is the set of joint distributions (couplings) with marginals \(p\) and \(q\). It stays informative when supports do not overlap, which motivated WGAN and optimal-transport flow matching.`,
+    terms: [[R`\gamma`, "a transport plan / coupling"]], syms: ["gamma", "pi", "E", "norm", "sim"], src: "text" },
+  { id: "elbo", topic: "info", title: "Evidence lower bound (ELBO)",
+    tex: R`\log p_\theta(x) \ge \mathbb{E}_{q(z)}\big[\log p_\theta(x\mid z)\big] - D_{\mathrm{KL}}\big(q(z)\,\|\,p(z)\big)`,
+    summary: "A tractable lower bound on log-likelihood: reconstruction minus a KL regulariser.",
+    detail: R`Derived by Jensen's inequality. The gap is exactly \(D_{\mathrm{KL}}(q(z)\|p_\theta(z\mid x))\), so maximising the bound also pulls \(q\) towards the true posterior. EM, VAEs and diffusion all optimise a version of it.`,
+    terms: [[R`q(z)`, "approximate posterior"], [R`p(z)`, "prior"]], syms: ["E", "kl", "log", "theta", "cond"], src: "vae" },
+  { id: "infonce", topic: "info", title: "InfoNCE contrastive loss",
+    tex: R`\mathcal{L}_{\text{InfoNCE}} = -\,\mathbb{E}\Big[\log\frac{\exp(\mathrm{sim}(z_i, z_i^+)/\tau)}{\sum_{j=1}^{K}\exp(\mathrm{sim}(z_i, z_j)/\tau)}\Big],\qquad I(X;Y)\ge \log K - \mathcal{L}_{\text{InfoNCE}}`,
+    summary: "Pick the positive pair out of K candidates; the loss behind SimCLR and CLIP.",
+    detail: R`\(\tau\) is the temperature; sim is usually cosine similarity. Larger \(K\) (bigger batches) tightens the mutual-information bound.`,
+    terms: [[R`z_i^+`, "positive (matching) embedding"], [R`K`, "candidates per query"]], syms: ["tau", "log", "sum", "E", "softmax"], src: "text" },
+  { id: "perplexity", topic: "info", title: "Perplexity",
+    tex: R`\mathrm{PPL} = \exp\Big(-\frac{1}{T}\sum_{t=1}^{T}\log p_\theta(x_t\mid x_{\lt t})\Big)`,
+    summary: "Exponentiated per-token cross-entropy of a language model.",
+    detail: R`Reads as the effective number of equally likely next tokens. A perplexity of 1 means perfect prediction.`,
+    terms: [[R`x_{\lt t}`, "all tokens before position t"]], syms: ["log", "sum", "cond", "theta"], src: "text" },
+
+  /* ---------- graphical ---------- */
+  { id: "bn-factorisation", topic: "graphical", title: "Bayesian network factorisation",
+    tex: R`p(x_1,\dots,x_n) = \prod_{i=1}^{n} p\big(x_i \mid \mathrm{pa}(x_i)\big)`,
+    summary: "A DAG's joint distribution is one conditional per node given its parents.",
+    detail: R`Each factor is a conditional probability table (CPT) or distribution (CPD). With all variables observed, the MLE of each CPT is just counting.`,
+    terms: [[R`\mathrm{pa}(x_i)`, "parents of node i in the DAG"]], syms: ["prod", "cond"], src: "text" },
+  { id: "markov-blanket", topic: "graphical", title: "Markov blanket and d-separation",
+    tex: R`x_i \perp x_{V\setminus(\{i\}\cup\mathrm{MB}(i))} \;\mid\; x_{\mathrm{MB}(i)},\qquad \mathrm{MB}(i) = \mathrm{pa}(i)\cup\mathrm{ch}(i)\cup\mathrm{pa}(\mathrm{ch}(i))`,
+    summary: "Given its blanket, a node is independent of everything else in the graph.",
+    detail: R`The blanket is parents, children and the children's other parents. Gibbs sampling only needs a node's blanket to resample it.`,
+    terms: [[R`V`, "all nodes"]], syms: ["perp", "cond"], src: "text" },
+  { id: "mrf", topic: "graphical", title: "Markov random field / energy-based model",
+    tex: R`p(\mathbf{x}) = \frac{1}{Z}\prod_{C\in\mathcal{C}}\psi_C(\mathbf{x}_C),\qquad Z = \sum_{\mathbf{x}}\prod_{C}\psi_C(\mathbf{x}_C),\qquad \psi_C = e^{-E_C(\mathbf{x}_C)}`,
+    summary: "Undirected models multiply clique potentials and normalise by Z.",
+    detail: R`\(\mathcal{C}\) is the set of cliques and \(Z\) the partition function, usually intractable. Boltzmann machines, CRFs and energy-based models all take this form.`,
+    terms: [[R`Z`, "partition function"], [R`E_C`, "energy of clique C"]], syms: ["prod", "psi", "sum"], src: "text" },
+  { id: "belief-prop", topic: "graphical", title: "Belief propagation (sum-product message)",
+    tex: R`m_{i\to j}(x_j) = \sum_{x_i}\psi_{ij}(x_i,x_j)\,\psi_i(x_i)\prod_{k\in N(i)\setminus j} m_{k\to i}(x_i)`,
+    summary: "Exact marginals on trees by passing messages between neighbours.",
+    detail: R`Replacing the sum with a max gives max-product, which on a chain is the Viterbi algorithm. Run on graphs with loops it becomes the approximate 'loopy BP'.`,
+    terms: [[R`N(i)`, "neighbours of node i"]], syms: ["psi", "sum", "prod"], src: "text" },
+  { id: "em", topic: "graphical", title: "Expectation–maximisation (EM)",
+    tex: R`Q(\theta\mid\theta^{(k)}) = \mathbb{E}_{z\sim p(z\mid x,\theta^{(k)})}\big[\log p(x,z\mid\theta)\big],\qquad \theta^{(k+1)} = \arg\max_\theta Q(\theta\mid\theta^{(k)})`,
+    summary: "Alternate inferring latents (E-step) and refitting parameters (M-step).",
+    detail: R`Each iteration never decreases \(\log p(x\mid\theta)\); it is coordinate ascent on the ELBO. Baum–Welch is EM for HMMs; k-means is a hard-assignment limit of EM for GMMs.`,
+    terms: [[R`k`, "iteration index"]], syms: ["theta", "E", "argmin", "log", "cond", "sim"], src: "text" },
+
+  /* ---------- hmm ---------- */
+  { id: "hmm-joint", topic: "hmm", title: "HMM joint probability",
+    tex: R`p(O, Q\mid\lambda) = \pi_{q_1}b_{q_1}(o_1)\prod_{t=2}^{T}a_{q_{t-1}q_t}\,b_{q_t}(o_t),\qquad \lambda = (A, B, \pi)`,
+    summary: "A start state, then alternating transitions and emissions.",
+    detail: R`\(a_{ij} = P(q_{t+1}=j\mid q_t=i)\) is the transition matrix, \(b_j(o) = P(o\mid q=j)\) the emission probabilities and \(\pi_i = P(q_1 = i)\) the initial distribution.`,
+    terms: [[R`Q = q_1..q_T`, "hidden state sequence"], [R`O = o_1..o_T`, "observations"]], syms: ["pi", "prod", "lambda", "cond"], src: "rabiner" },
+  { id: "hmm-forward", topic: "hmm", title: "Forward algorithm",
+    tex: R`\alpha_1(i) = \pi_i b_i(o_1),\qquad \alpha_{t+1}(j) = \Big[\sum_{i=1}^{N}\alpha_t(i)\,a_{ij}\Big]b_j(o_{t+1}),\qquad P(O\mid\lambda) = \sum_i\alpha_T(i)`,
+    summary: "Likelihood of an observation sequence in O(N²T).",
+    detail: R`\(\alpha_t(i) = P(o_1..o_t, q_t=i\mid\lambda)\). Computed in log space or rescaled each step to avoid underflow.`,
+    terms: [[R`N`, "number of hidden states"]], syms: ["alpha", "pi", "sum", "lambda", "cond"], src: "rabiner" },
+  { id: "hmm-backward", topic: "hmm", title: "Backward algorithm",
+    tex: R`\beta_T(i) = 1,\qquad \beta_t(i) = \sum_{j=1}^{N}a_{ij}\,b_j(o_{t+1})\,\beta_{t+1}(j)`,
+    summary: "Probability of the future observations given the current state.",
+    detail: R`\(\beta_t(i) = P(o_{t+1}..o_T\mid q_t=i,\lambda)\). Combined with \(\alpha\) it gives state posteriors.`,
+    terms: [], syms: ["beta", "sum"], src: "rabiner" },
+  { id: "viterbi", topic: "hmm", title: "Viterbi decoding",
+    tex: R`\delta_{t+1}(j) = \max_i\big[\delta_t(i)\,a_{ij}\big]\,b_j(o_{t+1}),\qquad \psi_{t+1}(j) = \arg\max_i\,\delta_t(i)\,a_{ij}`,
+    summary: "Most likely hidden-state path: the forward recursion with max instead of sum.",
+    detail: R`Back-pointers \(\psi\) are followed from \(\arg\max_i\delta_T(i)\) to read off the path. Used in speech recognition, CTC decoding and sequence labelling.`,
+    terms: [], syms: ["delta", "psi", "argmin"], src: "rabiner" },
+  { id: "baum-welch", topic: "hmm", title: "Baum–Welch re-estimation",
+    tex: R`\gamma_t(i) = \frac{\alpha_t(i)\beta_t(i)}{P(O\mid\lambda)},\quad \xi_t(i,j) = \frac{\alpha_t(i)\,a_{ij}\,b_j(o_{t+1})\,\beta_{t+1}(j)}{P(O\mid\lambda)},\quad \hat a_{ij} = \frac{\sum_{t}\xi_t(i,j)}{\sum_{t}\gamma_t(i)},\quad \hat\pi_i = \gamma_1(i)`,
+    summary: "EM for HMMs: soft-count expected states and transitions, then renormalise.",
+    detail: R`\(\gamma_t(i)\) is the posterior of being in state \(i\) at time \(t\); \(\xi_t(i,j)\) the posterior of the transition \(i\to j\). Emission estimates follow the same pattern.`,
+    terms: [], syms: ["gamma", "xi", "alpha", "beta", "pi", "hat", "sum", "lambda"], src: "rabiner" },
+  { id: "ssm", topic: "hmm", title: "State-space model recurrence (S4 / Mamba)",
+    tex: R`h_t = \bar{A}h_{t-1} + \bar{B}x_t,\qquad y_t = C h_t,\qquad \bar{A} = \exp(\Delta A),\quad \bar{B} = (\Delta A)^{-1}(\exp(\Delta A) - I)\,\Delta B`,
+    summary: "A learned, continuous-state descendant of the HMM recurrence.",
+    detail: R`The continuous system \(h'(t) = Ah(t) + Bx(t)\) is discretised with step \(\Delta\). Mamba makes \(\Delta, B, C\) depend on the input (selective scan), giving linear-time sequence modelling.`,
+    terms: [[R`\Delta`, "discretisation step"]], syms: ["bar", "Delta", "inverse"], src: "mamba" },
+
+  /* ---------- autoencoders ---------- */
+  { id: "ae", topic: "autoenc", title: "Autoencoder reconstruction",
+    tex: R`\min_{\theta,\phi}\;\mathbb{E}_x\big\|x - g_\theta(f_\phi(x))\big\|^2,\qquad z = f_\phi(x)`,
+    summary: "Encode to a bottleneck code z and decode back to x.",
+    detail: R`\(f_\phi\) is the encoder, \(g_\theta\) the decoder. With linear maps and MSE this recovers PCA.`,
+    terms: [[R`z`, "bottleneck code"]], syms: ["norm", "phi", "theta", "E"], src: "gbc" },
+  { id: "dae", topic: "autoenc", title: "Denoising autoencoder",
+    tex: R`\min\;\mathbb{E}_{x,\;\tilde x\sim q(\tilde x\mid x)}\big\|x - g_\theta(f_\phi(\tilde x))\big\|^2`,
+    summary: "Reconstruct the clean x from a corrupted x̃.",
+    detail: R`With Gaussian corruption, the optimal denoiser is related to the score \(\nabla\log p(\tilde x)\) (Tweedie's formula), which is the bridge to diffusion models.`,
+    terms: [[R`\tilde x`, "corrupted input"]], syms: ["tilde", "norm", "E", "phi", "theta", "sim"], src: "gbc" },
+  { id: "contractive-ae", topic: "autoenc", title: "Contractive autoencoder",
+    tex: R`\mathcal{L} = \|x - g_\theta(f_\phi(x))\|^2 + \lambda\,\big\|\mathbf{J}_{f_\phi}(x)\big\|_F^2`,
+    summary: "Penalise the encoder's Jacobian so codes are robust to small input changes.",
+    detail: R`The Frobenius norm of the Jacobian measures how sensitive the code is to every input direction.`,
+    terms: [], syms: ["jacobian", "norm", "lambda", "loss"], src: "gbc" },
+  { id: "vae-elbo", topic: "autoenc", title: "VAE objective",
+    tex: R`\mathcal{L}(\theta,\phi;x) = \mathbb{E}_{q_\phi(z\mid x)}\big[\log p_\theta(x\mid z)\big] - D_{\mathrm{KL}}\big(q_\phi(z\mid x)\,\|\,p(z)\big) \le \log p_\theta(x)`,
+    summary: "Maximise expected reconstruction log-likelihood minus a KL to the prior.",
+    detail: R`\(q_\phi\) is the encoder (approximate posterior), \(p_\theta\) the decoder and \(p(z) = \mathcal{N}(0,I)\) the prior. This is the ELBO with an amortised, network-predicted \(q\).`,
+    terms: [[R`q_\phi(z\mid x)`, "encoder"], [R`p_\theta(x\mid z)`, "decoder"]], syms: ["E", "kl", "phi", "theta", "log", "cond", "loss"], src: "vae" },
+  { id: "vae-reparam", topic: "autoenc", title: "VAE reparameterisation trick",
+    tex: R`q_\phi(z\mid x) = \mathcal{N}\big(\mu_\phi(x),\operatorname{diag}\sigma_\phi^2(x)\big) \;\Rightarrow\; z = \mu_\phi(x) + \sigma_\phi(x)\odot\epsilon,\quad \epsilon\sim\mathcal{N}(0,I)`,
+    summary: "Write the sample as a differentiable function of φ plus independent noise.",
+    detail: R`Without this, sampling blocks gradients to the encoder. The encoder usually outputs \(\log\sigma^2\) for stability.`,
+    terms: [], syms: ["mu", "sigma", "hadamard", "epsilon", "normal", "phi", "sim"], src: "vae" },
+  { id: "beta-vae", topic: "autoenc", title: "β-VAE",
+    tex: R`\mathcal{L}_\beta = \mathbb{E}_{q_\phi(z\mid x)}\big[\log p_\theta(x\mid z)\big] - \beta\,D_{\mathrm{KL}}\big(q_\phi(z\mid x)\,\|\,p(z)\big)`,
+    summary: "Weight the KL term by β to trade reconstruction for disentangled latents.",
+    detail: R`\(\beta \gt 1\) pushes towards factorised latents; \(\beta \lt 1\) is common in latent-diffusion autoencoders where reconstruction quality matters most.`,
+    terms: [], syms: ["beta", "kl", "E", "log", "phi", "theta"], src: "text" },
+  { id: "vq-vae", topic: "autoenc", title: "VQ-VAE loss",
+    tex: R`\mathcal{L} = \|x - \hat x\|^2 + \big\|\operatorname{sg}[z_e] - e\big\|^2 + \beta\,\big\|z_e - \operatorname{sg}[e]\big\|^2`,
+    summary: "Snap encoder outputs to the nearest codebook vector e; learn with stop-gradients.",
+    detail: R`\(\operatorname{sg}\) is stop-gradient. The second term moves codebook vectors, the third (commitment loss) keeps the encoder near them. Discrete tokens from VQ models feed many image and audio generators.`,
+    terms: [[R`e`, "nearest codebook vector"], [R`z_e`, "encoder output"]], syms: ["beta", "norm", "hat", "loss"], src: "text" },
+
+  /* ---------- transformer ---------- */
+  { id: "attention", topic: "transformer", title: "Scaled dot-product attention",
+    tex: R`\mathrm{Attention}(Q,K,V) = \mathrm{softmax}\!\Big(\frac{QK^\top}{\sqrt{d_k}} + M\Big)V,\qquad Q = XW^Q,\; K = XW^K,\; V = XW^V`,
+    summary: "Each token takes a weighted average of values, weighted by query–key similarity.",
+    detail: R`\(QK^\top\) is the \(n\times n\) matrix of all pairwise scores, the source of the \(O(n^2d)\) cost. Dividing by \(\sqrt{d_k}\) keeps score variance near 1 so the softmax does not saturate. The mask \(M\) is 0 where attention is allowed and \(-\infty\) where blocked (upper triangle for causal models).`,
+    terms: [[R`X`, "n × d_model token embeddings"], [R`W^Q, W^K, W^V`, "learned projections"], [R`d_k`, "key/query width"], [R`M`, "attention mask"]],
+    syms: ["softmax", "transpose"], src: "vaswani" },
+  { id: "multihead", topic: "transformer", title: "Multi-head attention",
+    tex: R`\mathrm{MultiHead}(X) = \mathrm{Concat}(\mathrm{head}_1,\dots,\mathrm{head}_h)\,W^O,\qquad \mathrm{head}_i = \mathrm{Attention}(XW_i^Q, XW_i^K, XW_i^V)`,
+    summary: "Run h attention heads in parallel on narrower projections and mix them.",
+    detail: R`Usually \(d_k = d_{\text{model}}/h\). Grouped-query and multi-query attention share \(K, V\) projections across heads to shrink the KV cache.`,
+    terms: [[R`h`, "number of heads"], [R`W^O`, "output projection"]], syms: ["softmax"], src: "vaswani" },
+  { id: "softmax-def", topic: "transformer", title: "Softmax",
+    tex: R`\mathrm{softmax}(z)_i = \frac{e^{z_i}}{\sum_{j}e^{z_j}}`,
+    summary: "Turns a vector of scores into a probability distribution.",
+    detail: R`Invariant to adding a constant to every \(z_i\), so implementations subtract \(\max_j z_j\) first. Dividing \(z\) by a temperature \(\tau\) sharpens (\(\tau\lt1\)) or softens (\(\tau\gt1\)) it.`,
+    terms: [], syms: ["softmax", "sum", "tau"], src: "gbc" },
+  { id: "transformer-block", topic: "transformer", title: "Pre-LN transformer block",
+    tex: R`X' = X + \mathrm{MHA}(\mathrm{LN}(X)),\qquad X'' = X' + \mathrm{FFN}(\mathrm{LN}(X')),\qquad \mathrm{FFN}(x) = W_2\,\sigma(W_1x + b_1) + b_2`,
+    summary: "Residual stream with attention and feed-forward sub-layers, each normalised first.",
+    detail: R`The original paper normalised after the residual (post-LN). Most modern LLMs use pre-LN, RMSNorm and a SwiGLU FFN, with \(d_{ff}\approx 4\,d_{\text{model}}\) (or \(\tfrac{8}{3}\) for SwiGLU).`,
+    terms: [[R`\sigma`, "activation (ReLU, GELU, …)"]], syms: ["sigma"], src: "vaswani" },
+  { id: "layernorm", topic: "transformer", title: "LayerNorm, RMSNorm and SwiGLU",
+    tex: R`\mathrm{LN}(x) = \gamma\odot\frac{x-\mu}{\sqrt{\sigma^2+\epsilon}} + \beta,\qquad \mathrm{RMSNorm}(x) = \gamma\odot\frac{x}{\sqrt{\frac{1}{d}\sum_i x_i^2 + \epsilon}},\qquad \mathrm{SwiGLU}(x) = \big(\mathrm{Swish}(xW)\odot xV\big)W_2`,
+    summary: "Per-token normalisation with learned scale γ and shift β, and the gated FFN.",
+    detail: R`\(\mu\) and \(\sigma^2\) are the mean and variance over the feature dimension of one token (unlike BatchNorm, which averages over the batch). RMSNorm drops the mean and the shift.`,
+    terms: [], syms: ["gamma", "beta", "mu", "sigma", "epsilon", "hadamard", "sum"], src: "text" },
+  { id: "sinusoidal-pe", topic: "transformer", title: "Sinusoidal positional encoding",
+    tex: R`PE_{(pos,2i)} = \sin(pos\cdot\omega_i),\qquad PE_{(pos,2i+1)} = \cos(pos\cdot\omega_i),\qquad \omega_i = 10000^{-2i/d}`,
+    summary: "Fixed sine/cosine features at geometric frequencies, added to embeddings.",
+    detail: R`Any fixed offset is a linear function of these features, which lets attention reason about relative position.`,
+    terms: [[R`pos`, "token position"], [R`i`, "feature-pair index"]], syms: ["omega"], src: "vaswani" },
+  { id: "rope", topic: "transformer", title: "Rotary position embedding (RoPE)",
+    tex: R`\langle R_{\Theta,m}q,\; R_{\Theta,n}k\rangle = q^\top R_{\Theta,n-m}\,k,\qquad R_{\Theta,m} = \operatorname{blockdiag}_i\begin{pmatrix}\cos m\theta_i & -\sin m\theta_i\\ \sin m\theta_i & \cos m\theta_i\end{pmatrix},\quad \theta_i = 10000^{-2i/d}`,
+    summary: "Rotate query/key feature pairs by position so scores depend only on relative offset.",
+    detail: R`Used by most open LLMs. Context-extension methods (NTK scaling, YaRN) work by rescaling the frequencies \(\theta_i\).`,
+    terms: [[R`m, n`, "positions of query and key"]], syms: ["theta", "transpose"], src: "rope" },
+  { id: "lm-loss", topic: "transformer", title: "Autoregressive language-model loss",
+    tex: R`\mathcal{L}_{\text{LM}} = -\sum_{t=1}^{T}\log p_\theta(x_t\mid x_{\lt t}),\qquad p_\theta(\cdot\mid x_{\lt t}) = \mathrm{softmax}(W_U h_t)`,
+    summary: "Next-token cross-entropy summed over the sequence.",
+    detail: R`\(h_t\) is the final hidden state and \(W_U\) the unembedding matrix. Training compute is roughly \(C\approx 6ND\) FLOPs for \(N\) parameters and \(D\) tokens, the quantity scaling laws are written in.`,
+    terms: [[R`W_U`, "unembedding (vocab projection)"]], syms: ["log", "sum", "softmax", "cond", "theta", "loss"], src: "vaswani" },
+  { id: "dpo", topic: "transformer", title: "Direct Preference Optimization (DPO)",
+    tex: R`\mathcal{L}_{\text{DPO}} = -\,\mathbb{E}_{(x,y_w,y_l)}\Big[\log\sigma\Big(\beta\log\frac{\pi_\theta(y_w\mid x)}{\pi_{\text{ref}}(y_w\mid x)} - \beta\log\frac{\pi_\theta(y_l\mid x)}{\pi_{\text{ref}}(y_l\mid x)}\Big)\Big]`,
+    summary: "Align a model to preferences with a classification loss instead of RL.",
+    detail: R`\(y_w\) and \(y_l\) are the preferred and rejected responses, \(\pi_{\text{ref}}\) the frozen reference model and \(\beta\) the implicit KL strength. Derived from the closed-form optimum of KL-regularised reward maximisation.`,
+    terms: [[R`\pi_{\text{ref}}`, "frozen reference policy"], [R`\sigma`, "sigmoid"]], syms: ["beta", "pi", "sigma", "log", "E", "cond", "theta"], src: "dpo" },
+
+  /* ---------- diffusion ---------- */
+  { id: "ddpm-forward", topic: "diffusion", title: "DDPM forward (noising) step",
+    tex: R`q(x_t\mid x_{t-1}) = \mathcal{N}\big(\sqrt{1-\beta_t}\,x_{t-1},\;\beta_t I\big)`,
+    summary: "Each step shrinks the signal slightly and adds Gaussian noise of variance βₜ.",
+    detail: R`DDPM uses a linear schedule from \(\beta_1 = 10^{-4}\) to \(\beta_T = 0.02\) with \(T = 1000\). After enough steps \(x_T\) is approximately \(\mathcal{N}(0,I)\).`,
+    terms: [[R`\beta_t`, "noise schedule"]], syms: ["beta", "normal", "cond"], src: "ddpm" },
+  { id: "ddpm-marginal", topic: "diffusion", title: "Jump to any noise level in one step",
+    tex: R`q(x_t\mid x_0) = \mathcal{N}\big(\sqrt{\bar\alpha_t}\,x_0,\;(1-\bar\alpha_t)I\big),\qquad x_t = \sqrt{\bar\alpha_t}\,x_0 + \sqrt{1-\bar\alpha_t}\,\epsilon,\qquad \bar\alpha_t = \prod_{s=1}^{t}(1-\beta_s)`,
+    summary: "Closed-form noising: what makes diffusion training cheap.",
+    detail: R`Pick a random \(t\), noise \(x_0\) once and train on that pair; no need to simulate the chain. \(\alpha_t = 1-\beta_t\) and \(\bar\alpha_t\) is their running product.`,
+    terms: [[R`\bar\alpha_t`, "cumulative signal fraction"]], syms: ["alpha", "bar", "epsilon", "normal", "prod", "beta", "cond"], src: "ddpm" },
+  { id: "ddpm-loss", topic: "diffusion", title: "Simplified DDPM training loss",
+    tex: R`\mathcal{L}_{\text{simple}} = \mathbb{E}_{t\sim\mathcal{U}\{1,T\},\,x_0,\,\epsilon\sim\mathcal{N}(0,I)}\Big[\big\|\epsilon - \epsilon_\theta\big(\sqrt{\bar\alpha_t}x_0 + \sqrt{1-\bar\alpha_t}\,\epsilon,\; t\big)\big\|^2\Big]`,
+    summary: "Train the network to predict the noise that was added.",
+    detail: R`The full objective is a variational bound with one KL term per step; this is a reweighted version that trains better. Other parameterisations predict \(x_0\), the score or the velocity \(v\).`,
+    terms: [[R`\epsilon_\theta`, "noise-prediction network"]], syms: ["epsilon", "E", "norm", "theta", "bar", "alpha", "sim", "loss"], src: "ddpm" },
+  { id: "ddpm-sampling", topic: "diffusion", title: "DDPM ancestral sampling step",
+    tex: R`x_{t-1} = \frac{1}{\sqrt{\alpha_t}}\Big(x_t - \frac{\beta_t}{\sqrt{1-\bar\alpha_t}}\,\epsilon_\theta(x_t,t)\Big) + \sigma_t z,\qquad z\sim\mathcal{N}(0,I)`,
+    summary: "Remove the predicted noise, rescale, add a little fresh noise; repeat T times.",
+    detail: R`\(\sigma_t^2 = \beta_t\) is a common choice. DDIM and ODE solvers take far fewer steps; distillation reduces this to one to four.`,
+    terms: [], syms: ["alpha", "beta", "sigma", "epsilon", "bar", "theta"], src: "ddpm" },
+  { id: "snr", topic: "diffusion", title: "Signal-to-noise ratio",
+    tex: R`\mathrm{SNR}(t) = \frac{\bar\alpha_t}{1-\bar\alpha_t}`,
+    summary: "How much signal remains at step t; used to design schedules and loss weights.",
+    detail: R`Min-SNR weighting and v-prediction were both motivated by looking at the loss as a function of SNR.`,
+    terms: [], syms: ["bar", "alpha"], src: "survey" },
+  { id: "score-eps", topic: "diffusion", title: "Noise prediction equals score estimation",
+    tex: R`s_\theta(x_t,t) \approx \nabla_{x_t}\log q(x_t) = -\,\frac{\epsilon_\theta(x_t,t)}{\sqrt{1-\bar\alpha_t}}`,
+    summary: "The predicted noise is a rescaled score: both point back towards the data.",
+    detail: R`This identity unifies DDPM and score-based models; it follows from Tweedie's formula.`,
+    terms: [[R`s_\theta`, "score network"]], syms: ["nabla", "log", "epsilon", "bar", "alpha", "theta"], src: "song" },
+  { id: "dsm", topic: "diffusion", title: "Denoising score matching",
+    tex: R`\mathcal{L}_{\text{DSM}} = \mathbb{E}_{t,\,x_0,\,x_t}\Big[\lambda(t)\,\big\|s_\theta(x_t,t) - \nabla_{x_t}\log q(x_t\mid x_0)\big\|^2\Big]`,
+    summary: "Regress the network onto the known score of the noising kernel.",
+    detail: R`For Gaussian noise \(\nabla_{x_t}\log q(x_t\mid x_0) = -(x_t - \sqrt{\bar\alpha_t}x_0)/(1-\bar\alpha_t)\), available in closed form. \(\lambda(t)\) is a weighting function.`,
+    terms: [[R`\lambda(t)`, "per-time weight"]], syms: ["nabla", "E", "norm", "log", "theta", "lambda", "cond"], src: "song" },
+  { id: "sde", topic: "diffusion", title: "Forward and reverse SDEs",
+    tex: R`dx = f(x,t)\,dt + g(t)\,dw,\qquad dx = \big[f(x,t) - g(t)^2\,\nabla_x\log p_t(x)\big]dt + g(t)\,d\bar w`,
+    summary: "Diffusion as a continuous-time process, reversed using the score.",
+    detail: R`\(dw\) is Brownian noise and \(d\bar w\) the same running backwards in time. Anderson's (1982) result guarantees the reverse SDE exists; learning the score is all that is needed to run it.`,
+    terms: [[R`f, g`, "drift and diffusion coefficients"]], syms: ["nabla", "log"], src: "song" },
+  { id: "pf-ode", topic: "diffusion", title: "Probability-flow ODE",
+    tex: R`\frac{dx}{dt} = f(x,t) - \tfrac{1}{2}g(t)^2\,\nabla_x\log p_t(x)`,
+    summary: "A deterministic ODE with the same marginals as the reverse SDE.",
+    detail: R`Enables exact likelihoods and fast deterministic samplers (DDIM, DPM-Solver), and is the trajectory that consistency models learn to jump along.`,
+    terms: [], syms: ["nabla", "log"], src: "song" },
+  { id: "cfg", topic: "diffusion", title: "Classifier-free guidance",
+    tex: R`\tilde\epsilon_\theta(x_t, c) = (1+w)\,\epsilon_\theta(x_t, c) - w\,\epsilon_\theta(x_t, \varnothing)`,
+    summary: "Extrapolate from the unconditional prediction towards the conditional one.",
+    detail: R`\(c\) is the condition (e.g. a text prompt), \(\varnothing\) the dropped condition and \(w\) the guidance scale. Larger \(w\) improves prompt adherence at the cost of diversity.`,
+    terms: [[R`w`, "guidance scale"], [R`c`, "conditioning"]], syms: ["epsilon", "tilde", "theta"], src: "survey" },
+  { id: "tweedie", topic: "diffusion", title: "Tweedie's formula",
+    tex: R`\mathbb{E}[x_0\mid x_t] = \frac{x_t + (1-\bar\alpha_t)\,\nabla_{x_t}\log p(x_t)}{\sqrt{\bar\alpha_t}}`,
+    summary: "The best denoiser is the noisy input nudged along the score.",
+    detail: R`Explains why denoisers and score models are interchangeable, and underlies many diffusion posterior-sampling methods.`,
+    terms: [], syms: ["E", "nabla", "bar", "alpha", "log", "cond"], src: "survey" },
+  { id: "flow-matching", topic: "diffusion", title: "Conditional flow matching",
+    tex: R`x_t = (1-t)\,x_0 + t\,x_1,\qquad \mathcal{L}_{\text{CFM}}(\theta) = \mathbb{E}_{t,\,q(x_1),\,p_t(x\mid x_1)}\big\|v_\theta(x_t,t) - u_t(x_t\mid x_1)\big\|^2,\qquad u_t = x_1 - x_0`,
+    summary: "Learn a velocity field that carries noise to data along straight lines.",
+    detail: R`Here \(t=0\) is noise and \(t=1\) is data (the reverse of DDPM's convention). The paper's optimal-transport path writes \(\mu_t(x) = t x_1\), \(\sigma_t(x) = 1-(1-\sigma_{\min})t\). Rectified flow and most 2024–2026 image and video generators use this objective.`,
+    terms: [[R`v_\theta`, "learned velocity field"], [R`u_t`, "target conditional velocity"]], syms: ["E", "norm", "theta", "mu", "sigma", "cond"], src: "fm" },
+
+  /* ---------- distill ---------- */
+  { id: "temp-softmax", topic: "distill", title: "Temperature-softened softmax",
+    tex: R`p_i^{(\tau)} = \frac{\exp(z_i/\tau)}{\sum_j\exp(z_j/\tau)}`,
+    summary: "Raise τ above 1 to expose how the teacher ranks the wrong classes.",
+    detail: R`Those small probabilities on incorrect classes are what Hinton et al. call 'dark knowledge'.`,
+    terms: [[R`z_i`, "logits"]], syms: ["tau", "softmax", "sum"], src: "hinton" },
+  { id: "kd-loss", topic: "distill", title: "Hinton knowledge-distillation loss",
+    tex: R`\mathcal{L}_{\text{KD}} = (1-\alpha)\,H\big(y,\,p^{s}\big) + \alpha\,\tau^2\,D_{\mathrm{KL}}\big(p^{t,(\tau)}\,\|\,p^{s,(\tau)}\big)`,
+    summary: "Mix the hard-label loss with a KL to the teacher's softened outputs.",
+    detail: R`The \(\tau^2\) factor keeps soft-target gradients on the same scale as hard-label gradients, since they shrink as \(1/\tau^2\). \(\alpha\) balances the two terms.`,
+    terms: [[R`p^t, p^s`, "teacher and student distributions"], [R`\alpha`, "mixing weight"]], syms: ["alpha", "tau", "kl", "entropy", "loss"], src: "hinton" },
+  { id: "fitnets", topic: "distill", title: "Feature (hint) distillation",
+    tex: R`\mathcal{L}_{\text{hint}} = \big\|\phi^{t}(x) - W_r\,\phi^{s}(x)\big\|^2`,
+    summary: "Match intermediate features through a learned projection W_r.",
+    detail: R`Introduced by FitNets. Attention transfer and relational KD match attention maps or pairwise distances instead of raw features.`,
+    terms: [[R`W_r`, "regressor matching widths"]], syms: ["norm", "phi"], src: "text" },
+  { id: "reverse-kl-kd", topic: "distill", title: "On-policy / reverse-KL distillation for LLMs",
+    tex: R`\mathcal{L} = \mathbb{E}_{x,\;y\sim p^s(\cdot\mid x)}\Big[\textstyle\sum_t D_{\mathrm{KL}}\big(p^s(\cdot\mid y_{\lt t},x)\,\|\,p^t(\cdot\mid y_{\lt t},x)\big)\Big]`,
+    summary: "Score the student's own samples against the teacher, mode-seeking.",
+    detail: R`Sampling from the student fixes the train/test mismatch of sequence-level KD. Variants swap the reverse KL for a generalised JSD or skew KL.`,
+    terms: [], syms: ["kl", "E", "sum", "cond", "sim"], src: "text" },
+  { id: "quantisation", topic: "distill", title: "Uniform quantisation",
+    tex: R`q = \operatorname{clamp}\big(\operatorname{round}(w/s) + z,\; q_{\min},\; q_{\max}\big),\qquad \hat w = s\,(q - z)`,
+    summary: "Map weights to b-bit integers with a scale s and zero-point z.",
+    detail: R`\(b\) bits give \(2^b\) levels. Scales are chosen per tensor, channel or group; methods such as GPTQ and AWQ pick values that minimise the layer's output error.`,
+    terms: [[R`s`, "scale"], [R`z`, "zero-point"]], syms: ["hat"], src: "text" },
+  { id: "ste", topic: "distill", title: "Straight-through estimator",
+    tex: R`\frac{\partial\,\operatorname{round}(x)}{\partial x} \approx 1`,
+    summary: "Pretend rounding is the identity on the backward pass.",
+    detail: R`Makes quantisation-aware training and VQ models trainable despite non-differentiable rounding.`,
+    terms: [], syms: ["partial"], src: "text" },
+  { id: "obs", topic: "distill", title: "Optimal Brain Surgeon / GPTQ update",
+    tex: R`\delta\mathcal{L}_q = \frac{w_q^2}{2\,[\mathbf{H}^{-1}]_{qq}},\qquad \delta w = -\frac{w_q}{[\mathbf{H}^{-1}]_{qq}}\,\mathbf{H}^{-1}_{:,q},\qquad \mathbf{H} = 2XX^\top`,
+    summary: "Second-order cost of removing weight q, and the fix-up for the others.",
+    detail: R`Derived from the Taylor expansion with a constraint \(w_q + \delta w_q = 0\). For a linear layer the Hessian of the reconstruction error is \(2XX^\top\) over calibration inputs; SparseGPT and GPTQ apply this column by column.`,
+    terms: [[R`X`, "calibration inputs to the layer"]], syms: ["delta", "hessian", "inverse", "loss", "transpose"], src: "text" },
+  { id: "pruning", topic: "distill", title: "Magnitude pruning mask",
+    tex: R`m = \mathbb{1}\big[\,|w| \gt \text{threshold}\,\big],\qquad w_{\text{pruned}} = w\odot m`,
+    summary: "Zero out the smallest-magnitude weights.",
+    detail: R`Simple, and the baseline for lottery-ticket and N:M structured sparsity work.`,
+    terms: [[R`m`, "binary mask"]], syms: ["indicator", "hadamard"], src: "text" },
+  { id: "lora", topic: "distill", title: "Low-rank adaptation (LoRA)",
+    tex: R`W = W_0 + \Delta W,\qquad \Delta W = BA,\quad B\in\mathbb{R}^{d\times r},\; A\in\mathbb{R}^{r\times k},\; r\ll\min(d,k)`,
+    summary: "Train a low-rank update instead of the full weight matrix.",
+    detail: R`Trainable parameters drop from \(dk\) to \(r(d+k)\). The Eckart–Young theorem says truncated SVD gives the best rank-\(r\) approximation, the same idea behind low-rank compression.`,
+    terms: [[R`r`, "rank"]], syms: ["Delta"], src: "text" },
+
+  /* ---------- theorems ---------- */
+  { id: "jensen", topic: "theorems", title: "Jensen's inequality",
+    tex: R`f(\mathbb{E}[x]) \le \mathbb{E}[f(x)]\;\; (f\text{ convex}),\qquad \log\mathbb{E}[x] \ge \mathbb{E}[\log x]`,
+    summary: "Convex functions of averages are at most averages of the function.",
+    detail: R`Applied to the concave log, it produces every ELBO and proves \(D_{\mathrm{KL}}\ge 0\).`,
+    terms: [], syms: ["E", "log"], src: "text" },
+  { id: "gibbs", topic: "theorems", title: "Gibbs' inequality",
+    tex: R`D_{\mathrm{KL}}(p\,\|\,q) \ge 0,\quad\text{with equality iff } p = q`,
+    summary: "Cross-entropy is minimised by the true distribution.",
+    detail: R`Why MLE is consistent and why distillation with KL drives the student towards the teacher.`,
+    terms: [], syms: ["kl"], src: "text" },
+  { id: "lln-clt", topic: "theorems", title: "Law of large numbers and central limit theorem",
+    tex: R`\bar x_N = \frac{1}{N}\sum_{i=1}^{N}x_i \xrightarrow{\;N\to\infty\;}\mu,\qquad \sqrt{N}\,(\bar x_N - \mu) \xrightarrow{d} \mathcal{N}(0,\sigma^2)`,
+    summary: "Sample averages converge to the mean, with Gaussian fluctuations of size σ/√N.",
+    detail: R`Justifies mini-batch gradients and Monte-Carlo estimates, and the infinite-width Gaussian-process limit of networks.`,
+    terms: [], syms: ["mu", "sigma", "normal", "bar", "sum"], src: "text" },
+  { id: "cauchy-schwarz", topic: "theorems", title: "Cauchy–Schwarz inequality",
+    tex: R`|\langle u, v\rangle| \le \|u\|\,\|v\|`,
+    summary: "Dot products are bounded by the product of lengths.",
+    detail: R`Why cosine similarity lies in \([-1, 1]\); used constantly in convergence and generalisation proofs.`,
+    terms: [], syms: ["norm"], src: "text" },
+  { id: "eckart-young", topic: "theorems", title: "Eckart–Young–Mirsky theorem",
+    tex: R`A_r = \sum_{i=1}^{r}\sigma_i u_i v_i^\top = \arg\min_{\operatorname{rank}(B)\le r}\|A - B\|_F,\qquad \|A - A_r\|_2 = \sigma_{r+1}`,
+    summary: "Truncated SVD is the best rank-r approximation.",
+    detail: R`The theoretical basis of PCA, low-rank layer compression and the intuition for LoRA.`,
+    terms: [], syms: ["sigma", "norm", "sum", "argmin", "transpose"], src: "cookbook" },
+  { id: "universal-approx", topic: "theorems", title: "Universal approximation theorem",
+    tex: R`\forall\,\epsilon\gt0\;\exists\,N, a_i, w_i, b_i:\quad \sup_{x\in K}\Big|f(x) - \sum_{i=1}^{N}a_i\,\sigma(w_i^\top x + b_i)\Big| \lt \epsilon`,
+    summary: "One hidden layer with enough units approximates any continuous function on a compact set.",
+    detail: R`Cybenko (1989) for sigmoids, Hornik (1991) for general activations. It says nothing about how many units, or whether gradient descent finds them.`,
+    terms: [[R`K`, "compact input domain"]], syms: ["epsilon", "sigma", "sum", "transpose"], src: "text" },
+  { id: "representer", topic: "theorems", title: "Representer theorem",
+    tex: R`f^* = \arg\min_{f\in\mathcal{H}}\sum_i\ell(f(x_i),y_i) + \lambda\|f\|_{\mathcal{H}}^2 \;\Rightarrow\; f^*(\cdot) = \sum_{i=1}^{N}\alpha_i\,k(x_i,\cdot)`,
+    summary: "Regularised optima in a kernel space are combinations of kernels at the data points.",
+    detail: R`Turns infinite-dimensional problems into finite ones; the basis of SVMs, kernel ridge regression and Gaussian processes.`,
+    terms: [[R`\mathcal{H}`, "reproducing-kernel Hilbert space"]], syms: ["alpha", "sum", "argmin", "lambda", "norm", "star"], src: "text" },
+  { id: "hoeffding", topic: "theorems", title: "Hoeffding / PAC generalisation bound",
+    tex: R`P\big(|\hat R(h) - R(h)| \gt \epsilon\big) \le 2e^{-2N\epsilon^2}\;\;\Rightarrow\;\; R(h) \le \hat R(h) + \sqrt{\frac{\log(2|\mathcal{H}|/\delta)}{2N}}\;\text{ w.p. }\ge 1-\delta`,
+    summary: "Training error approaches test error at rate 1/√N, with confidence 1 − δ.",
+    detail: R`The right-hand form adds a union bound over a finite hypothesis class \(\mathcal{H}\). VC dimension and Rademacher complexity extend it to infinite classes.`,
+    terms: [], syms: ["epsilon", "hat", "delta", "log"], src: "text" },
+  { id: "cramer-rao", topic: "theorems", title: "Cramér–Rao bound",
+    tex: R`\operatorname{Var}(\hat\theta) \succeq \mathbf{F}(\theta)^{-1}\quad\text{for unbiased }\hat\theta`,
+    summary: "No unbiased estimator beats the inverse Fisher information.",
+    detail: R`Connects the Fisher matrix to estimation precision, and motivates natural-gradient methods.`,
+    terms: [], syms: ["inverse", "hat", "theta"], src: "text" },
+  { id: "data-processing", topic: "theorems", title: "Data-processing inequality",
+    tex: R`X\to Y\to Z \;\Rightarrow\; I(X;Z)\le I(X;Y)`,
+    summary: "Processing can't create information about the input.",
+    detail: R`Underlies the information-bottleneck view of deep representations.`,
+    terms: [], syms: [], src: "text" },
+  { id: "gd-convergence", topic: "theorems", title: "Gradient-descent convergence (convex, L-smooth)",
+    tex: R`f(\theta_k) - f(\theta^*) \le \frac{L\,\|\theta_0 - \theta^*\|^2}{2k}\qquad\text{with }\eta = 1/L`,
+    summary: "Sub-optimality shrinks as 1/k; strong convexity makes it linear.",
+    detail: R`With \(\mu\)-strong convexity the error contracts by \((1-\mu/L)\) each step, so the condition number governs speed.`,
+    terms: [], syms: ["eta", "norm", "star", "theta"], src: "text" },
+  { id: "ntk", topic: "theorems", title: "Neural tangent kernel",
+    tex: R`\Theta(x, x') = \nabla_\theta f_\theta(x)^\top\,\nabla_\theta f_\theta(x')`,
+    summary: "Infinitely wide networks trained by gradient descent behave like kernel regression.",
+    detail: R`Jacot et al. (2018). In this limit the kernel stays fixed during training; finite networks move away from it ('feature learning').`,
+    terms: [], syms: ["nabla", "theta", "transpose"], src: "text" },
+  { id: "banach", topic: "theorems", title: "Banach fixed-point theorem",
+    tex: R`\|T(x) - T(y)\| \le c\,\|x-y\|,\; c\lt1 \;\Rightarrow\; \exists!\,x^*: T(x^*) = x^*,\quad x_{k+1} = T(x_k)\to x^*`,
+    summary: "A contraction has one fixed point, and iterating finds it.",
+    detail: R`Proves value iteration converges and justifies deep-equilibrium models.`,
+    terms: [], syms: ["norm", "star"], src: "text" }
+];
+
+const CONVENTIONS = [
+  ["a, x, λ", "italic lower-case", "Scalar"],
+  ["𝐱, 𝐡, 𝛉", "bold lower-case", "Vector (column by default)"],
+  ["𝐀, 𝐖", "bold upper-case", "Matrix"],
+  ["𝒳, 𝒟, ℋ", "calligraphic", "Set, space, dataset or hypothesis class"],
+  ["ℝ, ℕ", "blackboard", "Number systems; 𝐱 ∈ ℝᵈ is a d-dim real vector"],
+  ["xᵢ, x⁽ⁱ⁾, xₜ", "index", "Element i, training example i, time step t"],
+  ["A_{i,:}, A_{:,j}", "colon", "Row i, column j"],
+  ["f_θ, p_θ, q_φ", "subscript", "Parameterised by θ (model) or φ (encoder)"],
+  [":=, ≜", "definition", "Defined as"],
+  ["O(·), Θ(·)", "asymptotic", "Order of growth (attention is O(n²d))"]
+];
+
+</script>
+
+<script>
+(function () {
+  "use strict";
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
+
+  var symById = {}, topicById = {}, eqById = {};
+  SYMBOLS.forEach(function (s) { symById[s.id] = s; s.eqs = []; });
+  TOPICS.forEach(function (t) { topicById[t.id] = t; t.eqs = []; });
+  EQUATIONS.forEach(function (e) {
+    eqById[e.id] = e;
+    topicById[e.topic].eqs.push(e.id);
+    e.syms.forEach(function (sid) { if (symById[sid] && symById[sid].eqs.indexOf(e.id) < 0) symById[sid].eqs.push(e.id); });
+  });
+
+  /* ---------- math typesetting queue ---------- */
+  var pending = [];
+  function typeset(el) {
+    if (!el) return;
+    if (window.__mjReady && window.MathJax && MathJax.typesetPromise) {
+      MathJax.typesetPromise([el]).catch(function () {});
+    } else pending.push(el);
+  }
+  window.__flushMath = function () { var p = pending; pending = []; p.forEach(typeset); };
+  function disp(tex) { return "\\[" + tex + "\\]"; }
+  function inl(tex) { return "\\(" + tex + "\\)"; }
+  function texText(tex) { return esc(tex).replace(/&lt;/g, "\\lt "); }
+
+  /* ---------- search index ---------- */
+  function strip(s) { return String(s).replace(/\\[a-zA-Z]+/g, " ").replace(/[{}\\_^$()\[\]]/g, " "); }
+  var index = [];
+  SYMBOLS.forEach(function (s) {
+    index.push({ type: "symbol", id: s.id, title: s.name, sub: s.meanings[0], hay: (s.name + " " + s.glyph + " " + s.id + " " + s.tex + " " + s.meanings.join(" ")).toLowerCase(), glyph: s.glyph });
+  });
+  EQUATIONS.forEach(function (e) {
+    var symNames = e.syms.map(function (id) { return symById[id] ? symById[id].name + " " + symById[id].glyph : ""; }).join(" ");
+    var terms = e.terms.map(function (t) { return t[1] + " " + strip(t[0]); }).join(" ");
+    index.push({ type: "equation", id: e.id, title: e.title, sub: e.summary, topic: e.topic,
+      hay: (e.title + " " + e.summary + " " + strip(e.detail) + " " + terms + " " + symNames + " " + strip(e.tex) + " " + topicById[e.topic].title).toLowerCase() });
+  });
+  TOPICS.forEach(function (t) { index.push({ type: "topic", id: t.id, title: t.title, sub: t.blurb, hay: (t.title + " " + t.blurb).toLowerCase() }); });
+
+  function search(q) {
+    q = q.trim().toLowerCase();
+    if (!q) return null;
+    var toks = q.split(/\s+/).filter(Boolean);
+    var out = [];
+    index.forEach(function (it) {
+      var ok = toks.every(function (t) { return it.hay.indexOf(t) >= 0; });
+      if (!ok) return;
+      var tl = it.title.toLowerCase(), score = 1;
+      if (tl === q || (it.glyph && it.glyph.toLowerCase() === q)) score += 100;
+      if (tl.indexOf(q) === 0) score += 30;
+      if (tl.indexOf(q) >= 0) score += 15;
+      toks.forEach(function (t) { if (tl.indexOf(t) >= 0) score += 5; });
+      if (it.type === "symbol") score += 3;
+      out.push({ it: it, score: score });
+    });
+    out.sort(function (a, b) { return b.score - a.score; });
+    return { toks: toks, items: out.map(function (o) { return o.it; }) };
+  }
+  function hl(text, toks) {
+    var s = esc(text);
+    toks.forEach(function (t) {
+      if (t.length < 2) return;
+      var re = new RegExp("(" + t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + ")", "ig");
+      s = s.replace(re, "<mark>$1</mark>");
+    });
+    return s;
+  }
+
+  /* ---------- shared bits ---------- */
+  function glyphClass(s) { return s.glyph.length > 3 ? " small" : ""; }
+  function tileHTML(s) {
+    var n = s.eqs.length;
+    return '<a class="tile" href="#sym-' + s.id + '" title="' + esc(s.name) + '"><span class="g' + glyphClass(s) + '">' + esc(s.glyph) +
+      '</span><span class="n">' + esc(s.name) + '</span><span class="c">' + n + (n === 1 ? " equation" : " equations") + "</span></a>";
+  }
+  function cardHTML(e, showTopic) {
+    return '<button class="card" data-eq="' + e.id + '"><span class="meta"><h3>' + esc(e.title) + "</h3>" +
+      (showTopic ? '<span class="tp">' + esc(topicById[e.topic].title) + "</span>" : "") +
+      '</span><div class="f">' + texText(disp(e.tex)) + '</div><p class="s">' + esc(e.summary) + '</p><span class="more">Read more →</span></button>';
+  }
+
+  var view = $("#view");
+  var context = [];       // equation ids on the current page, for prev/next
+  var baseHash = "home";  // last non-drawer route
+
+  /* ---------- home ---------- */
+  function renderHome(q) {
+    var counts = EQUATIONS.length + " equations · " + SYMBOLS.length + " symbols · " + TOPICS.length + " topics";
+    var html = '<section class="hero"><div class="wrap">' +
+      '<span class="eyebrow">Notation reference for ML &amp; deep learning papers</span>' +
+      "<h1>Read any equation, <em>one symbol</em> at a time.</h1>" +
+      '<p class="lead">Pick a symbol to see every equation it appears in, from Bayes nets and HMMs to transformers, diffusion and distillation. Open any equation for a plain-language reading, a legend of its terms and the paper it comes from.</p>' +
+      '<div class="bigsearch"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8.5" cy="8.5" r="6"/><path d="M13 13l5 5" stroke-linecap="round"/></svg>' +
+      '<input type="search" id="mainSearch" placeholder="Search a symbol, name or idea: σ, Jacobian, KL, attention…" aria-label="Search the whole atlas" autocomplete="off"></div>' +
+      '<div class="try"><span>Try</span>' + ["𝔼", "∇", "Hessian", "temperature", "ELBO", "softmax", "noise schedule", "Viterbi"].map(function (t) {
+        return '<button class="chip" data-q="' + esc(t) + '">' + esc(t) + "</button>"; }).join("") +
+      '<span class="stats" style="margin-left:auto">' + counts + " · press <span class=\"kbd\">/</span> to search</span></div>" +
+      '</div></section><main class="wrap" id="homeMain"></main>';
+    view.innerHTML = html;
+    var input = $("#mainSearch");
+    input.value = q || "";
+    var t;
+    input.addEventListener("input", function () { clearTimeout(t); t = setTimeout(function () { fillHome(input.value); }, 110); });
+    view.querySelectorAll(".try .chip").forEach(function (b) { b.addEventListener("click", function () { input.value = b.dataset.q; fillHome(b.dataset.q); input.focus(); }); });
+    fillHome(input.value);
+  }
+
+  function fillHome(q) {
+    var main = $("#homeMain");
+    if (!main) return;
+    lastQuery = q || "";
+    var res = search(q || "");
+    if (res) {
+      context = res.items.filter(function (i) { return i.type === "equation"; }).map(function (i) { return i.id; });
+      if (!res.items.length) { main.innerHTML = '<p class="empty">No matches for “' + esc(q) + '”. Try a Greek letter name (sigma), a glyph (σ) or a concept (gradient).</p>'; return; }
+      var groups = { symbol: [], equation: [], topic: [] };
+      res.items.forEach(function (i) { groups[i.type].push(i); });
+      var h = '<div class="results">';
+      if (groups.symbol.length) h += '<div class="rgroup"><h3>Symbols · ' + groups.symbol.length + '</h3><div class="tiles">' + groups.symbol.map(function (i) { return tileHTML(symById[i.id]); }).join("") + "</div></div>";
+      if (groups.equation.length) h += '<div class="rgroup"><h3>Equations · ' + groups.equation.length + '</h3><div class="rlist">' + groups.equation.map(function (i) {
+        return '<button class="rrow" data-eq="' + i.id + '"><span class="t">' + hl(i.title, res.toks) + '</span><span class="tp">' + esc(topicById[i.topic].title) + '</span><span class="s">' + hl(i.sub, res.toks) + "</span></button>"; }).join("") + "</div></div>";
+      if (groups.topic.length) h += '<div class="rgroup"><h3>Topics · ' + groups.topic.length + '</h3><div class="topics">' + groups.topic.map(function (i) { return topicCard(topicById[i.id]); }).join("") + "</div></div>";
+      main.innerHTML = h + "</div>";
+      return;
+    }
+    context = [];
+    var h2 = "";
+    CATS.forEach(function (c) {
+      var list = SYMBOLS.filter(function (s) { return s.cat === c.id; });
+      h2 += '<section class="section"><div class="section-head"><h2>' + esc(c.title) + '</h2><span class="note">' + list.length + " symbols</span></div><div class=\"tiles\">" + list.map(tileHTML).join("") + "</div></section>";
+    });
+    h2 += '<section class="section" id="topicsSec"><div class="section-head"><h2>Topics</h2><span class="note">Every equation, grouped by model family</span></div><div class="topics">' + TOPICS.map(topicCard).join("") + "</div></section>";
+    h2 += '<section class="section"><div class="section-head"><h2>How to read the typography</h2><span class="note">Conventions from Goodfellow, Bengio &amp; Courville</span></div><div class="tablewrap"><table><thead><tr><th>Written as</th><th>Style</th><th>Means</th></tr></thead><tbody>' +
+      CONVENTIONS.map(function (r) { return '<tr><td class="sym">' + esc(r[0]) + "</td><td>" + esc(r[1]) + "</td><td>" + esc(r[2]) + "</td></tr>"; }).join("") + "</tbody></table></div></section>";
+    main.innerHTML = h2;
+  }
+  function topicCard(t) {
+    return '<a class="topic" href="#topic-' + t.id + '"><span class="c">' + t.eqs.length + " equations</span><h3>" + esc(t.title) + "</h3><p>" + esc(t.blurb) + "</p></a>";
+  }
+  var lastQuery = "";
+
+  /* ---------- symbol page ---------- */
+  function renderSymbol(id) {
+    var s = symById[id];
+    if (!s) return renderHome();
+    var byTopic = {};
+    s.eqs.forEach(function (eid) { var e = eqById[eid]; (byTopic[e.topic] = byTopic[e.topic] || []).push(e); });
+    context = [];
+    var listHTML = "";
+    TOPICS.forEach(function (t) {
+      if (!byTopic[t.id]) return;
+      listHTML += '<div class="grouphead">' + esc(t.title) + " · " + byTopic[t.id].length + '</div><div class="cards">' + byTopic[t.id].map(function (e) { context.push(e.id); return cardHTML(e, false); }).join("") + "</div>";
+    });
+    view.innerHTML = '<section class="phead"><div class="wrap">' +
+      '<div class="crumbs"><a href="#home">Atlas</a><span>/</span><span>' + esc(catTitle(s.cat)) + "</span></div>" +
+      '<div class="symhead"><div class="bigglyph' + glyphClass(s) + '">' + esc(s.glyph) + '</div><div style="display:grid;gap:10px;min-width:0">' +
+      "<h1>" + esc(s.name) + "</h1>" +
+      '<div class="texline"><span>Written in TeX as</span><code id="texCode">' + esc(s.tex) + '</code><button class="copy" id="copyTex">Copy</button><span>· renders as</span><span>' + texText(inl(s.tex)) + "</span></div>" +
+      '<ul class="meanings">' + s.meanings.map(function (m) { return "<li>" + esc(m) + "</li>"; }).join("") + "</ul></div></div></div></section>" +
+      '<main class="wrap"><section class="section"><div class="section-head"><h2>Appears in ' + s.eqs.length + (s.eqs.length === 1 ? " equation" : " equations") + '</h2><span class="note">Select one to read it in the side panel</span></div>' +
+      (s.eqs.length ? listHTML : '<p class="empty">No equation in the atlas uses this symbol yet.</p>') + "</section></main>";
+    $("#copyTex").addEventListener("click", function () { copy(s.tex); });
+    typeset(view);
+  }
+  function catTitle(id) { for (var i = 0; i < CATS.length; i++) if (CATS[i].id === id) return CATS[i].title; return ""; }
+
+  /* ---------- topic page ---------- */
+  function renderTopic(id) {
+    var t = topicById[id];
+    if (!t) return renderHome();
+    context = t.eqs.slice();
+    view.innerHTML = '<section class="phead"><div class="wrap"><div class="crumbs"><a href="#home">Atlas</a><span>/</span><a href="#topics">Topics</a></div>' +
+      "<h1 style=\"font-size:clamp(26px,4vw,38px)\">" + esc(t.title) + '</h1><p class="topic-lead">' + esc(t.blurb) + "</p></div></section>" +
+      '<main class="wrap"><section class="section"><div class="section-head"><h2>' + t.eqs.length + ' equations</h2><span class="note">Select one to read it in the side panel</span></div><div class="cards">' +
+      t.eqs.map(function (eid) { return cardHTML(eqById[eid], false); }).join("") + "</div></section></main>";
+    typeset(view);
+  }
+
+  /* ---------- drawer ---------- */
+  var drawer = $("#drawer"), scrim = $("#scrim"), openId = null;
+  function openDrawer(id) {
+    var e = eqById[id];
+    if (!e) return;
+    openId = id;
+    if (context.indexOf(id) < 0) context = topicById[e.topic].eqs.slice();
+    $("#dTopic").textContent = topicById[e.topic].title;
+    $("#dTopic").href = "#topic-" + e.topic;
+    $("#dTitle").textContent = e.title;
+    var src = SOURCES[e.src];
+    var h = '<div class="dformula">' + texText(disp(e.tex)) + "</div>" +
+      '<div class="dsec"><h4>In short</h4><p><strong>' + esc(e.summary) + "</strong></p></div>" +
+      '<div class="dsec"><h4>Reading it</h4><p>' + texText(e.detail) + "</p></div>";
+    if (e.terms.length) h += '<div class="dsec"><h4>Where</h4><dl class="where">' + e.terms.map(function (t) { return "<dt>" + texText(inl(t[0])) + "</dt><dd>" + esc(t[1]) + "</dd>"; }).join("") + "</dl></div>";
+    if (e.syms.length) h += '<div class="dsec"><h4>Symbols in this equation</h4><div class="chips">' + e.syms.map(function (sid) {
+      var s = symById[sid]; return s ? '<a class="chip" href="#sym-' + s.id + '"><span class="g">' + esc(s.glyph) + "</span>" + esc(s.name) + "</a>" : ""; }).join("") + "</div></div>";
+    var related = EQUATIONS.filter(function (o) { return o.id !== e.id && o.syms.filter(function (s) { return e.syms.indexOf(s) >= 0; }).length >= 2 && o.topic !== e.topic; }).slice(0, 4);
+    if (related.length) h += '<div class="dsec"><h4>Same symbols, other topics</h4><div class="chips">' + related.map(function (o) { return '<button class="chip" data-eq="' + o.id + '">' + esc(o.title) + "</button>"; }).join("") + "</div></div>";
+    h += '<div class="dsec src"><h4>Source</h4><p><a href="' + esc(src.url) + '" target="_blank" rel="noopener">' + esc(src.label) + "</a></p></div>" +
+      '<div class="dsec"><h4>TeX</h4><div style="display:flex;gap:8px;align-items:flex-start"><code style="overflow-x:auto;white-space:pre;display:block;flex:1;min-width:0;padding:8px">' + esc(e.tex) + '</code><button class="copy" id="copyEq">Copy</button></div></div>';
+    var body = $("#dBody");
+    body.innerHTML = h;
+    body.scrollTop = 0;
+    $("#copyEq").addEventListener("click", function () { copy(e.tex); });
+    var i = context.indexOf(id);
+    var prev = context[i - 1], next = context[i + 1];
+    var pb = $("#dPrev"), nb = $("#dNext");
+    pb.disabled = !prev; nb.disabled = !next;
+    pb.textContent = prev ? "← " + eqById[prev].title : "← Previous";
+    nb.textContent = next ? eqById[next].title + " →" : "Next →";
+    pb.dataset.eq = prev || ""; nb.dataset.eq = next || "";
+    drawer.classList.add("on"); scrim.classList.add("on"); drawer.setAttribute("aria-hidden", "false");
+    document.querySelectorAll(".card.active").forEach(function (c) { c.classList.remove("active"); });
+    var card = view.querySelector('.card[data-eq="' + id + '"]'); if (card) card.classList.add("active");
+    typeset(body);
+    setTimeout(function () { $("#dClose").focus({ preventScroll: true }); }, 50);
+  }
+  function closeDrawer() {
+    drawer.classList.remove("on"); scrim.classList.remove("on"); drawer.setAttribute("aria-hidden", "true");
+    var was = openId; openId = null;
+    if (location.hash.indexOf("#eq-") === 0) { suppress = true; location.hash = baseHash; }
+    var card = was && view.querySelector('[data-eq="' + was + '"]'); if (card) card.focus({ preventScroll: true });
+  }
+  $("#dClose").addEventListener("click", closeDrawer);
+  scrim.addEventListener("click", closeDrawer);
+  $("#dPrev").addEventListener("click", function () { if (this.dataset.eq) go("eq-" + this.dataset.eq); });
+  $("#dNext").addEventListener("click", function () { if (this.dataset.eq) go("eq-" + this.dataset.eq); });
+
+  /* ---------- routing ---------- */
+  var suppress = false;
+  function go(h) { if (location.hash === "#" + h) route(); else location.hash = h; }
+  function route() {
+    var h = (location.hash || "#home").slice(1) || "home";
+    if (suppress) { suppress = false; if (h === baseHash && view.innerHTML) return; }
+    if (h.indexOf("eq-") === 0) {
+      var e = eqById[h.slice(3)];
+      if (!e) { location.hash = "home"; return; }
+      if (!view.innerHTML) { baseHash = "topic-" + e.topic; renderTopic(e.topic); }
+      openDrawer(e.id);
+      return;
+    }
+    if (drawer.classList.contains("on")) { drawer.classList.remove("on"); scrim.classList.remove("on"); openId = null; }
+    baseHash = h;
+    var topWrap = $("#topSearchWrap");
+    if (h === "home" || h === "topics") {
+      topWrap.hidden = true;
+      renderHome(lastQuery);
+      if (h === "topics") { var sec = $("#topicsSec"); if (sec) sec.scrollIntoView(); }
+      else window.scrollTo(0, 0);
+    } else {
+      topWrap.hidden = false;
+      if (h.indexOf("sym-") === 0) renderSymbol(h.slice(4));
+      else if (h.indexOf("topic-") === 0) renderTopic(h.slice(6));
+      else renderHome();
+      window.scrollTo(0, 0);
+    }
+  }
+  window.addEventListener("hashchange", route);
+
+  /* clicks on any element carrying data-eq open it */
+  document.addEventListener("click", function (ev) {
+    var el = ev.target.closest("[data-eq]");
+    if (!el || el.classList.contains("navpill")) return;
+    if (!el.dataset.eq) return;
+    ev.preventDefault();
+    go("eq-" + el.dataset.eq);
+  });
+  /* header search sends you home with the query */
+  var top = $("#topSearch");
+  top.addEventListener("keydown", function (ev) {
+    if (ev.key === "Enter") { lastQuery = top.value; top.value = ""; go("home"); setTimeout(function () { var m = $("#mainSearch"); if (m) m.focus(); }, 30); }
+  });
+  document.addEventListener("keydown", function (ev) {
+    if (ev.key === "Escape" && drawer.classList.contains("on")) { closeDrawer(); return; }
+    if (drawer.classList.contains("on") && (ev.key === "ArrowRight" || ev.key === "ArrowLeft") && !/INPUT|TEXTAREA/.test(document.activeElement.tagName)) {
+      var b = ev.key === "ArrowRight" ? $("#dNext") : $("#dPrev"); if (!b.disabled) b.click(); return;
+    }
+    if (ev.key === "/" && !/INPUT|TEXTAREA/.test(document.activeElement.tagName)) {
+      ev.preventDefault();
+      var m = $("#mainSearch") || (!$("#topSearchWrap").hidden && top);
+      if (m) m.focus();
+    }
+  });
+
+  /* copy with fallback */
+  var toastEl = $("#toast"), tt;
+  function toast(msg) { toastEl.textContent = msg; toastEl.classList.add("on"); clearTimeout(tt); tt = setTimeout(function () { toastEl.classList.remove("on"); }, 1400); }
+  function copy(text) {
+    var done = function () { toast("Copied TeX"); };
+    var fallback = function () {
+      var ta = document.createElement("textarea"); ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0"; document.body.appendChild(ta); ta.select();
+      try { document.execCommand("copy"); done(); } catch (e) { toast("Select the TeX and copy it manually"); }
+      ta.remove();
+    };
+    try { navigator.clipboard.writeText(text).then(done, fallback); } catch (e) { fallback(); }
+  }
+
+  route();
+})();
+</script>
+
+</body></html>

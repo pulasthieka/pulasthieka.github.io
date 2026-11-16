@@ -1,0 +1,63 @@
+---
+import Base from '../layouts/Base.astro';
+import PostCard from '../components/PostCard.astro';
+import LabCard from '../components/LabCard.astro';
+import { site, highlights, timeline, lab } from '../data/site';
+import { getPosts } from '../lib/posts';
+
+const posts = (await getPosts()).slice(0, 3);
+---
+<Base title="Researcher" accent="blue" description="Biosignals, diagnostics, and the models that read them — research highlights, writing and interactive explainers.">
+  <section class="page">
+    <div class="eyebrow mono">Path 01 · Researcher</div>
+    <h1 class="display">Biosignals, diagnostics, and the models that read them.</h1>
+    <div class="status mono"><i></i>{site.status}</div>
+    <p class="lede">
+      I'm a biomedical engineer (First Class Honours, University of Moratuwa) and a PhD candidate at the University of
+      Melbourne. My research so far has centered on biosignal acquisition and diagnostics, with recent work applying
+      deep learning to mass spectrometry and biomedical imaging.
+    </p>
+    <div class="actions">
+      <a class="btn btn--accent mono" href="/blog/">Read the blog →</a>
+      <a class="btn mono" href={site.links.github} target="_blank" rel="noopener">GitHub ↗</a>
+      <a class="btn mono" href={site.links.linkedin} target="_blank" rel="noopener">LinkedIn ↗</a>
+    </div>
+
+    <h2 class="section-label mono">Research highlights</h2>
+    {
+      highlights.map((h, i) => (
+        <div class="row" style={`animation-delay:${i * 70}ms`}>
+          <div class="row__head">
+            <span class="row__title">{h.title}</span>
+            <span class="row__meta mono">{h.meta}</span>
+          </div>
+          <div class="row__sub">{h.sub}</div>
+          {h.body && <div class="row__body">{h.body}</div>}
+        </div>
+      ))
+    }
+
+    <h2 class="section-label mono">Education &amp; experience</h2>
+    {
+      timeline.map((t) => (
+        <div class="t-row">
+          <div class="t-row__when mono">{t.when}</div>
+          <div class="t-row__what">
+            <div class="t-row__role">{t.role}</div>
+            <div class="t-row__org">{t.org}</div>
+          </div>
+        </div>
+      ))
+    }
+
+    <h2 class="section-label mono">Blog <a href="/blog/">All posts →</a></h2>
+    <div class="cards">
+      {posts.map((p, i) => <PostCard post={p} delay={i * 70} />)}
+    </div>
+
+    <h2 class="section-label mono">Lab <a href="/lab/">All interactives →</a></h2>
+    <div class="lab-grid">
+      {lab.slice(0, 2).map((item, i) => <LabCard item={item} delay={i * 70} />)}
+    </div>
+  </section>
+</Base>

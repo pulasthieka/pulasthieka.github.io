@@ -1,0 +1,46 @@
+---
+import Base from '../../layouts/Base.astro';
+import { site, works } from '../../data/site';
+---
+<Base title="Creative" accent="rust" description="UX and visual design — web apps, posters, pitch decks and photography.">
+  <section class="page page--wide creative">
+    <div class="eyebrow mono">Path 02 · Creative</div>
+    <h1 class="display--sans">Design as the other half</h1>
+    <p class="lede serif">
+      Outside research, I design — UX and visual work spanning web apps, posters, pitch decks, and murals. A small
+      selection is below; more on Behance.
+    </p>
+    <div class="actions">
+      <a class="btn btn--accent mono" href={site.links.behance} target="_blank" rel="noopener">Behance ↗</a>
+      <a class="btn mono" href="/talks/">Talks &amp; decks →</a>
+    </div>
+
+    <div class="works">
+      {
+        works.map((w, i) => {
+          const external = !w.href;
+          return (
+            <a
+              class="work"
+              href={w.href ?? site.links.behance}
+              target={external ? '_blank' : undefined}
+              rel={external ? 'noopener' : undefined}
+              style={`animation-delay:${i * 60}ms`}
+            >
+              <div class="work__tile" aria-hidden="true">
+                <b>{w.mark}</b>
+                <i class="mono">{String(i + 1).padStart(2, '0')}</i>
+              </div>
+              <div class="work__head">
+                <span class="work__title">{w.title}</span>
+                <span class="work__kind mono">{w.kind}</span>
+              </div>
+              <div class="work__body">{w.body}</div>
+              <div class={`work__cta mono ${w.href ? 'work__cta--on' : ''}`}>{w.cta ?? 'Behance ↗'}</div>
+            </a>
+          );
+        })
+      }
+    </div>
+  </section>
+</Base>
