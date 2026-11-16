@@ -20,6 +20,7 @@ www.pulasthi.dev.
 | Blog posts (Markdown) | `src/content/blog/` |
 | Interactive pieces (self-contained HTML) | `public/interactive/<slug>/index.html` |
 | Colours, type, layout | `src/styles/global.css` |
+| Design direction record (drafts, chosen direction) | `design-demos/` |
 | Pages | `src/pages/` |
 
 ### Add a blog post

@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Direction 3 · The issue — Pulasthi Ekanayake</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root { --black:#07090c; --white:#f4f6f8; --dim:#9aa3ad; --sig:#39b6ff; --paper:#ffffff; --ink:#0c0e11; --rule:#d5d9de; }
+  * { box-sizing:border-box; margin:0; }
+  body { background:var(--black); color:var(--white); font:400 17px/1.5 Barlow, system-ui, sans-serif; }
+  a { color:inherit; text-decoration:none; }
+  .cond { font-family:"Barlow Condensed", sans-serif; text-transform:uppercase; }
+
+  /* COVER */
+  .cover { position:relative; min-height:100svh; display:grid; grid-template-rows:auto 1fr auto; overflow:hidden; }
+  .cover svg { position:absolute; inset:0; width:100%; height:100%; }
+  .cover > * { position:relative; }
+  .top { display:flex; justify-content:space-between; align-items:center; gap:16px; padding:18px clamp(18px,4vw,48px); font-size:14px; letter-spacing:.08em; }
+  .top nav { display:flex; gap:24px; } .top a:hover { color:var(--sig); }
+  .plate { align-self:start; padding:2vh clamp(18px,4vw,48px) 0; }
+  .plate h1 { font:700 clamp(64px,13.2vw,208px)/.82 "Barlow Condensed", sans-serif; letter-spacing:-.015em; text-transform:uppercase; }
+  .plate h1 span { display:block; color:transparent; -webkit-text-stroke:1.5px var(--white); }
+  .plate p { margin-top:14px; font-size:14px; letter-spacing:.14em; color:var(--dim); }
+  .lines { display:grid; grid-template-columns:minmax(0,1.5fr) repeat(2,minmax(0,1fr)); gap:0; border-top:1px solid rgba(255,255,255,.28); background:linear-gradient(rgba(7,9,12,0), rgba(7,9,12,.86) 30%); }
+  .lines a { padding:20px clamp(18px,2.4vw,30px) 26px; border-left:1px solid rgba(255,255,255,.2); display:block; }
+  .lines a:first-child { border-left:0; padding-left:clamp(18px,4vw,48px); }
+  .lines small { display:block; font-size:13px; letter-spacing:.14em; color:var(--sig); }
+  .lines b { display:block; margin-top:8px; font:600 clamp(22px,2.3vw,34px)/1.02 "Barlow Condensed", sans-serif; text-transform:uppercase; text-wrap:balance; }
+  .lines a:first-child b { font-size:clamp(30px,3.8vw,58px); }
+  .lines a:hover b { color:var(--sig); }
+
+  /* CONTENTS */
+  .contents { background:var(--paper); color:var(--ink); padding:clamp(34px,6vw,72px) clamp(18px,4vw,48px) 60px; }
+  .contents h2 { font:700 clamp(44px,7vw,104px)/.9 "Barlow Condensed", sans-serif; text-transform:uppercase; letter-spacing:-.01em; }
+  .grid { margin-top:30px; display:grid; grid-template-columns:minmax(0,1.55fr) minmax(0,1fr); gap:clamp(24px,4vw,64px); }
+  .toc a { display:grid; grid-template-columns:88px minmax(0,1fr) 132px; gap:18px; align-items:center; padding:16px 0; border-top:1px solid var(--rule); }
+  .toc a:last-child { border-bottom:1px solid var(--rule); }
+  .toc .n { font:700 54px/1 "Barlow Condensed", sans-serif; color:var(--ink); font-variant-numeric:tabular-nums; }
+  .toc a:hover .n { color:#0a78c2; }
+  .toc small { font-size:13px; letter-spacing:.12em; text-transform:uppercase; color:#0a78c2; font-weight:600; }
+  .toc b { display:block; font-weight:600; font-size:21px; line-height:1.3; margin-top:3px; text-wrap:balance; }
+  .toc span { display:block; color:#59616b; font-size:15.5px; line-height:1.38; margin-top:4px; }
+  .toc img { width:132px; aspect-ratio:16/10; object-fit:cover; display:block; background:#e8e4d9; }
+  .side h3 { font:600 15px Barlow, sans-serif; letter-spacing:.12em; text-transform:uppercase; padding-bottom:10px; border-bottom:3px solid var(--ink); }
+  .side ul { list-style:none; padding:0; } .side li { padding:12px 0; border-bottom:1px solid var(--rule); font-size:16px; line-height:1.38; }
+  .side li b { font-weight:600; }
+  .side .imgs { display:grid; grid-template-columns:1fr 1fr 1fr; gap:6px; margin:12px 0 26px; }
+  .side .imgs img { width:100%; aspect-ratio:1; object-fit:cover; display:block; }
+  .ed { margin-top:26px; display:grid; grid-template-columns:86px minmax(0,1fr); gap:14px; align-items:start; }
+  .ed img { width:86px; aspect-ratio:4/5; object-fit:cover; }
+  .ed p { font-size:15.5px; line-height:1.42; color:#39404a; }
+
+  @media (max-width:860px) {
+    .top nav a:nth-child(n+3) { display:none; }
+    .lines { grid-template-columns:1fr; } .lines a { border-left:0; border-top:1px solid rgba(255,255,255,.2); padding:16px 18px 18px; } .lines a:first-child { border-top:0; padding-left:18px; }
+    .grid { grid-template-columns:1fr; } .toc a { grid-template-columns:54px minmax(0,1fr); } .toc img { display:none; } .toc .n { font-size:40px; }
+  }
+</style>
+</head>
+<body>
+  <section class="cover">
+    <svg id="sig" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true"></svg>
+    <div class="top cond"><span>Vol. 4 · No. 11 · November 2026</span><nav><a href="#contents">Contents</a><a href="#">Research</a><a href="#">Design</a><a href="#">About</a></nav></div>
+    <div class="plate"><h1>Pulasthi <span>Ekanayake</span></h1><p class="cond">Biosignals · Models · Design</p></div>
+    <div class="lines">
+      <a href="#"><small class="cond">Cover feature · Interactive</small><b>ML Notation Atlas: read any equation, one symbol at a time</b></a>
+      <a href="#"><small class="cond">Research</small><b>Estimating osteoarthritis progression with multimodal deep learning</b></a>
+      <a href="#"><small class="cond">Research</small><b>Novel computational models for semantic decoding</b></a>
+    </div>
+  </section>
+
+  <section class="contents" id="contents">
+    <h2>Contents</h2>
+    <div class="grid">
+      <div class="toc">
+        <a href="#"><span class="n">26</span><div><small>Interactive</small><b>ML Notation Atlas</b><span>A searchable reference for the symbols and equations machine-learning papers use without explaining.</span></div><img src="../dist/covers/ml-notation-atlas.svg" alt=""></a>
+        <a href="#"><span class="n">24</span><div><small>Research</small><b>Estimating Osteoarthritis Progression With Multimodal Deep Learning</b><span>A biomedical application of multimodal AI.</span></div><img src="../dist/covers/estimating-osteaarthritis.svg" alt=""></a>
+        <a href="#"><span class="n">23</span><div><small>Research</small><b>Novel Computational Models for Semantic Decoding</b><span>Review article on the state of the art.</span></div><img src="../dist/covers/semantic-decoding.svg" alt=""></a>
+        <a href="#"><span class="n">23</span><div><small>Research</small><b>Explainable AI for Understanding Cell-Cell Interactions</b><span>Research proposal on intercellular communication.</span></div><img src="../dist/covers/explainable-ai.svg" alt=""></a>
+        <a href="#"><span class="n">22</span><div><small>Notes</small><b>Setting up a web server in an EC2</b><span>MongoDB, Node, nginx and pm2 on one machine.</span></div><img src="../dist/covers/setup-webserver.svg" alt=""></a>
+      </div>
+      <aside class="side">
+        <h3>Design department</h3>
+        <div class="imgs"><img src="../public/img/work/mora-fitness.webp" alt="Mora Fitness Challenge"><img src="../public/img/work/redesigns.webp" alt="Redesigns"><img src="../public/img/work/chemistry-magazine.webp" alt="Chemistry Magazine"></div>
+        <h3>Research record</h3>
+        <ul>
+          <li><b>Best Paper Award</b>, IEEE ICIIS 2023, for Endo-MASS</li>
+          <li><b>ASMS 2024</b>, oral and poster presentations</li>
+          <li><b>CSIRO Data61</b>, real-time 3D reconstruction</li>
+        </ul>
+        <div class="ed"><img src="../public/img/portrait.svg" alt=""><p><b>From the author.</b> Pulasthi Ekanayake is a biomedical engineer working on biosignals, diagnostics and the models that read them. hello@pulasthi.dev</p></div>
+      </aside>
+    </div>
+  </section>
+
+<script>
+// Cover material: a multichannel recording, drawn at load. Same idea as the
+// site's Latent Traces covers: one stimulus, sharp onset, slow recovery.
+(function () {
+  let s = 2611; const R = () => (s = (s * 1664525 + 1013904223) >>> 0) / 4294967296;
+  const W = 1600, H = 900, C = 34, N = 180, ph = Array.from({ length: C }, () => [R() * 9, R() * 9, .6 + R()]);
+  let out = '';
+  for (let c = 0; c < C; c++) {
+    const base = 250 + c * 20; let d = '';
+    for (let i = 0; i <= N; i++) {
+      const x = (i / N) * W, t = x - 1010, g = Math.exp(-Math.pow(c - 15, 2) / 90);
+      const resp = t < 0 ? Math.exp(-t * t / 1800) : Math.exp(-t / 300) * (.8 + .2 * Math.cos(t / 46));
+      const y = base - 150 * g * resp - 7 * Math.sin(x * .011 * ph[c][2] + ph[c][0]) - 4 * Math.sin(x * .037 + ph[c][1]);
+      d += (i ? 'L' : 'M') + x.toFixed(0) + ' ' + y.toFixed(1);
+    }
+    const hot = c === 15;
+    out += `<path d="${d}V${H}H0Z" fill="#07090c" stroke="${hot ? '#39b6ff' : '#f4f6f8'}" stroke-opacity="${hot ? 1 : .5}" stroke-width="${hot ? 2.6 : 1.2}"/>`;
+  }
+  document.getElementById('sig').innerHTML = out;
+})();
+</script>
+</body>
+</html>

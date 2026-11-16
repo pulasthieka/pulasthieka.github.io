@@ -2,12 +2,13 @@
 import Base from '../layouts/Base.astro';
 ---
 <Base title="Page not found">
-  <section class="page">
-    <h1 class="display">This page took a different path.</h1>
-    <p class="lede">The page you were looking for has moved or never existed.</p>
+  <div class="panel page">
+    <h1 class="hl hl--page">
+      Page not found <span>› The page you were looking for has moved or never existed</span>
+    </h1>
     <div class="actions">
-      <a class="btn mono" href="/">← Home</a>
-      <a class="btn mono" href="/blog/">Blog →</a>
+      <a class="btn btn--blue mono" href="/">Front page</a>
+      <a class="btn mono" href="/blog/">All articles</a>
     </div>
-  </section>
+  </div>
 </Base>

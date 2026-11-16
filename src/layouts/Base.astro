@@ -5,14 +5,12 @@ import { site, nav } from '../data/site';
 interface Props {
   title?: string;
   description?: string;
-  accent?: 'blue' | 'rust' | 'green' | 'plum';
-  footer?: boolean;
 }
-const { title, description = site.description, accent, footer = true } = Astro.props;
+const { title, description = site.description } = Astro.props;
 const pageTitle = title ? `${title} — ${site.name}` : site.title;
 const path = Astro.url.pathname;
 const canonical = new URL(path, Astro.site);
-const isCurrent = (href: string) => path === href || path.startsWith(href);
+const [first, ...rest] = site.name.split(' ');
 ---
 <!doctype html>
 <html lang="en">
@@ -26,53 +24,61 @@ const isCurrent = (href: string) => path === href || path.startsWith(href);
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonical} />
-    <meta name="theme-color" content="#f4f1ea" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#171512" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#1a1a1a" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)" />
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <link rel="alternate" type="application/rss+xml" title={`${site.name} — blog`} href="/rss.xml" />
+    <link rel="alternate" type="application/rss+xml" title={`${site.name} — articles`} href="/rss.xml" />
     <link rel="sitemap" href="/sitemap-index.xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200;0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,300;1,6..72,400&family=Archivo:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap"
       rel="stylesheet"
     />
   </head>
   <body>
     <a class="skip mono" href="#main">Skip to content</a>
-    <header class="top">
-      <a class="logo" href="/" aria-label={`${site.name} — home`}>{site.initials}</a>
-      <nav class="mono" aria-label="Primary">
-        {
-          nav.map((n) => (
-            <a class={`link accent-${n.accent}`} href={n.href} aria-current={isCurrent(n.href) ? 'page' : undefined}>
-              {n.label}
-            </a>
-          ))
-        }
-        <a class="pill" href={`mailto:${site.email}`}>{site.email}</a>
-      </nav>
+    <div class="util mono">
+      <div class="wrap">
+        <a href={site.links.github} rel="noopener">GitHub</a>
+        <a href={site.links.linkedin} rel="noopener">LinkedIn</a>
+        <a href={site.links.behance} rel="noopener">Behance</a>
+        <a href="/talks/">Talks</a>
+        <a class="r" href={`mailto:${site.email}`}>{site.email}</a>
+      </div>
+    </div>
+    <header class="mast">
+      <div class="wrap">
+        <a class="name" href="/" aria-label={`${site.name} — home`}>{first} <b>{rest.join(' ')}</b></a>
+        <span class="tag mono">{site.tagline}</span>
+        <nav class="nav" aria-label="Primary">
+          {
+            nav.map((n) => (
+              <a href={n.href} aria-current={path.startsWith(n.href) ? 'page' : undefined}>
+                {n.label}
+              </a>
+            ))
+          }
+        </nav>
+      </div>
     </header>
-    <main id="main" class={accent ? `accent-${accent}` : undefined}>
+    <main id="main" class="wrap">
       <slot />
     </main>
-    {
-      footer && (
-        <footer class="foot mono">
-          <span>
-            {site.name} · {site.location}
-          </span>
-          <nav aria-label="Secondary">
-            <a href="/talks/">Talks</a>
-            <a href="/rss.xml">RSS</a>
-            <a href={site.links.github} rel="noopener">GitHub</a>
-            <a href={site.links.linkedin} rel="noopener">LinkedIn</a>
-            <a href={`mailto:${site.email}`}>{site.email}</a>
-          </nav>
-        </footer>
-      )
-    }
+    <footer class="foot mono">
+      <div class="wrap">
+        <span>{site.name} · {site.location}</span>
+        <nav aria-label="Secondary">
+          <a href="/blog/">Articles</a>
+          <a href="/talks/">Talks</a>
+          <a href="/rss.xml">RSS</a>
+          <a href={site.links.github} rel="noopener">GitHub</a>
+          <a href={site.links.linkedin} rel="noopener">LinkedIn</a>
+          <a href={`mailto:${site.email}`}>Email</a>
+        </nav>
+      </div>
+    </footer>
   </body>
 </html>

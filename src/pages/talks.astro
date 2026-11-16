@@ -2,11 +2,12 @@
 import Base from '../layouts/Base.astro';
 import { talks } from '../data/site';
 ---
-<Base title="Talks" accent="rust" description="Presentations on various topics that I have given over the years.">
-  <section class="page">
-    <h1 class="display">Presentations I've given over the years.</h1>
-
-    <div style="margin-top:clamp(30px,5vh,54px);border-top:1px solid var(--rule-strong)">
+<Base title="Talks" description="Presentations on various topics that I have given over the years.">
+  <div class="panel page">
+    <h1 class="hl hl--page">
+      Talks <span>› Presentations I've given over the years</span>
+    </h1>
+    <div style="margin-top:26px">
       {
         talks.map((t) => (
           <div class="talk">
@@ -17,5 +18,5 @@ import { talks } from '../data/site';
         ))
       }
     </div>
-  </section>
+  </div>
 </Base>

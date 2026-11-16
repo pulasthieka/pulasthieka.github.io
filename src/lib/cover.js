@@ -215,8 +215,8 @@ export function generate(options) {
 }
 
 export const palette = {
-  light: { bg: '#e8e4d9', ink: '#1c1a17', accent: '#2d5e9c' },
-  dark: { bg: '#24211c', ink: '#ece7dc', accent: '#8fb8ee' },
+  light: { bg: '#e4e4e0', ink: '#0d0d0d', accent: '#00629b' },
+  dark: { bg: '#232321', ink: '#f0f0ec', accent: '#6cbcea' },
 };
 
 // Standalone SVG. Colours follow the viewer's light/dark preference, so the

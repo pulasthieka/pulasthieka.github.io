@@ -16,5 +16,16 @@ export const shortDate = (d: Date) =>
 
 export const readingTime = (body = '') => Math.max(1, Math.round(body.split(/\s+/).length / 220));
 
+export const dayDate = (d: Date) =>
+  d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' });
+
+/** Section tag shown on chips. */
+export const sectionOf = (post: Post) =>
+  post.data.interactive ? 'Interactive' : post.data.category === 'research' ? 'Research' : 'Notes';
+
+/** Reading time, or where an interactive piece runs. */
+export const lengthOf = (post: Post) =>
+  post.data.interactive ? 'Runs in your browser' : `${readingTime(post.body)} min read`;
+
 export const longDate = (d: Date) =>
   d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });

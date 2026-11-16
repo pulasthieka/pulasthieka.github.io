@@ -2,48 +2,43 @@
 import Base from '../../layouts/Base.astro';
 import { site, works } from '../../data/site';
 ---
-<Base title="Creative" accent="rust" description="UX and visual design — web apps, posters, pitch decks and photography.">
-  <section class="page page--wide creative">
-    <h1 class="display--sans">Design as the other half</h1>
-    <p class="lede serif">
-      Outside research, I design — UX and visual work spanning web apps, posters, pitch decks, and murals. A small
-      selection is below; more on Behance.
-    </p>
+<Base title="Design" description="UX and visual design — web apps, posters, pitch decks and interface studies.">
+  <div class="panel page">
+    <h1 class="hl hl--page">
+      Design <span>› UX and visual work spanning web apps, posters, pitch decks and murals</span>
+    </h1>
+    <p class="lede">Outside research, I design. A selection is below; the rest is on Behance.</p>
     <div class="actions">
-      <a class="btn btn--accent mono" href={site.links.behance} target="_blank" rel="noopener">Behance ↗</a>
-      <a class="btn mono" href="/talks/">Talks &amp; decks →</a>
+      <a class="btn btn--blue mono" href={site.links.behance} target="_blank" rel="noopener">Behance ↗</a>
+      <a class="btn mono" href="/talks/">Talks &amp; decks</a>
     </div>
 
-    <div class="works">
-      {
-        works.map((w, i) => {
-          const external = !w.href;
-          return (
-            <a
-              class="work"
-              href={w.href ?? site.links.behance}
-              target={external ? '_blank' : undefined}
-              rel={external ? 'noopener' : undefined}
-             
-            >
-              <div class="work__tile" aria-hidden="true">
-                {w.img ? (
-                  <img src={`/img/work/${w.img}`} alt="" width="808" height="632" loading={i < 3 ? 'eager' : 'lazy'} />
-                ) : (
-                  <b>{w.mark}</b>
-                )}
-                {!w.img && <i class="mono">{String(i + 1).padStart(2, '0')}</i>}
-              </div>
-              <div class="work__head">
-                <span class="work__title">{w.title.split('µ').map((s) => s.toUpperCase()).join('µ')}</span>
-                <span class="work__kind mono">{w.kind}</span>
-              </div>
-              <div class="work__body">{w.body}</div>
-              <div class={`work__cta mono ${w.href ? 'work__cta--on' : ''}`}>{w.cta ?? 'Behance ↗'}</div>
-            </a>
-          );
-        })
-      }
-    </div>
-  </section>
+    <section class="sect">
+      <h2>{works.length} projects</h2>
+      <div class="works">
+        {
+          works.map((w, i) => {
+            const external = !w.cta;
+            return (
+              <a class="work" href={w.href ?? site.links.behance} target={external ? '_blank' : undefined} rel={external ? 'noopener' : undefined}>
+                <div class="work__tile">
+                  {w.img ? (
+                    <img src={`/img/work/${w.img}`} alt="" width="808" height="632" loading={i < 3 ? 'eager' : 'lazy'} />
+                  ) : (
+                    <b aria-hidden="true">{w.mark}</b>
+                  )}
+                </div>
+                <h2>{w.title}</h2>
+                <p>{w.body}</p>
+                <div class="meta mono">
+                  <span>{w.kind}</span>
+                  <span>{external ? 'Behance ↗' : 'Case study'}</span>
+                </div>
+              </a>
+            );
+          })
+        }
+      </div>
+    </section>
+  </div>
 </Base>

@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Six candidates — pulasthi.dev as an IEEE-style magazine</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:opsz,wght@8..60,400;8..60,700&family=STIX+Two+Text:ital,wght@0,400;1,400&family=Caveat:wght@500&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing:border-box; margin:0; }
+  body { background:#dcdcd8; color:#111; font:400 14px/1.4 "IBM Plex Sans", sans-serif; padding:28px; }
+  h1 { font-size:20px; font-weight:600; } .sub { color:#555; margin:4px 0 22px; max-width:80ch; }
+  .board { display:grid; grid-template-columns:repeat(auto-fill, 480px); gap:28px 24px; }
+  .cell { width:480px; } .cell h2 { font-size:14px; font-weight:600; margin-top:9px; } .cell p { color:#555; font-size:13px; }
+  .cell .pick { color:#00629b; font-weight:600; }
+  [data-thumb] { width:480px; height:300px; overflow:hidden; position:relative; background:#fff; box-shadow:0 1px 0 rgba(0,0,0,.25), 0 10px 26px rgba(0,0,0,.14); }
+  [data-thumb] iframe { width:1440px; height:900px; border:0; transform:scale(.3334); transform-origin:0 0; pointer-events:none; }
+
+  /* 4 · colour-coded sections */
+  .t4 { padding:16px 18px; font-family:"Source Serif 4", serif; }
+  .t4 .np { font:700 22px/1 "Source Serif 4", serif; letter-spacing:-.02em; border-bottom:4px solid #111; padding-bottom:8px; display:flex; justify-content:space-between; align-items:baseline; }
+  .t4 .np small { font:500 9px "IBM Plex Mono"; letter-spacing:.1em; }
+  .t4 .g { display:grid; grid-template-columns:1.5fr 1fr 1fr; gap:12px; margin-top:12px; }
+  .t4 .s { border-top:5px solid var(--c); padding-top:6px; }
+  .t4 .s small { font:600 9px "IBM Plex Sans"; letter-spacing:.1em; text-transform:uppercase; color:var(--c); }
+  .t4 .s b { display:block; font-size:13px; line-height:1.15; margin-top:4px; } .t4 .s:first-child b { font-size:23px; letter-spacing:-.02em; }
+  .t4 img { width:100%; height:84px; object-fit:cover; margin-top:8px; display:block; }
+
+  /* 5 · margin notes */
+  .t5 { padding:20px 22px; display:grid; grid-template-columns:1fr 132px; gap:18px; font-family:"STIX Two Text", serif; background:#fffff8; }
+  .t5 h3 { font-weight:400; font-style:italic; font-size:25px; line-height:1.1; } .t5 p { font-size:11.5px; line-height:1.42; margin-top:9px; }
+  .t5 aside { font-size:9.5px; line-height:1.35; color:#444; padding-top:40px; } .t5 aside svg { width:100%; height:26px; display:block; margin:4px 0 10px; }
+  .t5 .sc { font-variant:small-caps; letter-spacing:.06em; }
+
+  /* 6 · dense annotated spread */
+  .t6 { display:grid; grid-template-columns:1.15fr 1fr; height:100%; }
+  .t6 .l { padding:14px 14px 0; position:relative; border-right:1px solid #111; }
+  .t6 h3 { font:700 21px/1.02 "IBM Plex Sans"; letter-spacing:-.03em; } .t6 h3 span { background:linear-gradient(transparent 58%, #ffe14d 58%); }
+  .t6 svg { width:100%; height:150px; margin-top:6px; }
+  .t6 .hw { font:500 13px/1 Caveat, cursive; position:absolute; }
+  .t6 .r { display:grid; grid-template-columns:repeat(3,1fr); grid-auto-rows:1fr; }
+  .t6 .r div { border:1.5px solid #111; margin:-.75px; padding:6px; font-size:8.5px; line-height:1.25; }
+  .t6 .r b { display:block; font:700 20px/1 "IBM Plex Sans"; } .t6 .r .y { background:#ffe14d; } .t6 .r .k { background:#111; color:#fff; }
+</style>
+</head>
+<body>
+  <h1>pulasthi.dev as an IEEE-style magazine — six candidates</h1>
+  <p class="sub">Each cell is the first screen of one direction, with the real name, real article titles and real artwork. Candidates 1–3 are built out as full pages (dir-1, dir-2, dir-3). Candidates 4–6 are alternates: say the word and one becomes a full page.</p>
+  <div class="board">
+    <div class="cell"><div data-thumb="1"><iframe src="dir-1.html" title="Front page" loading="lazy"></iframe></div><h2>1 · Front page <span class="pick">(full version: dir-1)</span></h2><p>Real reference: IEEE Spectrum's site. Lead feature with rail, headline running into a grey deck, boxed section tags.</p></div>
+    <div class="cell"><div data-thumb="2"><iframe src="dir-2.html" title="Transactions" loading="lazy"></iframe></div><h2>2 · Transactions <span class="pick">(full version: dir-2)</span></h2><p>Real reference: the IEEE journal article page. Two columns, Abstract and Index Terms, Fig. and Table captions, author biography.</p></div>
+    <div class="cell"><div data-thumb="3"><iframe src="dir-3.html" title="The issue" loading="lazy"></iframe></div><h2>3 · The issue <span class="pick">(full version: dir-3)</span></h2><p>Roulette, web #8 (cinematic sound-viz dark). A print cover made of a live signal recording, then a contents page.</p></div>
+
+    <div class="cell"><div data-thumb="4"><div class="t4">
+      <div class="np">Pulasthi Ekanayake <small>NOVEMBER 2026</small></div>
+      <div class="g">
+        <div class="s" style="--c:#00629b"><small>Interactive</small><b>ML Notation Atlas: read any equation, one symbol at a time</b><img src="../dist/covers/ml-notation-atlas.svg" alt=""></div>
+        <div class="s" style="--c:#b3312c"><small>Research</small><b>Estimating Osteoarthritis Progression With Multimodal Deep Learning</b><img src="../dist/covers/estimating-osteaarthritis-thumb.svg" alt=""></div>
+        <div class="s" style="--c:#2f7d4f"><small>Design</small><b>µMora Mathematics, a web app for a 5,000-participant olympiad</b><img src="../public/img/work/umora.webp" alt=""></div>
+      </div>
+    </div></div><h2>4 · Colour-coded sections</h2><p>Best designer, bold: Mark Porter's newspaper systems. Each department owns a colour and a heavy top rule.</p></div>
+
+    <div class="cell"><div data-thumb="5"><div class="t5">
+      <div><h3>Biosignals, diagnostics, and the models that read them</h3><p><span class="sc">I am a biomedical engineer</span> and a PhD candidate at the University of Melbourne. My undergraduate thesis built a device that records blood pressure, temperature, bioimpedance and PPG from a patient's arm, validated in a clinical study. That work became Endo-MASS.</p><p>Recent articles: ML Notation Atlas · Estimating Osteoarthritis Progression · Novel Computational Models for Semantic Decoding.</p></div>
+      <aside>Four channels through one cuff cycle.<svg viewBox="0 0 132 26"><path d="M0 18 L40 18 L46 4 L60 14 L90 17 L132 18" fill="none" stroke="#111"/><path d="M0 22 L40 22 L47 12 L64 19 L132 22" fill="none" stroke="#a00"/></svg>Best Paper Award, IEEE ICIIS 2023.<svg viewBox="0 0 132 26"><path d="M0 20 Q30 2 60 16 T132 10" fill="none" stroke="#111"/></svg>104 equations, 54 symbols in the atlas.</aside>
+    </div></div><h2>5 · Margin notes</h2><p>Best designer, quiet: Edward Tufte's handouts. One reading column, with small figures and notes in the margin.</p></div>
+
+    <div class="cell"><div data-thumb="6"><div class="t6">
+      <div class="l"><h3>What one cuff cycle <span>does to four signals</span></h3>
+        <svg viewBox="0 0 250 150"><g fill="none" stroke="#111" stroke-width="1.4"><path d="M0 40 H90 L98 12 L120 34 L250 38"/><path d="M0 75 H90 L100 50 L128 70 L250 73"/><path d="M0 108 H92 L104 90 L140 104 L250 106"/><path d="M0 138 H96 L112 128 L160 136 L250 137"/></g><line x1="90" y1="0" x2="90" y2="150" stroke="#d22" stroke-dasharray="3 3"/><g fill="#111"><circle cx="98" cy="12" r="7"/><circle cx="100" cy="50" r="7"/><circle cx="104" cy="90" r="7"/></g><g fill="#fff" font-size="9" font-family="IBM Plex Sans" font-weight="700" text-anchor="middle"><text x="98" y="15">1</text><text x="100" y="53">2</text><text x="104" y="93">3</text></g></svg>
+        <span class="hw" style="left:118px; top:58px; color:#d22">release →</span><span class="hw" style="left:150px; top:120px; color:#1746c9">slow recovery</span></div>
+      <div class="r"><div><b>4</b>signals recorded together</div><div class="y"><b>2023</b>Best Paper, IEEE ICIIS</div><div><b>6</b>articles</div><div class="k"><b>104</b>equations in the atlas</div><div><b>54</b>symbols</div><div><b>11</b>topics</div><div><b>8</b>design projects</div><div><b>4</b>talks</div><div class="y"><b>1</b>interactive</div></div>
+    </div></div><h2>6 · Annotated spread</h2><p>Roulette, East Asia #12 (dense Japanese magazine). A diagram with numbered callouts and handwritten notes beside a data grid.</p></div>
+  </div>
+</body>
+</html>

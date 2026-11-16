@@ -9,6 +9,9 @@ export const site = {
   email: 'hello@pulasthi.dev',
   location: 'Colombo → Melbourne',
   status: 'Colombo → Melbourne · PhD, Oct 2026',
+  tagline: 'Biosignals, models & design',
+  byline:
+    'a biomedical engineer working on biosignals, diagnostics and the models that read them, and an occasional designer',
   links: {
     github: 'https://github.com/pulasthieka',
     linkedin: 'https://linkedin.com/in/pulasthi-ekanayake',
@@ -17,10 +20,10 @@ export const site = {
 };
 
 export const nav = [
-  { href: '/research/', label: 'Researcher', accent: 'blue' },
-  { href: '/blog/', label: 'Blog', accent: 'blue' },
-  { href: '/creative/', label: 'Creative', accent: 'rust' },
-  { href: '/about/', label: 'About', accent: 'green' },
+  { href: '/blog/', label: 'Articles' },
+  { href: '/research/', label: 'Research' },
+  { href: '/creative/', label: 'Design' },
+  { href: '/about/', label: 'About' },
 ] as const;
 
 export const highlights = [

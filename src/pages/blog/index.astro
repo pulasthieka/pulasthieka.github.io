@@ -1,31 +1,36 @@
 ---
 import Base from '../../layouts/Base.astro';
-import { getPosts, postUrl, shortDate } from '../../lib/posts';
+import { getPosts, postUrl, dayDate, sectionOf, lengthOf } from '../../lib/posts';
 
 const posts = await getPosts();
 ---
-<Base title="Blog" accent="blue" description="Research notes, proposals and the occasional how-to.">
-  <section class="page">
-    <h1 class="display">Notes from research, and a few things worth writing down.</h1>
-    <p class="lede">
-      Research proposals and reviews, mostly on AI for medicine, alongside the practical notes I kept returning to.
-    </p>
+<Base title="Articles" description="Research notes, proposals, interactive explainers and the occasional how-to.">
+  <div class="panel page">
+    <h1 class="hl hl--page">
+      Articles <span>› Research proposals and reviews, interactive explainers, and the practical notes I kept returning to</span>
+    </h1>
 
-    <h2 class="section-label mono">{posts.length} posts <a href="/rss.xml">RSS →</a></h2>
-    {
-      posts.map((p, i) => (
-        <a class="post-row" href={postUrl(p)}>
-          <img class="post-row__cover" src={`/covers/${p.id}-thumb.svg`} alt="" width="1600" height="900" loading="lazy" />
-          <div>
-            <div class="post-row__meta">
-              <span class="post-row__date mono">{shortDate(p.data.date)}</span>
-              <span class="post-row__tag mono">{p.data.draft ? 'Draft' : p.data.category}</span>
-            </div>
-            <div class="post-row__title">{p.data.title}</div>
-            <div class="post-row__desc">{p.data.description}</div>
-          </div>
-        </a>
-      ))
-    }
-  </section>
+    <div class="sect">
+      <h2>{posts.length} articles <a href="/rss.xml">RSS</a></h2>
+      <div style="margin-top:12px">
+        {
+          posts.map((p) => (
+            <a class="item" href={postUrl(p)}>
+              <div>
+                <span class={`chip mono ${p.data.interactive ? 'chip--k' : ''}`}>{p.data.draft ? 'Draft' : sectionOf(p)}</span>
+                <h2>
+                  {p.data.title} <span>› {p.data.description}</span>
+                </h2>
+                <div class="meta mono">
+                  <time datetime={p.data.date.toISOString().slice(0, 10)}>{dayDate(p.data.date)}</time>
+                  <span>{lengthOf(p)}</span>
+                </div>
+              </div>
+              <img src={`/covers/${p.id}-thumb.svg`} alt="" width="1600" height="900" loading="lazy" />
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </div>
 </Base>

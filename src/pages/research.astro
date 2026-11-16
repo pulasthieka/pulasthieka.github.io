@@ -1,56 +1,77 @@
 ---
 import Base from '../layouts/Base.astro';
-import PostCard from '../components/PostCard.astro';
 import { site, highlights, timeline } from '../data/site';
-import { getPosts } from '../lib/posts';
+import { getPosts, postUrl, dayDate, sectionOf, lengthOf } from '../lib/posts';
 
-const posts = (await getPosts()).slice(0, 3);
+const posts = (await getPosts()).filter((p) => sectionOf(p) !== 'Notes').slice(0, 3);
 ---
-<Base title="Researcher" accent="blue" description="Biosignals, diagnostics, and the models that read them — research highlights, writing and interactive explainers.">
-  <section class="page">
-    <h1 class="display">Biosignals, diagnostics, and the models that read them.</h1>
-    <div class="status mono"><i></i>{site.status}</div>
+<Base title="Research" description="Biosignals, diagnostics, and the models that read them — research highlights, education and writing.">
+  <div class="panel page">
+    <h1 class="hl hl--page">
+      Research <span>› Biosignals, diagnostics, and the models that read them</span>
+    </h1>
     <p class="lede">
       I'm a biomedical engineer (First Class Honours, University of Moratuwa) and a PhD candidate at the University of
       Melbourne. My research so far has centered on biosignal acquisition and diagnostics, with recent work applying
       deep learning to mass spectrometry and biomedical imaging.
     </p>
     <div class="actions">
-      <a class="btn btn--accent mono" href="/blog/">Read the blog →</a>
+      <a class="btn btn--blue mono" href="/blog/">Read the articles</a>
       <a class="btn mono" href={site.links.github} target="_blank" rel="noopener">GitHub ↗</a>
       <a class="btn mono" href={site.links.linkedin} target="_blank" rel="noopener">LinkedIn ↗</a>
     </div>
 
-    <h2 class="section-label mono">Research highlights</h2>
-    {
-      highlights.map((h, i) => (
-        <div class="row">
-          <div class="row__head">
-            <span class="row__title">{h.title}</span>
-            <span class="row__meta mono">{h.meta}</span>
-          </div>
-          <div class="row__sub">{h.sub}</div>
-          {h.body && <div class="row__body">{h.body}</div>}
+    <div class="split">
+      <section class="sect">
+        <h2>Highlights</h2>
+        <ul class="list">
+          {
+            highlights.map((h) => (
+              <li>
+                <b>{h.title} · {h.meta}</b>
+                <span>{h.sub} {h.body}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </section>
+      <section class="sect">
+        <h2>Education &amp; experience</h2>
+        <div style="margin-top:12px">
+          {
+            timeline.map((t) => (
+              <div class="rec">
+                <div class="mono">{t.when}</div>
+                <div>
+                  <b>{t.role}</b>
+                  <span>{t.org}</span>
+                </div>
+              </div>
+            ))
+          }
         </div>
-      ))
-    }
-
-    <h2 class="section-label mono">Education &amp; experience</h2>
-    {
-      timeline.map((t) => (
-        <div class="t-row">
-          <div class="t-row__when mono">{t.when}</div>
-          <div class="t-row__what">
-            <div class="t-row__role">{t.role}</div>
-            <div class="t-row__org">{t.org}</div>
-          </div>
-        </div>
-      ))
-    }
-
-    <h2 class="section-label mono">Blog <a href="/blog/">All posts →</a></h2>
-    <div class="cards">
-      {posts.map((p, i) => <PostCard post={p} delay={i * 70} />)}
+      </section>
     </div>
-  </section>
+
+    <section class="sect">
+      <h2>Recent writing <a href="/blog/">All articles</a></h2>
+      <div class="cards3">
+        {
+          posts.map((p) => (
+            <a href={postUrl(p)}>
+              <img src={`/covers/${p.id}-thumb.svg`} alt="" width="1600" height="900" loading="lazy" />
+              <div>
+                <span class="chip mono">{sectionOf(p)}</span>
+                <h3>{p.data.title}</h3>
+                <div class="meta mono">
+                  <time datetime={p.data.date.toISOString().slice(0, 10)}>{dayDate(p.data.date)}</time>
+                  <span>{lengthOf(p)}</span>
+                </div>
+              </div>
+            </a>
+          ))
+        }
+      </div>
+    </section>
+  </div>
 </Base>

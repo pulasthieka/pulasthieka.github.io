@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Direction 2 · Transactions — Pulasthi Ekanayake</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400;0,600;0,700;1,400;1,700&display=swap" rel="stylesheet">
+<style>
+  :root { --ink:#111; --grey:#555; --rule:#111; --link:#00508a; }
+  * { box-sizing:border-box; margin:0; }
+  body { background:#fff; color:var(--ink); font:400 17px/1.42 "STIX Two Text", "Times New Roman", serif; }
+  a { color:var(--link); text-decoration:none; } a:hover { text-decoration:underline; }
+  .sheet { max-width:1120px; margin:0 auto; padding:18px 40px 60px; }
+
+  .run { display:flex; justify-content:space-between; gap:16px; font-size:13.5px; letter-spacing:.04em; text-transform:uppercase; padding-bottom:7px; border-bottom:1px solid var(--rule); }
+  .run nav { display:flex; gap:18px; } .run a { color:var(--ink); }
+
+  .title { text-align:center; padding:38px 0 6px; }
+  .title h1 { font-weight:400; font-size:clamp(30px,4.4vw,50px); line-height:1.08; letter-spacing:-.005em; text-wrap:balance; }
+  .authors { margin-top:16px; font-size:19px; }
+  .authors i { font-size:15px; color:var(--grey); }
+
+  .cols { margin-top:30px; column-count:2; column-gap:34px; text-align:justify; hyphens:auto; }
+  .cols > * { break-inside:avoid-column; }
+  .abs { font-weight:700; font-size:16px; line-height:1.36; }
+  .abs i { font-weight:700; }
+  .terms { margin-top:10px; font-size:16px; font-weight:700; font-style:italic; }
+  .terms span { font-weight:400; }
+  h2 { margin:22px 0 8px; text-align:center; font-weight:400; font-size:15.5px; letter-spacing:.07em; font-variant:small-caps; }
+  h2 b { font-weight:400; font-variant:normal; }
+  p + p { text-indent:1.1em; }
+  .drop::first-letter { float:left; font-size:3.25em; line-height:.86; padding:3px 5px 0 0; }
+  .drop::first-line { font-variant:small-caps; letter-spacing:.03em; }
+
+  figure { margin:14px 0 12px; break-inside:avoid; }
+  figure img { display:block; width:100%; aspect-ratio:16/9; object-fit:cover; object-position:top; border:1px solid #bbb; }
+  figcaption { margin-top:6px; font-size:14px; line-height:1.3; text-align:left; }
+
+  table { width:100%; border-collapse:collapse; font-size:14.5px; text-align:left; margin-top:6px; }
+  caption { font-size:13.5px; letter-spacing:.06em; text-transform:uppercase; padding-bottom:6px; line-height:1.35; }
+  caption b { display:block; font-weight:400; }
+  thead th { border-top:3px double var(--rule); border-bottom:1px solid var(--rule); font-weight:400; font-style:italic; padding:5px 6px; }
+  td { padding:5px 6px; vertical-align:top; } tbody tr:last-child td { border-bottom:3px double var(--rule); }
+
+  .refs { padding:0; list-style:none; counter-reset:r; font-size:15px; text-align:left; hyphens:manual; }
+  .refs li { counter-increment:r; display:grid; grid-template-columns:30px minmax(0,1fr); padding:3px 0; }
+  .refs li::before { content:"[" counter(r) "]"; }
+  .refs em { font-style:italic; }
+
+  .bio { display:grid; grid-template-columns:104px minmax(0,1fr); gap:14px; margin-top:8px; font-size:15px; line-height:1.36; break-inside:avoid; }
+  .bio img { width:104px; aspect-ratio:4/5; object-fit:cover; border:1px solid #999; }
+  .foot { margin-top:26px; padding-top:8px; border-top:1px solid var(--rule); font-size:13.5px; display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+
+  @media (max-width:820px) {
+    .sheet { padding:14px 18px 44px; } .cols { column-count:1; } .run { flex-direction:column; gap:6px; }
+    body { font-size:17.5px; } .bio { grid-template-columns:84px minmax(0,1fr); } .bio img { width:84px; }
+  }
+</style>
+</head>
+<body>
+<div class="sheet">
+  <div class="run"><span>Pulasthi Ekanayake: Collected Work, Vol. 4, No. 11, November 2026</span><nav><a href="#">Articles</a><a href="#">Research</a><a href="#">Design</a><a href="#">Contact</a></nav></div>
+
+  <header class="title">
+    <h1>Biosignals, Diagnostics, and the Models That Read Them</h1>
+    <p class="authors">Pulasthi Ekanayake<br><i>Biomedical engineer &amp; occasional designer · Colombo → Melbourne</i></p>
+  </header>
+
+  <div class="cols">
+    <p class="abs"><i>Abstract</i>—This site collects the writing, interactive explainers and design work of a biomedical engineer. The research concerns biosignal acquisition and diagnostics, with recent work applying deep learning to mass spectrometry and biomedical imaging. The articles range from research proposals and reviews to short practical notes. One of them, an atlas of machine-learning notation, runs in the browser.</p>
+    <p class="terms">Index Terms—<span>Biosignals, bioimpedance, endothelial function, multimodal deep learning, mass spectrometry, explainable AI, UX design.</span></p>
+
+    <h2><b>I.</b> Introduction</h2>
+    <p class="drop">I am a biomedical engineer (First Class Honours, University of Moratuwa) and a PhD candidate at the University of Melbourne. My undergraduate thesis built a reconfigurable device that records blood pressure, temperature, bioimpedance and PPG from a patient's arm, validated in a clinical study.</p>
+    <p>That work became Endo-MASS, which received the Best Paper Award at IEEE ICIIS 2023. Since then I have worked on compound identification from mass spectrometry data and presented at ASMS 2024.</p>
+
+    <h2><b>II.</b> Recent Articles</h2>
+    <figure><a href="#"><img src="../dist/covers/ml-notation-atlas.svg" alt=""></a><figcaption>Fig. 1.&nbsp; <a href="#">ML Notation Atlas</a>, an interactive reference to 104 equations and 54 symbols. Cover generated from the article's own seed.</figcaption></figure>
+    <table>
+      <caption>Table I<b>Articles by Subject and Year</b></caption>
+      <thead><tr><th>Title</th><th>Kind</th><th>Year</th></tr></thead>
+      <tbody>
+        <tr><td><a href="#">ML Notation Atlas</a></td><td>Interactive</td><td>2026</td></tr>
+        <tr><td><a href="#">Estimating Osteoarthritis Progression With Multimodal Deep Learning</a></td><td>Proposal</td><td>2024</td></tr>
+        <tr><td><a href="#">Novel Computational Models for Semantic Decoding</a></td><td>Review</td><td>2023</td></tr>
+        <tr><td><a href="#">Explainable AI for Understanding Cell-Cell Interactions</a></td><td>Proposal</td><td>2023</td></tr>
+        <tr><td><a href="#">Some useful Linux commands</a></td><td>Note</td><td>2022</td></tr>
+        <tr><td><a href="#">Setting up a web server in an EC2</a></td><td>Note</td><td>2022</td></tr>
+      </tbody>
+    </table>
+
+    <h2><b>III.</b> Design Work</h2>
+    <p>Outside research, I design: UX and visual work spanning web apps, posters and pitch decks. A selection is shown in Fig. 2; the rest is on <a href="#">Behance</a>.</p>
+    <figure><a href="#"><img src="../public/img/work/umora.webp" alt=""></a><figcaption>Fig. 2.&nbsp; µMora Mathematics, a multilingual web app for a 5,000-participant mathematics olympiad.</figcaption></figure>
+
+    <h2>References</h2>
+    <ol class="refs">
+      <li><span>P. Ekanayake, “<a href="#">Estimating osteoarthritis progression with multimodal deep learning</a>,” <em>pulasthi.dev</em>, Dec. 2024.</span></li>
+      <li><span>P. Ekanayake, “<a href="#">Novel computational models for semantic decoding</a>,” <em>pulasthi.dev</em>, Oct. 2023.</span></li>
+      <li><span>P. Ekanayake, “<a href="#">Explainable AI for understanding cell-cell interactions</a>,” <em>pulasthi.dev</em>, May 2023.</span></li>
+      <li><span>“Endo-MASS: Multi-signal acquisition system and software for non-invasive assessment of endothelial function,” in <em>Proc. IEEE ICIIS</em>, 2023. Best Paper Award.</span></li>
+    </ol>
+
+    <div class="bio"><img src="../public/img/portrait.svg" alt=""><p><b>Pulasthi Ekanayake</b> received the B.Sc. Eng. (Hons.) degree in biomedical engineering from the University of Moratuwa, Sri Lanka. He has worked as a machine learning engineer building AI tools for scientists, and as a designer of web apps, posters and pitch decks. <a href="#">Full profile</a>.</p></div>
+  </div>
+
+  <div class="foot"><span>hello@pulasthi.dev</span><span>GitHub · LinkedIn · Behance · RSS</span></div>
+</div>
+</body>
+</html>
