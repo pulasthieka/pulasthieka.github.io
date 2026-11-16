@@ -221,14 +221,15 @@ export const palette = {
 
 // Standalone SVG. Colours follow the viewer's light/dark preference, so the
 // same file works in both themes when used as an <img>.
-export function renderSVG(options) {
+// `weight` scales stroke, dash and dot sizes (thumbnails use a heavier line).
+export function renderSVG(options, weight = 1) {
   const { shapes, marks, dots } = generate(options);
   const n = (v) => Math.round(v);
   const { light, dark } = palette;
   let out =
     `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid slice">` +
-    `<style>.b,.l{fill:${light.bg}}.l{stroke:${light.ink};stroke-width:1.5;stroke-linejoin:round}` +
-    `.a{stroke:${light.accent};stroke-width:3}.m{stroke:${light.ink};stroke-opacity:.38;stroke-dasharray:2 8;fill:none}` +
+    `<style>.b,.l{fill:${light.bg}}.l{stroke:${light.ink};stroke-width:${1.5 * weight};stroke-linejoin:round}` +
+    `.a{stroke:${light.accent};stroke-width:${3 * weight}}.m{stroke:${light.ink};stroke-width:${weight};stroke-opacity:.38;stroke-dasharray:${2 * weight} ${8 * weight};fill:none}` +
     `.d{fill:${light.accent}}@media(prefers-color-scheme:dark){.b,.l{fill:${dark.bg}}.l,.m{stroke:${dark.ink}}` +
     `.a{stroke:${dark.accent}}.d{fill:${dark.accent}}}</style><rect class="b" width="${W}" height="${H}"/>`;
   for (const s of shapes) {
@@ -237,7 +238,7 @@ export function renderSVG(options) {
     out += `<path class="l${s.accent ? ' a' : ''}" d="${d}"/>`;
   }
   for (const m of marks) out += `<path class="m" d="M${n(m[0])} ${n(m[1])}L${n(m[2])} ${n(m[3])}"/>`;
-  for (const pt of dots) out += `<circle class="d" cx="${n(pt[0])}" cy="${n(pt[1])}" r="7"/>`;
+  for (const pt of dots) out += `<circle class="d" cx="${n(pt[0])}" cy="${n(pt[1])}" r="${7 * weight}"/>`;
   return out + '</svg>';
 }
 
@@ -252,4 +253,9 @@ export function coverOptions(slug, cover) {
     coupling: 0.3 + ((seed % 50) / 100),
   };
   return Object.assign({}, defaults, auto, cover || {});
+}
+
+/** The same drawing simplified for small sizes: fewer channels, drawn heavier. */
+export function thumbOptions(options) {
+  return Object.assign({}, options, { channels: Math.max(6, Math.round(options.channels * 0.45)) });
 }

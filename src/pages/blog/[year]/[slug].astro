@@ -1,27 +1,33 @@
 ---
 import { render } from 'astro:content';
 import Base from '../../../layouts/Base.astro';
-import { getPosts, shortDate, readingTime } from '../../../lib/posts';
+import { site } from '../../../data/site';
+import { getPosts, postUrl, longDate, readingTime } from '../../../lib/posts';
 
 export async function getStaticPaths() {
   const posts = await getPosts();
-  return posts.map((post) => ({
+  return posts.map((post, i) => ({
     params: { year: String(post.data.date.getUTCFullYear()), slug: post.id },
-    props: { post },
+    // posts are newest first: the one before is newer, the one after is older
+    props: { post, newer: posts[i - 1], older: posts[i + 1] },
   }));
 }
 
-const { post } = Astro.props;
+const { post, newer, older } = Astro.props;
 const { Content } = await render(post);
 const interactive = post.data.interactive && `/interactive/${post.data.interactive}/index.html`;
-const meta = [shortDate(post.data.date), post.data.category, `${readingTime(post.body)} min read`].filter(Boolean);
 ---
 <Base title={post.data.title} description={post.data.description} accent="blue">
   <article class="page page--narrow">
     <a class="back mono" href="/blog/">← Blog</a>
-    <div class="post-meta mono">{meta.join(' · ')}</div>
     <h1 class="post-title">{post.data.title}</h1>
     <p class="post-dek">{post.data.description}</p>
+    <p class="post-meta mono">
+      <a href="/about/">{site.name}</a>
+      <time datetime={post.data.date.toISOString().slice(0, 10)}>{longDate(post.data.date)}</time>
+      {post.data.category && <span>{post.data.category}</span>}
+      {!interactive && <span>{readingTime(post.body)} min read</span>}
+    </p>
     {
       interactive ? (
         <div class="embed">
@@ -38,9 +44,34 @@ const meta = [shortDate(post.data.date), post.data.category, `${readingTime(post
     <div class="prose">
       <Content />
     </div>
-    <div class="post-end mono">
-      <span>{post.data.tags.join(' · ')}</span>
-      <a href="/blog/">All posts →</a>
-    </div>
+
+    <footer class="post-foot">
+      <div class="byline">
+        <img src="/img/portrait-thumb.svg" alt="" width="800" height="1000" loading="lazy" />
+        <p>
+          Written by <a href="/about/">{site.name}</a>, a biomedical engineer working on biosignals, diagnostics and
+          the models that read them. <a href={`mailto:${site.email}`}>Say hello</a> or
+          <a href="/rss.xml">follow by RSS</a>.
+        </p>
+      </div>
+      <nav class="post-nav" aria-label="More articles">
+        {
+          older && (
+            <a href={postUrl(older)}>
+              <span class="mono">← Older</span>
+              <b>{older.data.title}</b>
+            </a>
+          )
+        }
+        {
+          newer && (
+            <a class="post-nav__next" href={postUrl(newer)}>
+              <span class="mono">Newer →</span>
+              <b>{newer.data.title}</b>
+            </a>
+          )
+        }
+      </nav>
+    </footer>
   </article>
 </Base>

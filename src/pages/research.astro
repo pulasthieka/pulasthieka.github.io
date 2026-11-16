@@ -8,7 +8,6 @@ const posts = (await getPosts()).slice(0, 3);
 ---
 <Base title="Researcher" accent="blue" description="Biosignals, diagnostics, and the models that read them — research highlights, writing and interactive explainers.">
   <section class="page">
-    <div class="eyebrow mono">Path 01 · Researcher</div>
     <h1 class="display">Biosignals, diagnostics, and the models that read them.</h1>
     <div class="status mono"><i></i>{site.status}</div>
     <p class="lede">
@@ -25,7 +24,7 @@ const posts = (await getPosts()).slice(0, 3);
     <h2 class="section-label mono">Research highlights</h2>
     {
       highlights.map((h, i) => (
-        <div class="row" style={`animation-delay:${i * 70}ms`}>
+        <div class="row">
           <div class="row__head">
             <span class="row__title">{h.title}</span>
             <span class="row__meta mono">{h.meta}</span>

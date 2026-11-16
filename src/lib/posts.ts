@@ -15,3 +15,6 @@ export const shortDate = (d: Date) =>
   d.toLocaleDateString('en-GB', { month: 'short', year: 'numeric', timeZone: 'UTC' });
 
 export const readingTime = (body = '') => Math.max(1, Math.round(body.split(/\s+/).length / 220));
+
+export const longDate = (d: Date) =>
+  d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });

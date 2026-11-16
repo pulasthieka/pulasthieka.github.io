@@ -6,7 +6,6 @@ const posts = await getPosts();
 ---
 <Base title="Blog" accent="blue" description="Research notes, proposals and the occasional how-to.">
   <section class="page">
-    <div class="eyebrow mono">Blog</div>
     <h1 class="display">Notes from research, and a few things worth writing down.</h1>
     <p class="lede">
       Research proposals and reviews, mostly on AI for medicine, alongside the practical notes I kept returning to.
@@ -15,8 +14,8 @@ const posts = await getPosts();
     <h2 class="section-label mono">{posts.length} posts <a href="/rss.xml">RSS →</a></h2>
     {
       posts.map((p, i) => (
-        <a class="post-row" href={postUrl(p)} style={`animation-delay:${i * 60}ms`}>
-          <img class="post-row__cover" src={`/covers/${p.id}.svg`} alt="" width="1600" height="900" loading="lazy" />
+        <a class="post-row" href={postUrl(p)}>
+          <img class="post-row__cover" src={`/covers/${p.id}-thumb.svg`} alt="" width="1600" height="900" loading="lazy" />
           <div>
             <div class="post-row__meta">
               <span class="post-row__date mono">{shortDate(p.data.date)}</span>

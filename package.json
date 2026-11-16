@@ -7,7 +7,7 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "portrait": "node scripts/portrait.mjs"
+    "portrait": "node scripts/portrait.mjs && node scripts/portrait-thumb.mjs"
   },
   "dependencies": {
     "@astrojs/rss": "^4.0.11",

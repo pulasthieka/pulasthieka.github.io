@@ -6,12 +6,13 @@ import { writeFileSync } from 'node:fs';
 import { palette } from '../src/lib/cover.js';
 
 const SRC = 'design/portrait/source.webp';
-const OUT = 'public/img/portrait.svg';
+const OUT = process.env.OUT ?? 'public/img/portrait.svg';
+const STROKE = Number(process.env.STROKE ?? 1.6); // line weight; heavier for the small version
 
 const W = 800;
 const H = 1000;
 const ROWS = Number(process.env.ROWS ?? 58); // channels
-const COLS = 150; // samples per channel
+const COLS = Number(process.env.COLS ?? 150); // samples per channel
 const AMP = Number(process.env.AMP ?? 3.4); // peak height, in row spacings
 const GAMMA = Number(process.env.GAMMA ?? 1.25); // >1 keeps light areas calm
 const ACCENT_ROW = Math.round(ROWS * Number(process.env.ACCENT ?? 0.36));
@@ -44,8 +45,8 @@ const { light, dark } = palette;
 
 let svg =
   `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid slice">` +
-  `<style>.b,.l{fill:${light.bg}}.l{stroke:${light.ink};stroke-width:1.6;stroke-linejoin:round}` +
-  `.a{stroke:${light.accent};stroke-width:3}@media(prefers-color-scheme:dark){.b,.l{fill:${dark.bg}}` +
+  `<style>.b,.l{fill:${light.bg}}.l{stroke:${light.ink};stroke-width:${STROKE};stroke-linejoin:round}` +
+  `.a{stroke:${light.accent};stroke-width:${STROKE * 1.9}}@media(prefers-color-scheme:dark){.b,.l{fill:${dark.bg}}` +
   `.l{stroke:${dark.ink}}.a{stroke:${dark.accent}}}</style><rect class="b" width="${W}" height="${H}"/>`;
 
 for (let r = 0; r < ROWS; r++) {

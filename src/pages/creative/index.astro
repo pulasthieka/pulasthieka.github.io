@@ -4,7 +4,6 @@ import { site, works } from '../../data/site';
 ---
 <Base title="Creative" accent="rust" description="UX and visual design — web apps, posters, pitch decks and photography.">
   <section class="page page--wide creative">
-    <div class="eyebrow mono">Path 02 · Creative</div>
     <h1 class="display--sans">Design as the other half</h1>
     <p class="lede serif">
       Outside research, I design — UX and visual work spanning web apps, posters, pitch decks, and murals. A small
@@ -25,7 +24,7 @@ import { site, works } from '../../data/site';
               href={w.href ?? site.links.behance}
               target={external ? '_blank' : undefined}
               rel={external ? 'noopener' : undefined}
-              style={`animation-delay:${i * 60}ms`}
+             
             >
               <div class="work__tile" aria-hidden="true">
                 {w.img ? (
