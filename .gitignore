@@ -5,3 +5,7 @@ dist/
 .env.*
 .DS_Store
 .claude/
+
+# Impeccable runtime files
+.impeccable/hook.cache.json
+.impeccable/config.local.json
