@@ -3,7 +3,7 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
 /* Layout: a reference atlas — sticky slim header, home = search hero over graph paper + symbol index; symbol & topic pages list equation cards; a right-side drawer reads one equation in depth. */
 :root {
@@ -199,6 +199,55 @@ mjx-container[display="true"] { margin: 0 !important; }
 }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
+
+
+<style id="site-theme">
+/* Matches pulasthi.dev (src/styles/global.css): paper panels, hairline rules,
+   serif headlines, mono metadata, one blue, square corners. */
+:root {
+  --bg: #f6f6f3; --surface: #ffffff; --ink: #0d0d0d; --muted: #62625e; --line: #c9c9c4; --grid: #e6e6e2;
+  --accent: #00629b; --accent-ink: #ffffff; --accent-soft: #dcebf3; --mark: #ffe58a;
+  --scrim: rgba(13, 13, 13, .4); --shadow: 0 18px 50px rgba(13, 13, 13, .18);
+  --f-display: "Source Serif 4", Georgia, serif;
+  --f-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+  --r: 0px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #1b1b19; --surface: #232321; --ink: #f0f0ec; --muted: #a3a39d; --line: #3a3a36; --grid: #232321;
+    --accent: #6cbcea; --accent-ink: #0d0d0d; --accent-soft: #1d3442; --mark: #5c4b12;
+    --scrim: rgba(0, 0, 0, .6); --shadow: 0 18px 50px rgba(0, 0, 0, .5);
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #1b1b19; --surface: #232321; --ink: #f0f0ec; --muted: #a3a39d; --line: #3a3a36; --grid: #232321;
+  --accent: #6cbcea; --accent-ink: #0d0d0d; --accent-soft: #1d3442; --mark: #5c4b12;
+  --scrim: rgba(0, 0, 0, .6); --shadow: 0 18px 50px rgba(0, 0, 0, .5);
+}
+body { background: var(--bg); }
+h1, h2, h3 { font-weight: 700; letter-spacing: -.02em; }
+.hero h1 { font-size: clamp(30px, 4.4vw, 46px); line-height: 1.08; }
+.brand { font-family: var(--f-body); font-weight: 600; letter-spacing: -.03em; }
+/* square corners everywhere, as on the site */
+.tile, .card, .topic, .rrow, .chip, .kbd, code, .copy, .iconbtn, .navpill, .navbtn, .bigglyph, .dformula, .tablewrap,
+.toast, mark, input[type="search"], .bigsearch input, :focus-visible { border-radius: 0 !important; }
+.bigsearch input { box-shadow: none; border-color: var(--ink); }
+.chip, .eyebrow, .stats, .tile .c, .card .tp, .rrow .tp, .grouphead, th { font-family: var(--f-mono); }
+.chip { text-transform: uppercase; letter-spacing: .05em; font-size: 12px; padding: 4px 9px; }
+.tile .c, .card .tp, .rrow .tp, .topic .c { font-size: 12px; }
+.tile:hover { transform: none; }
+.section-head { border-top: 3px solid var(--ink); padding-top: 12px; }
+.section h2 { font-family: var(--f-body); font-weight: 600; font-size: 15px; letter-spacing: .02em; text-transform: uppercase; }
+.card h3, .topic h3 { font-family: var(--f-body); font-weight: 600; letter-spacing: -.015em; }
+.dhead h2 { font-family: var(--f-display); }
+/* Inside the article the site already shows the title, so the atlas drops its own name */
+html.embedded .brand { display: none; }
+html.embedded .top .wrap { justify-content: flex-start; }
+html.embedded .hero .wrap { padding-block: 30px 28px; }
+@media (max-width: 640px) { html.embedded .top .wrap { padding-block: 3px; min-height: 0; } html.embedded .top:not(:has(#topSearchWrap:not([hidden]))) { display: none; } }
+</style>
+<script>if (window.self !== window.top) document.documentElement.classList.add('embedded');</script>
 
 <header class="top">
   <div class="wrap">
