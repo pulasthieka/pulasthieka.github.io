@@ -1,0 +1,24 @@
+---
+// A post's generated cover. The build-time SVG is the fallback; the browser
+// redraws it with a fresh seed on every visit (see the script in Base.astro).
+import { Image } from 'astro:assets';
+import { coverOptions, thumbOptions } from '../lib/cover.js';
+import type { Post } from '../lib/posts';
+
+interface Props {
+  post: Post;
+  thumb?: boolean;
+  lazy?: boolean;
+}
+const { post, thumb, lazy } = Astro.props;
+const options = coverOptions(post.id, post.data.cover);
+const data = thumb ? { ...thumbOptions(options), weight: 2.6 } : { ...options, weight: 1 };
+---
+<Image
+  src={`/covers/${post.id}${thumb ? '-thumb' : ''}.svg`}
+  alt=""
+  width={1600}
+  height={900}
+  loading={lazy ? 'lazy' : 'eager'}
+  data-cover={JSON.stringify(data)}
+/>

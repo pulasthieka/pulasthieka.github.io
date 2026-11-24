@@ -1,14 +1,15 @@
 ---
 import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
 ---
 <Base title="Page not found">
   <div class="panel page">
     <h1 class="hl hl--page">
-      Page not found <span>› The page you were looking for has moved or never existed</span>
+      Page not found <span>› It either moved or never existed. Sorry about that.</span>
     </h1>
     <div class="actions">
-      <a class="btn btn--blue mono" href="/">Front page</a>
-      <a class="btn mono" href="/blog/">All articles</a>
+      <a class="btn btn--blue mono ic" href="/"><Icon name="arrow-left" />Back to the front page</a>
+      <a class="btn mono ic" href="/blog/"><Icon name="book-open" />All articles</a>
     </div>
   </div>
 </Base>

@@ -68,7 +68,7 @@ Real, usable material:
 - Five published articles in `src/content/blog/` (osteoarthritis progression with multimodal deep learning, semantic decoding, explainable AI for cell-cell interactions, setting up a web server on EC2, Linux commands).
 - One interactive piece, the ML Notation Atlas, at `public/interactive/ml-notation-atlas/`, published as an article.
 - Research record: undergraduate thesis on a multimodal biosignal acquisition system for endothelial function (University of Moratuwa, supervised by Dr. Anjula De Silva); the Endo-MASS paper with a Best Paper Award at IEEE ICIIS 2023; industrial research at CSIRO Data61; ASMS 2024 presentations.
-- Eight project cover images from Pulasthi's Behance profile in `public/img/work/`, each linked to its Behance project.
+- Eight project cover images from Pulasthi's Behance profile in `src/assets/work/`, each linked to its Behance project.
 - Four slide decks embedded on the Talks page from the `pulasthieka/presentations` repository.
 - A portrait photo at `design/portrait/source.webp` (source only; the site serves a generated rendering of it).
 

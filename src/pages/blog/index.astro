@@ -1,17 +1,20 @@
 ---
 import Base from '../../layouts/Base.astro';
-import { getPosts, postUrl, dayDate, sectionOf, lengthOf } from '../../lib/posts';
+import { getPosts, postUrl, sectionOf } from '../../lib/posts';
 
 const posts = await getPosts();
+import Icon from '../../components/Icon.astro';
+import PostMeta from '../../components/PostMeta.astro';
+import Cover from '../../components/Cover.astro';
 ---
-<Base title="Articles" description="Research notes, proposals, interactive explainers and the occasional how-to.">
+<Base title="Articles" description="Research write-ups, interactive explainers and the odd how-to.">
   <div class="panel page">
     <h1 class="hl hl--page">
-      Articles <span>› Research proposals and reviews, interactive explainers, and the practical notes I kept returning to</span>
+      Articles <span>› Research write-ups, interactive explainers, and the how-tos I kept looking up</span>
     </h1>
 
     <div class="sect">
-      <h2>{posts.length} articles <a href="/rss.xml">RSS</a></h2>
+      <h2>{posts.length} articles <a class="ic" href="/rss.xml"><Icon name="rss" />RSS</a></h2>
       <div style="margin-top:12px">
         {
           posts.map((p) => (
@@ -22,11 +25,10 @@ const posts = await getPosts();
                   {p.data.title} <span>› {p.data.description}</span>
                 </h2>
                 <div class="meta mono">
-                  <time datetime={p.data.date.toISOString().slice(0, 10)}>{dayDate(p.data.date)}</time>
-                  <span>{lengthOf(p)}</span>
+                  <PostMeta post={p} />
                 </div>
               </div>
-              <img src={`/covers/${p.id}-thumb.svg`} alt="" width="1600" height="900" loading="lazy" />
+              <Cover post={p} thumb lazy />
             </a>
           ))
         }

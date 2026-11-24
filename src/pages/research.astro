@@ -1,29 +1,32 @@
 ---
 import Base from '../layouts/Base.astro';
 import { site, highlights, timeline } from '../data/site';
-import { getPosts, postUrl, dayDate, sectionOf, lengthOf } from '../lib/posts';
+import { getPosts, postUrl, sectionOf } from '../lib/posts';
 
 const posts = (await getPosts()).filter((p) => sectionOf(p) !== 'Notes').slice(0, 3);
+import Icon from '../components/Icon.astro';
+import PostMeta from '../components/PostMeta.astro';
+import Cover from '../components/Cover.astro';
 ---
-<Base title="Research" description="Biosignals, diagnostics, and the models that read them — research highlights, education and writing.">
+<Base title="Research" description="Biosignals, diagnostics and the models that read them: research highlights, background and writing.">
   <div class="panel page">
     <h1 class="hl hl--page">
       Research <span>› Biosignals, diagnostics, and the models that read them</span>
     </h1>
     <p class="lede">
-      I'm a biomedical engineer (First Class Honours, University of Moratuwa) and a PhD candidate at the University of
-      Melbourne. My research so far has centered on biosignal acquisition and diagnostics, with recent work applying
-      deep learning to mass spectrometry and biomedical imaging.
+      I studied biomedical engineering at the University of Moratuwa (First Class Honours) and I'm now a PhD candidate
+      at the University of Melbourne. Most of my research has been about recording biosignals and using them to
+      diagnose things. Lately I've been applying deep learning to mass spectrometry and medical imaging.
     </p>
     <div class="actions">
-      <a class="btn btn--blue mono" href="/blog/">Read the articles</a>
-      <a class="btn mono" href={site.links.github} target="_blank" rel="noopener">GitHub ↗</a>
-      <a class="btn mono" href={site.links.linkedin} target="_blank" rel="noopener">LinkedIn ↗</a>
+      <a class="btn btn--blue mono ic" href="/blog/"><Icon name="book-open" />Read the articles</a>
+      <a class="btn mono ic" href={site.links.github} target="_blank" rel="noopener"><Icon name="github" />GitHub</a>
+      <a class="btn mono ic" href={site.links.linkedin} target="_blank" rel="noopener"><Icon name="linkedin" />LinkedIn</a>
     </div>
 
     <div class="split">
       <section class="sect">
-        <h2>Highlights</h2>
+        <h2><span class="ic"><Icon name="award" />Highlights</span></h2>
         <ul class="list">
           {
             highlights.map((h) => (
@@ -36,7 +39,7 @@ const posts = (await getPosts()).filter((p) => sectionOf(p) !== 'Notes').slice(0
         </ul>
       </section>
       <section class="sect">
-        <h2>Education &amp; experience</h2>
+        <h2><span class="ic"><Icon name="briefcase" />Where I've been</span></h2>
         <div style="margin-top:12px">
           {
             timeline.map((t) => (
@@ -54,18 +57,17 @@ const posts = (await getPosts()).filter((p) => sectionOf(p) !== 'Notes').slice(0
     </div>
 
     <section class="sect">
-      <h2>Recent writing <a href="/blog/">All articles</a></h2>
+      <h2><span class="ic"><Icon name="file-text" />Recent writing</span> <a href="/blog/">All articles</a></h2>
       <div class="cards3">
         {
           posts.map((p) => (
             <a href={postUrl(p)}>
-              <img src={`/covers/${p.id}-thumb.svg`} alt="" width="1600" height="900" loading="lazy" />
+              <Cover post={p} thumb lazy />
               <div>
                 <span class="chip mono">{sectionOf(p)}</span>
                 <h3>{p.data.title}</h3>
                 <div class="meta mono">
-                  <time datetime={p.data.date.toISOString().slice(0, 10)}>{dayDate(p.data.date)}</time>
-                  <span>{lengthOf(p)}</span>
+                  <PostMeta post={p} />
                 </div>
               </div>
             </a>

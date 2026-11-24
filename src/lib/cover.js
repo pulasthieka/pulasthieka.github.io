@@ -9,13 +9,13 @@ export const H = 900;
 
 export const defaults = {
   seed: 1,
-  mode: 'linear', // 'linear' = stacked traces, 'radial' = concentric rings
-  channels: 22, // how many traces / rings
-  events: 2, // stimuli that disturb the field
-  coupling: 0.5, // 0 = every channel on its own, 1 = neighbours move together
-  quantize: 0, // 0 = analogue; 3..8 = number of discrete levels
-  cells: 1, // radial only: number of ring systems
-  accents: 1, // channels drawn in the accent colour
+  mode: 'linear', // 'linear' = one current across the page, 'radial' = 1-3 whirls
+  channels: 22, // line density
+  events: 2, // vortices that disturb the field
+  coupling: 0.5, // 0 = turbulent, 1 = long calm currents
+  quantize: 0, // 0 = smooth; 3..8 = lines snap to a few headings
+  cells: 1, // radial only: number of whirls
+  accents: 1, // lines drawn in the accent colour
 };
 
 export function hashSeed(str) {
@@ -27,7 +27,7 @@ export function hashSeed(str) {
   return (h >>> 0) % 999983 + 1;
 }
 
-function mulberry32(a) {
+export function mulberry32(a) {
   return function () {
     a |= 0;
     a = (a + 0x6d2b79f5) | 0;
@@ -38,7 +38,7 @@ function mulberry32(a) {
 }
 
 // Seeded 2D value noise in [0, 1], smooth-stepped.
-function makeNoise(rand) {
+export function makeNoise(rand) {
   const perm = new Uint8Array(512);
   const vals = new Float32Array(256);
   for (let i = 0; i < 256; i++) {
@@ -79,138 +79,132 @@ export function generate(options) {
   const C = Math.max(3, Math.round(p.channels));
   const E = Math.max(1, Math.round(p.events));
   const q = Math.round(p.quantize);
-  const k = 1.7 + (0.12 - 1.7) * Math.min(1, Math.max(0, p.coupling));
+  const coupling = Math.min(1, Math.max(0, p.coupling));
   const nAcc = Math.max(0, Math.round(p.accents));
-  const shapes = [];
-  const marks = [];
-  const dots = [];
+  const radial = p.mode === 'radial';
 
-  const accentSet = (events) => {
-    const set = new Set();
-    if (nAcc <= events.length) {
-      for (let j = 0; j < nAcc; j++) set.add(Math.round(events[j].c));
-    } else {
-      for (let j = 0; j < nAcc; j++) set.add(Math.round(((j + 0.5) / nAcc) * (C - 1)));
-    }
-    return set;
+  // The hidden field: domain-warped noise. Coupling smooths it out.
+  const f = 0.0042 + (0.0016 - 0.0042) * coupling;
+  const warp = 260 * (1 - 0.5 * coupling);
+  const base = (x, y) => {
+    const wx = x + warp * (noise(x * f * 0.7 + 11, y * f * 0.7) - 0.5);
+    const wy = y + warp * (noise(x * f * 0.7, y * f * 0.7 + 23) - 0.5);
+    return (noise(wx * f, wy * f) - 0.5) * Math.PI * (radial ? 2.4 : 1.9) + (noise(wx * f * 3, wy * f * 3 + 7) - 0.5) * 0.9;
   };
 
-  if (p.mode === 'radial') {
-    const layouts = {
-      1: { r: 0.4, c: [[0.5, 0.5]] },
-      2: { r: 0.34, c: [[0.33, 0.53], [0.67, 0.47]] },
-      3: { r: 0.29, c: [[0.24, 0.57], [0.5, 0.42], [0.76, 0.58]] },
-    };
-    const layout = layouts[Math.min(3, Math.max(1, Math.round(p.cells)))];
-    const centers = layout.c.map(([x, y]) => [x * W + R(-18, 18), y * H + R(-14, 14)]);
-    const Rad = layout.r * H;
-    const sp = (Rad * 0.9) / (C - 1);
-    const N = 132;
-
-    centers.forEach((ctr, ci) => {
-      const events = [];
-      for (let e = 0; e < E; e++) {
-        let th = R(0, Math.PI * 2);
-        if (e === 0 && centers.length > 1) {
-          // the first stimulus of every cell reaches toward its neighbour
-          const o = centers[ci === centers.length - 1 ? ci - 1 : ci + 1];
-          th = Math.atan2(o[1] - ctr[1], o[0] - ctr[0]) + R(-0.18, 0.18);
-        }
-        events.push({
-          th,
-          c: R(0.5, 0.95) * (C - 1),
-          sc: R(0.2, 0.45) * C,
-          onset: R(0.07, 0.14),
-          tau: R(0.45, 1.0),
-          amp: sp * R(1.8, 3.4),
-          ph: R(0, 90),
-        });
-      }
-      const acc = accentSet(events);
-      const radius = (c, th) => {
-        const nx = 4 + 1.3 * Math.cos(th);
-        const ny = 4 + 1.3 * Math.sin(th);
-        let d = sp * 0.5 * (noise(nx + c * k * 0.35, ny + ci * 9) - 0.5);
-        d += sp * 0.22 * (noise(nx * 3.1 + c * k * 0.6, ny * 3.1 + 30 + ci * 9) - 0.5);
-        for (const ev of events) {
-          let dt = th - ev.th;
-          dt = Math.atan2(Math.sin(dt), Math.cos(dt));
-          const g = Math.exp(-((c - ev.c) ** 2) / (2 * ev.sc * ev.sc));
-          d += ev.amp * g * response(dt, ev.onset, ev.tau) * (0.55 + 0.45 * noise(nx + ev.ph, ny + c * k * 0.5));
-        }
-        if (q > 0) {
-          const step = (sp * 2.4) / q;
-          d = Math.round(d / step) * step;
-        }
-        return Rad * 0.1 + c * sp + d;
-      };
-      for (let c = C - 1; c >= 0; c--) {
-        const pts = [];
-        for (let i = 0; i < N; i++) {
-          const th = (i / N) * Math.PI * 2;
-          const r = radius(c, th);
-          pts.push([ctr[0] + r * Math.cos(th), ctr[1] + r * Math.sin(th)]);
-        }
-        shapes.push({ pts, accent: acc.has(c), close: 'loop' });
-      }
-      for (const ev of events) {
-        const far = Rad * 1.22;
-        marks.push([ctr[0], ctr[1], ctr[0] + far * Math.cos(ev.th), ctr[1] + far * Math.sin(ev.th)]);
-        const c = Math.round(ev.c);
-        const r = radius(c, ev.th);
-        dots.push([ctr[0] + r * Math.cos(ev.th), ctr[1] + r * Math.sin(ev.th)]);
-      }
-    });
-  } else {
-    const top = H * 0.2;
-    const bot = H * 0.93;
-    const sp = (bot - top) / (C - 1);
-    const N = 120;
-    const hold = q > 0 ? 2 : 1;
-    const events = [];
-    for (let e = 0; e < E; e++) {
-      events.push({
-        x: W * (0.14 + ((e + R(0.15, 0.85)) / E) * 0.6),
-        c: R(0.15, 0.85) * (C - 1),
-        sc: R(0.16, 0.4) * C,
-        onset: R(16, 38),
-        tau: R(150, 420),
-        amp: sp * R(2.4, 4.6),
-        ph: R(0, 90),
-      });
-    }
-    const acc = accentSet(events);
-    const level = (c, x) => {
-      let d = sp * 0.5 * (noise(x * 0.011, c * k + 3.1) - 0.5);
-      d += sp * 0.36 * (noise(x * 0.045, c * k * 1.6 + 40) - 0.5);
-      for (const ev of events) {
-        const g = Math.exp(-((c - ev.c) ** 2) / (2 * ev.sc * ev.sc));
-        d += ev.amp * g * response(x - ev.x, ev.onset, ev.tau) * (0.55 + 0.45 * noise(x * 0.014 + ev.ph, c * k * 0.8 + ev.ph));
-      }
-      if (q > 0) {
-        const step = (sp * 2.4) / q;
-        d = Math.round(d / step) * step;
-      }
-      return top + c * sp - d;
-    };
-    for (let c = 0; c < C; c++) {
-      const pts = [];
-      let prev = null;
-      for (let i = 0; i <= N; i += hold) {
-        const x = -20 + (i * (W + 40)) / N;
-        const y = level(c, x);
-        if (q > 0 && prev !== null && prev !== y) pts.push([x, prev]);
-        pts.push([x, y]);
-        prev = y;
-      }
-      shapes.push({ pts, accent: acc.has(c), close: 'floor' });
-    }
-    for (const ev of events) {
-      marks.push([ev.x, H * 0.06, ev.x, H * 0.96]);
-      dots.push([ev.x, level(Math.round(ev.c), ev.x)]);
-    }
+  // Linear: one current running across the page. Radial: 1-3 slow whirls.
+  const ncells = radial ? Math.min(3, Math.max(1, Math.round(p.cells))) : 0;
+  const cells = [];
+  for (let i = 0; i < ncells; i++) {
+    cells.push({ x: W * ((i + 0.5) / ncells + R(-0.06, 0.06)), y: H * R(0.38, 0.62), s: R(0.8, 1.2) * H * 0.42, dir: rand() < 0.5 ? -1 : 1 });
   }
 
+  // Stimuli are vortices: a sharp rise near the core, then a long, rippling recovery outward.
+  const events = [];
+  for (let e = 0; e < E; e++) {
+    events.push({
+      x: W * (0.12 + ((e + R(0.2, 0.8)) / E) * 0.76),
+      y: H * R(0.22, 0.78),
+      s: R(110, 230),
+      amp: R(2.2, 3.6),
+      dir: rand() < 0.5 ? -1 : 1,
+    });
+  }
+
+  const angle = (x, y) => {
+    const a = base(x, y);
+    let vx = Math.cos(a);
+    let vy = Math.sin(a);
+    for (const c of cells) {
+      const dx = x - c.x;
+      const dy = y - c.y;
+      const w = 1.6 * Math.exp(-(dx * dx + dy * dy) / (2 * c.s * c.s));
+      const r = Math.hypot(dx, dy) || 1;
+      vx += (-dy / r) * c.dir * w;
+      vy += (dx / r) * c.dir * w;
+    }
+    for (const ev of events) {
+      const dx = x - ev.x;
+      const dy = y - ev.y;
+      const r = Math.hypot(dx, dy) || 1;
+      const g = ev.amp * response((r - ev.s * 0.3) / ev.s, 0.12, 0.7);
+      vx += (-dy / r) * ev.dir * g;
+      vy += (dx / r) * ev.dir * g;
+    }
+    let th = Math.atan2(vy, vx);
+    if (q > 0) th = Math.round(th / (Math.PI / q)) * (Math.PI / q); // sampled and held: only a few headings
+    return th;
+  };
+
+  // Evenly spaced streamlines (Jobard and Lefer): a line starts only where there is room
+  // and stops when it comes too close to another one.
+  const dsep = Math.max(9, 280 / C);
+  const dtest = dsep * 0.55;
+  const step = 3;
+  const gw = Math.ceil(W / dsep) + 3;
+  const grid = new Map();
+  const key = (x, y) => (Math.floor(y / dsep) + 1) * gw + Math.floor(x / dsep) + 1;
+  const free = (x, y, d, id) => {
+    const cx = Math.floor(x / dsep) + 1;
+    const cy = Math.floor(y / dsep) + 1;
+    for (let j = cy - 1; j <= cy + 1; j++) {
+      for (let i = cx - 1; i <= cx + 1; i++) {
+        const bucket = grid.get(j * gw + i);
+        if (!bucket) continue;
+        for (const pt of bucket) if (pt[2] !== id && (pt[0] - x) ** 2 + (pt[1] - y) ** 2 < d * d) return false;
+      }
+    }
+    return true;
+  };
+  const inside = (x, y) => x > -30 && x < W + 30 && y > -30 && y < H + 30;
+  const half = (x, y, sign, id) => {
+    const pts = [];
+    for (let i = 0; i < 700; i++) {
+      const th = angle(x, y);
+      x += sign * step * Math.cos(th);
+      y += sign * step * Math.sin(th);
+      if (!inside(x, y) || !free(x, y, dtest, id)) break;
+      pts.push([x, y]);
+    }
+    return pts;
+  };
+
+  const lines = [];
+  const add = (x, y, accent) => {
+    if (!inside(x, y) || !free(x, y, dsep, -1)) return;
+    const id = lines.length;
+    const pts = [...half(x, y, -1, id).reverse(), [x, y], ...half(x, y, 1, id)];
+    if (pts.length < 12) return;
+    for (const pt of pts) {
+      const k = key(pt[0], pt[1]);
+      if (!grid.has(k)) grid.set(k, []);
+      grid.get(k).push([pt[0], pt[1], id]);
+    }
+    lines.push({ pts, accent });
+  };
+
+  // Accent lines go first, threaded through the stimuli, so they always exist.
+  for (let j = 0; j < nAcc; j++) {
+    const ev = events[j % E];
+    const t = (j / nAcc) * Math.PI * 2 + R(0, 1);
+    add(ev.x + Math.cos(t) * ev.s * 0.45, ev.y + Math.sin(t) * ev.s * 0.45, true);
+  }
+  const seeds = [];
+  for (let y = dsep / 2; y < H; y += dsep) for (let x = dsep / 2; x < W; x += dsep) seeds.push([x + R(-0.4, 0.4) * dsep, y + R(-0.4, 0.4) * dsep]);
+  for (let i = seeds.length - 1; i > 0; i--) {
+    const j = Math.floor(rand() * (i + 1));
+    [seeds[i], seeds[j]] = [seeds[j], seeds[i]];
+  }
+  for (const [x, y] of seeds) add(x, y, false);
+
+  // Lines fade with distance from the nearest stimulus, so depth comes from the events.
+  const near = (x, y) => Math.max(...events.map((ev) => Math.exp(-((x - ev.x) ** 2 + (y - ev.y) ** 2) / (2 * (ev.s * 2.2) ** 2))));
+  const shapes = lines.map((l) => {
+    const m = l.pts[l.pts.length >> 1];
+    return { pts: l.pts, accent: l.accent, fade: l.accent ? 1 : 0.3 + 0.7 * near(m[0], m[1]) };
+  });
+  const marks = events.map((ev) => [ev.x, ev.y, ev.s * 0.3]);
+  const dots = events.map((ev) => [ev.x, ev.y]);
   return { shapes, marks, dots };
 }
 
@@ -228,16 +222,19 @@ export function renderSVG(options, weight = 1) {
   const { light, dark } = palette;
   let out =
     `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid slice">` +
-    `<style>.b,.l{fill:${light.bg}}.l{stroke:${light.ink};stroke-width:${1.5 * weight};stroke-linejoin:round}` +
-    `.a{stroke:${light.accent};stroke-width:${3 * weight}}.m{stroke:${light.ink};stroke-width:${weight};stroke-opacity:.38;stroke-dasharray:${2 * weight} ${8 * weight};fill:none}` +
-    `.d{fill:${light.accent}}@media(prefers-color-scheme:dark){.b,.l{fill:${dark.bg}}.l,.m{stroke:${dark.ink}}` +
+    `<style>.b{fill:${light.bg}}.l,.m{fill:none;stroke:${light.ink};stroke-width:${1.3 * weight};stroke-linecap:round;stroke-linejoin:round}` +
+    `.a{stroke:${light.accent};stroke-width:${2.8 * weight}}.m{stroke-width:${weight};stroke-opacity:.45;stroke-dasharray:${2 * weight} ${7 * weight}}` +
+    `.d{fill:${light.accent}}@media(prefers-color-scheme:dark){.b{fill:${dark.bg}}.l,.m{stroke:${dark.ink}}` +
     `.a{stroke:${dark.accent}}.d{fill:${dark.accent}}}</style><rect class="b" width="${W}" height="${H}"/>`;
-  for (const s of shapes) {
-    let d = 'M' + s.pts.map((pt) => `${n(pt[0])} ${n(pt[1])}`).join('L');
-    d += s.close === 'loop' ? 'Z' : `V${H + 20}H-20Z`;
-    out += `<path class="l${s.accent ? ' a' : ''}" d="${d}"/>`;
+  const ordered = [...shapes.filter((s) => !s.accent), ...shapes.filter((s) => s.accent)];
+  for (const s of ordered) {
+    // every third traced point is plenty at this size and keeps the file small
+    const pts = s.pts.filter((_, i) => i % 3 === 0 || i === s.pts.length - 1);
+    const d = 'M' + pts.map((pt) => `${n(pt[0])} ${n(pt[1])}`).join('L');
+    const o = s.fade < 0.95 ? ` stroke-opacity="${s.fade.toFixed(2)}"` : '';
+    out += `<path class="l${s.accent ? ' a' : ''}"${o} d="${d}"/>`;
   }
-  for (const m of marks) out += `<path class="m" d="M${n(m[0])} ${n(m[1])}L${n(m[2])} ${n(m[3])}"/>`;
+  for (const m of marks) out += `<circle class="m" cx="${n(m[0])}" cy="${n(m[1])}" r="${n(m[2])}"/>`;
   for (const pt of dots) out += `<circle class="d" cx="${n(pt[0])}" cy="${n(pt[1])}" r="${7 * weight}"/>`;
   return out + '</svg>';
 }

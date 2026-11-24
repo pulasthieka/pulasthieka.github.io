@@ -3,15 +3,15 @@
 export const site = {
   name: 'Pulasthi Ekanayake',
   initials: 'PE',
-  title: 'Pulasthi Ekanayake — biomedical engineer & occasional designer',
+  title: 'Pulasthi Ekanayake — biomedical engineer who also designs',
   description:
-    'Biomedical engineer working on biosignals, diagnostics and the models that read them. Writing, interactive explainers and design work.',
+    'Biomedical engineer writing about biosignals, diagnostics and the machine learning behind them, with interactive explainers and some design work on the side.',
   email: 'hello@pulasthi.dev',
   location: 'Colombo → Melbourne',
   status: 'Colombo → Melbourne · PhD, Oct 2026',
-  tagline: 'Biosignals, models & design',
+  tagline: 'Biosignals, machine learning, design',
   byline:
-    'a biomedical engineer working on biosignals, diagnostics and the models that read them, and an occasional designer',
+    'a biomedical engineer who works on biosignals and the machine learning that reads them, and designs things on the side',
   links: {
     github: 'https://github.com/pulasthieka',
     linkedin: 'https://linkedin.com/in/pulasthi-ekanayake',
@@ -30,8 +30,8 @@ export const highlights = [
   {
     title: 'Undergraduate thesis',
     meta: 'Univ. of Moratuwa',
-    sub: 'Reconfigurable multimodal biosignal acquisition system for measuring endothelial function.',
-    body: 'Built a device recording blood pressure, temperature, bioimpedance and PPG signals, validated in a medical-council-approved clinical study. Supervised by Dr. Anjula De Silva.',
+    sub: 'A reconfigurable device that measures endothelial function from several biosignals at once.',
+    body: 'I built it to record blood pressure, temperature, bioimpedance and PPG, and validated it in a clinical study approved by the medical council. Supervised by Dr. Anjula De Silva.',
   },
   {
     title: 'Best Paper Award',
@@ -42,20 +42,20 @@ export const highlights = [
   {
     title: 'Industrial research',
     meta: 'CSIRO, Brisbane',
-    sub: 'Real-time 3D reconstruction for factory-floor safety.',
-    body: 'Built a reconstruction tool now used by other researchers evaluating computer vision algorithms.',
+    sub: 'Real-time 3D reconstruction to make factory floors safer.',
+    body: 'I built a reconstruction tool that other researchers went on to use for testing computer vision algorithms.',
   },
   {
     title: 'Current work',
     meta: 'ExpertIntelligence.ai',
-    sub: 'Compound identification and quantification from mass spectrometry data.',
-    body: 'Leading research toward spatial proteomics applications.',
+    sub: 'Working out which compounds are in a sample, and how much, from mass spectrometry data.',
+    body: 'I lead the research, which is heading toward spatial proteomics.',
   },
   {
     title: 'Conference presentations',
     meta: 'ASMS 2024',
-    sub: 'Oral and poster presentations.',
-    body: 'Deep learning for LC-MS authentication, and MALDI image registration.',
+    sub: 'Talks and posters.',
+    body: 'On deep learning for LC-MS authentication, and on registering MALDI images.',
   },
 ];
 
@@ -67,7 +67,7 @@ export const timeline = [
   { when: '2016 — 2021', role: 'BSc Eng (Hons) Biomedical Engineering — First Class', org: 'University of Moratuwa' },
 ];
 
-// Creative work. `img` is a file in public/img/work/ (covers pulled from
+// Creative work. `img` is a file in src/assets/work/ (covers pulled from
 // Behance); without one the tile falls back to the typographic `mark`.
 // `href` is the Behance project or an internal case study.
 const be = (path: string) => `https://www.behance.net/gallery/${path}`;
@@ -84,7 +84,7 @@ export const works: {
   {
     title: 'Virtual Career Fair',
     kind: 'React · UX',
-    body: 'Scheduling platform that handled 100+ interviews during a pandemic-era university career fair. Reused the following year.',
+    body: 'A scheduling app that ran 100+ interviews when our university career fair had to go online during the pandemic. They brought it back the next year.',
     cta: 'Case study →',
     href: '/creative/virtual-career-fair/',
     mark: 'VCF',
@@ -92,7 +92,7 @@ export const works: {
   {
     title: 'µMora Mathematics',
     kind: 'Web app · UI',
-    body: 'Multilingual web app supporting a 5,000+ participant mathematics olympiad.',
+    body: 'A multilingual web app for a maths olympiad with more than 5,000 participants.',
     mark: 'µ',
     img: 'umora.webp',
     href: be('142240881/Mora-Online-Mathematics-Competition-UI'),
@@ -100,7 +100,7 @@ export const works: {
   {
     title: 'Redesigns',
     kind: 'UI',
-    body: 'A collection of redesign exercises.',
+    body: 'A set of redesign exercises.',
     mark: 'Re',
     img: 'redesigns.webp',
     href: be('210597927/Redesigns'),
@@ -108,7 +108,7 @@ export const works: {
   {
     title: 'Mora Fitness Challenge',
     kind: 'Poster',
-    body: 'Event branding and print for the university rowing club.',
+    body: 'Branding and print for an event run by the university rowing club.',
     mark: 'MFC',
     img: 'mora-fitness.webp',
     href: be('72457441/Mora-Fitness-Challenge'),
@@ -116,7 +116,7 @@ export const works: {
   {
     title: 'UI Experiments',
     kind: 'Case study',
-    body: 'Interface studies published as Behance case studies.',
+    body: 'Interface studies, written up as case studies on Behance.',
     mark: 'UI',
     img: 'ui-experiments.webp',
     href: be('142236985/UI-Experiments'),
@@ -124,7 +124,7 @@ export const works: {
   {
     title: 'AcneAid Plasters',
     kind: 'Pitch deck',
-    body: 'Narrative and slide design for a healthcare product pitch.',
+    body: 'The story and the slides for a healthcare product pitch.',
     mark: 'Aa',
     img: 'acneaid.webp',
     href: be('142238209/A-Pitch-Deck-AcneAid-Plasters'),
@@ -148,7 +148,7 @@ export const works: {
   {
     title: 'Chemistry Magazine',
     kind: 'Cover design',
-    body: 'Cover artwork for a chemistry magazine.',
+    body: 'A cover for a chemistry magazine.',
     mark: 'Ch',
     img: 'chemistry-magazine.webp',
     href: be('139335411/Chemistry-Magazine-Cover'),
@@ -164,22 +164,22 @@ const deck = (file: string) =>
 export const talks = [
   {
     title: 'Graphic design workshop',
-    body: 'Graphic design is one of my more productive hobbies. A presentation made to teach design concepts to high-school students.',
+    body: 'Graphic design is one of my more productive hobbies. I made this to teach design basics to high-school students.',
     src: deck('Graphic Design Worshop.pptx'),
   },
   {
     title: 'Pulse oximeters',
-    body: 'How one of the simplest, yet most useful, pieces of medical sensing equipment works.',
+    body: 'How the pulse oximeter, one of the simplest and most useful bits of medical sensing kit, actually works.',
     src: deck('Pulse Oximeters.pptx'),
   },
   {
     title: 'Ideation',
-    body: 'How to generate ideas and select the ones that are worth working on.',
+    body: 'How to come up with ideas, and how to pick the ones worth your time.',
     src: deck('Ideation.pptx'),
   },
   {
     title: 'Biomedical innovations',
-    body: 'Another presentation in my series on biomedical innovation.',
+    body: 'Another one from my series on biomedical innovation.',
     src: deck('Biomedical Innovations.pptx'),
   },
 ];

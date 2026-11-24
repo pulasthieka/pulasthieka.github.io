@@ -1,47 +1,48 @@
 ---
 import Base from '../layouts/Base.astro';
 import { site } from '../data/site';
+import Icon from '../components/Icon.astro';
+import { Image } from 'astro:assets';
 ---
-<Base title="About" description="Pulasthi Ekanayake — a biomedical engineer working where engineering and design meet.">
+<Base title="About" description="Pulasthi Ekanayake is a biomedical engineer from Colombo, now doing a PhD in Melbourne, who also designs.">
   <div class="panel page">
     <div class="about">
       <div>
         <h1 class="hl hl--page">
-          About <span>› Where biomedical engineering and design meet</span>
+          About <span>› Engineer by training, designer by habit</span>
         </h1>
         <p class="lede">
-          I'm Pulasthi — a biomedical engineer from Colombo, Sri Lanka. I've worked as a machine learning engineer
-          building AI tools for scientists, and I'm now in Melbourne for a PhD, picking back up research I began during
-          my undergrad into biosignal-based diagnostics.
+          Hi, I'm Pulasthi. I'm a biomedical engineer from Colombo, Sri Lanka. For the past couple of years I worked
+          as a machine learning engineer, building AI tools for scientists. Now I'm in Melbourne doing a PhD, going
+          back to the biosignal diagnostics research I started as an undergrad.
         </p>
         <p class="lede">
-          Alongside the engineering, I've spent years working in UX and visual design — from web apps to posters and
-          pitch decks. I'm especially drawn to where biomedical engineering and design meet: making complex health
-          technology genuinely usable.
+          I've also been doing UX and visual design for years: web apps, posters, pitch decks. The part I enjoy most is
+          where the two overlap, taking health technology that's complicated and making it easy to use.
         </p>
         <div class="actions">
-          <a class="btn btn--blue mono" href={`mailto:${site.email}`}>{site.email}</a>
-          <a class="btn mono" href={site.links.linkedin} target="_blank" rel="noopener">LinkedIn ↗</a>
-          <a class="btn mono" href={site.links.github} target="_blank" rel="noopener">GitHub ↗</a>
-          <a class="btn mono" href={site.links.behance} target="_blank" rel="noopener">Behance ↗</a>
+          <a class="btn btn--blue mono ic" href={`mailto:${site.email}`}><Icon name="mail" />{site.email}</a>
+          <a class="btn mono ic" href={site.links.linkedin} target="_blank" rel="noopener"><Icon name="linkedin" />LinkedIn</a>
+          <a class="btn mono ic" href={site.links.github} target="_blank" rel="noopener"><Icon name="github" />GitHub</a>
+          <a class="btn mono ic" href={site.links.behance} target="_blank" rel="noopener"><Icon name="behance" />Behance</a>
         </div>
       </div>
       <figure class="portrait">
-        <img src="/img/portrait.svg" alt="Portrait of Pulasthi Ekanayake, drawn as stacked line traces" width="800" height="1000" />
+        <Image src="/img/portrait.svg" alt="Portrait of Pulasthi Ekanayake, drawn as flowing lines" width={800} height={1000} loading="eager" data-portrait="full" />
       </figure>
     </div>
 
     <div class="split">
       <section class="sect">
-        <h2>Research <a href="/research/">Highlights and record</a></h2>
+        <h2><span class="ic"><Icon name="flask-conical" />Research</span> <a href="/research/">See the research</a></h2>
         <ul class="list">
-          <li><span>Biosignal acquisition and diagnostics, and deep learning for mass spectrometry and biomedical imaging.</span></li>
+          <li><span>Recording biosignals and using them for diagnosis, plus deep learning for mass spectrometry and medical imaging.</span></li>
         </ul>
       </section>
       <section class="sect">
-        <h2>Design <a href="/creative/">Projects</a></h2>
+        <h2><span class="ic"><Icon name="palette" />Design</span> <a href="/creative/">See the projects</a></h2>
         <ul class="list">
-          <li><span>Web apps, posters, pitch decks and interface studies, with the full set on Behance.</span></li>
+          <li><span>Web apps, posters, pitch decks and interface studies. Everything else is on Behance.</span></li>
         </ul>
       </section>
     </div>

@@ -13,13 +13,14 @@ const stats = [
   ['3', 'Screens, student flow'],
   ['2', 'Years in service'],
 ];
+import Icon from '../../components/Icon.astro';
 ---
 <Base
   title="Virtual Career Fair Platform"
   description="A scheduling app built in six weeks so a 40-employer university career fair could run entirely online."
 >
   <article class="panel page">
-    <a class="back mono" href="/creative/">← All projects</a>
+    <a class="back mono ic" href="/creative/"><Icon name="arrow-left" />All projects</a>
     <h1 class="hl hl--page">
       Virtual Career Fair Platform
       <span>› A scheduling app built in six weeks so a 40-employer university career fair could run entirely online, and be trusted by both sides of every interview</span>
@@ -77,8 +78,8 @@ const stats = [
     </dl>
 
     <div class="actions">
-      <a class="btn mono" href="/creative/">All projects</a>
-      <a class="btn mono" href={site.links.behance} target="_blank" rel="noopener">More on Behance ↗</a>
+      <a class="btn mono ic" href="/creative/"><Icon name="arrow-left" />All projects</a>
+      <a class="btn mono ic" href={site.links.behance} target="_blank" rel="noopener"><Icon name="behance" />More on Behance</a>
     </div>
   </article>
 </Base>

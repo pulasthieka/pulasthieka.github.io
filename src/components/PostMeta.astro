@@ -1,0 +1,13 @@
+---
+import Icon from './Icon.astro';
+import { dayDate, longDate, lengthOf, type Post } from '../lib/posts';
+
+interface Props {
+  post: Post;
+  long?: boolean;
+}
+const { post, long } = Astro.props;
+const date = post.data.date;
+---
+<span class="ic"><Icon name="calendar" /><time datetime={date.toISOString().slice(0, 10)}>{long ? longDate(date) : dayDate(date)}</time></span>
+<span class="ic"><Icon name={post.data.interactive ? 'mouse-pointer-click' : 'clock'} />{lengthOf(post)}</span>

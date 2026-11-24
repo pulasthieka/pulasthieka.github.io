@@ -1,11 +1,13 @@
 ---
 import { site } from '../data/site';
+import Icon from './Icon.astro';
+import { Image } from 'astro:assets';
 ---
 <div class="author">
-  <img src="/img/portrait-thumb.svg" alt="" width="800" height="1000" loading="lazy" />
+  <Image src="/img/portrait-thumb.svg" alt="" width={800} height={1000} data-portrait="thumb" />
   <div>
-    <span class="mono">About the author</span>
+    <span class="mono">Who writes this</span>
     <p>{site.name} is {site.byline}.</p>
   </div>
-  <a class="btn mono" href="/about/">Read the profile</a>
+  <a class="btn mono ic" href="/about/">More about me<Icon name="arrow-right" /></a>
 </div>

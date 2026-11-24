@@ -1,16 +1,20 @@
 ---
 import Base from '../../layouts/Base.astro';
 import { site, works } from '../../data/site';
+import Icon from '../../components/Icon.astro';
+import { Image } from 'astro:assets';
+const workImages = import.meta.glob<{ default: ImageMetadata }>('../../assets/work/*.webp', { eager: true });
+const work = (file: string) => workImages[`../../assets/work/${file}`].default;
 ---
-<Base title="Design" description="UX and visual design — web apps, posters, pitch decks and interface studies.">
+<Base title="Design" description="UX and visual design: web apps, posters, pitch decks and interface studies.">
   <div class="panel page">
     <h1 class="hl hl--page">
       Design <span>› UX and visual work spanning web apps, posters, pitch decks and murals</span>
     </h1>
-    <p class="lede">Outside research, I design. A selection is below; the rest is on Behance.</p>
+    <p class="lede">When I'm not doing research, I'm usually designing something. Here are some favourites; the rest lives on Behance.</p>
     <div class="actions">
-      <a class="btn btn--blue mono" href={site.links.behance} target="_blank" rel="noopener">Behance ↗</a>
-      <a class="btn mono" href="/talks/">Talks &amp; decks</a>
+      <a class="btn btn--blue mono ic" href={site.links.behance} target="_blank" rel="noopener"><Icon name="behance" />Behance</a>
+      <a class="btn mono ic" href="/talks/"><Icon name="presentation" />Talks &amp; slides</a>
     </div>
 
     <section class="sect">
@@ -23,7 +27,7 @@ import { site, works } from '../../data/site';
               <a class="work" href={w.href ?? site.links.behance} target={external ? '_blank' : undefined} rel={external ? 'noopener' : undefined}>
                 <div class="work__tile">
                   {w.img ? (
-                    <img src={`/img/work/${w.img}`} alt="" width="808" height="632" loading={i < 3 ? 'eager' : 'lazy'} />
+                    <Image src={work(w.img)} alt="" widths={[400, 800]} sizes="(max-width: 860px) 100vw, (max-width: 1020px) 50vw, 400px" loading={i < 3 ? 'eager' : 'lazy'} />
                   ) : (
                     <b aria-hidden="true">{w.mark}</b>
                   )}
@@ -32,7 +36,7 @@ import { site, works } from '../../data/site';
                 <p>{w.body}</p>
                 <div class="meta mono">
                   <span>{w.kind}</span>
-                  <span>{external ? 'Behance ↗' : 'Case study'}</span>
+                  <span class="ic">{external ? 'Behance' : 'Case study'}<Icon name={external ? 'arrow-up-right' : 'arrow-right'} /></span>
                 </div>
               </a>
             );

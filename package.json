@@ -7,11 +7,15 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "portrait": "node scripts/portrait.mjs && node scripts/portrait-thumb.mjs"
+    "portrait": "node scripts/portrait.mjs"
   },
   "dependencies": {
     "@astrojs/rss": "^4.0.11",
     "@astrojs/sitemap": "^3.2.1",
     "astro": "^5.14.0"
+  },
+  "devDependencies": {
+    "lucide-static": "^1.78.0",
+    "simple-icons": "^16.38.1"
   }
 }

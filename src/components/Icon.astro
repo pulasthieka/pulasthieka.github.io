@@ -1,0 +1,44 @@
+---
+// Inline SVG icons, read at build time so no icon font or JS ships.
+// Line icons come from Lucide (ISC); brand marks from Simple Icons (CC0).
+import { readFileSync } from 'node:fs';
+import { createRequire } from 'node:module';
+
+interface Props {
+  name: string;
+  class?: string;
+  label?: string;
+}
+const { name, class: cls, label } = Astro.props;
+const require = createRequire(import.meta.url);
+
+// LinkedIn is no longer in either set; this is the classic outline mark, filled.
+const LINKEDIN =
+  '<path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/>';
+const BRANDS = new Set(['github', 'behance']);
+
+let inner: string;
+let filled = false;
+if (name === 'linkedin') {
+  inner = LINKEDIN;
+  filled = true;
+} else if (BRANDS.has(name)) {
+  const raw = readFileSync(require.resolve(`simple-icons/icons/${name}.svg`), 'utf8');
+  inner = raw.replace(/^[\s\S]*?<\/title>/, '').replace(/<\/svg>\s*$/, '');
+  filled = true;
+} else {
+  const raw = readFileSync(require.resolve(`lucide-static/icons/${name}.svg`), 'utf8');
+  inner = raw.replace(/^[\s\S]*?<svg[\s\S]*?>/, '').replace(/<\/svg>\s*$/, '');
+}
+---
+<svg
+  class:list={['icon', filled && 'icon--fill', cls]}
+  viewBox="0 0 24 24"
+  width="1em"
+  height="1em"
+  aria-hidden={label ? undefined : 'true'}
+  aria-label={label}
+  role={label ? 'img' : undefined}
+  focusable="false"
+  set:html={inner}
+/>

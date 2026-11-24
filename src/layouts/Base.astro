@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import { site, nav } from '../data/site';
+import Icon from '../components/Icon.astro';
 
 interface Props {
   title?: string;
@@ -26,6 +27,14 @@ const [first, ...rest] = site.name.split(' ');
     <meta property="og:url" content={canonical} />
     <meta name="theme-color" content="#1a1a1a" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)" />
+    <script is:inline>
+      // Apply a saved theme before first paint so there is no flash.
+      document.documentElement.classList.add('js');
+      try {
+        var t = localStorage.getItem('theme');
+        if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+      } catch (e) {}
+    </script>
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
@@ -34,7 +43,7 @@ const [first, ...rest] = site.name.split(' ');
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Petrona:ital,wght@0,400;0,600;0,700;1,400&family=Schibsted+Grotesk:wght@400;500;600&family=Spline+Sans+Mono:wght@400;500&display=swap"
       rel="stylesheet"
     />
   </head>
@@ -42,11 +51,14 @@ const [first, ...rest] = site.name.split(' ');
     <a class="skip mono" href="#main">Skip to content</a>
     <div class="util mono">
       <div class="wrap">
-        <a href={site.links.github} rel="noopener">GitHub</a>
-        <a href={site.links.linkedin} rel="noopener">LinkedIn</a>
-        <a href={site.links.behance} rel="noopener">Behance</a>
-        <a href="/talks/">Talks</a>
-        <a class="r" href={`mailto:${site.email}`}>{site.email}</a>
+        <a class="ic" href={site.links.github} target="_blank" rel="noopener"><Icon name="github" />GitHub</a>
+        <a class="ic" href={site.links.linkedin} target="_blank" rel="noopener"><Icon name="linkedin" />LinkedIn</a>
+        <a class="ic" href={site.links.behance} target="_blank" rel="noopener"><Icon name="behance" />Behance</a>
+        <a class="ic" href="/talks/"><Icon name="presentation" />Talks</a>
+        <a class="r ic" href={`mailto:${site.email}`}><Icon name="mail" /><span>{site.email}</span></a>
+        <button class="theme ic" type="button" role="switch" aria-label="Dark mode" hidden>
+          <Icon name="sun" /><span class="theme__track"></span><Icon name="moon" />
+        </button>
       </div>
     </div>
     <header class="mast">
@@ -69,16 +81,75 @@ const [first, ...rest] = site.name.split(' ');
     </main>
     <footer class="foot mono">
       <div class="wrap">
-        <span>{site.name} · {site.location}</span>
+        <span class="ic"><Icon name="map-pin" />{site.name} · {site.location}</span>
         <nav aria-label="Secondary">
-          <a href="/blog/">Articles</a>
-          <a href="/talks/">Talks</a>
-          <a href="/rss.xml">RSS</a>
-          <a href={site.links.github} rel="noopener">GitHub</a>
-          <a href={site.links.linkedin} rel="noopener">LinkedIn</a>
-          <a href={`mailto:${site.email}`}>Email</a>
+          <a class="ic" href="/blog/"><Icon name="book-open" />Articles</a>
+          <a class="ic" href="/talks/"><Icon name="presentation" />Talks</a>
+          <a class="ic" href="/rss.xml"><Icon name="rss" />RSS</a>
+          <a class="ic" href={site.links.github} target="_blank" rel="noopener"><Icon name="github" />GitHub</a>
+          <a class="ic" href={site.links.linkedin} target="_blank" rel="noopener"><Icon name="linkedin" />LinkedIn</a>
+          <a class="ic" href={`mailto:${site.email}`}><Icon name="mail" />Email</a>
         </nav>
       </div>
     </footer>
+    <script is:inline>
+      (function () {
+        var root = document.documentElement;
+        var btn = document.querySelector('.theme');
+        var mq = matchMedia('(prefers-color-scheme: dark)');
+        var metas = document.querySelectorAll('meta[name="theme-color"]');
+        function current() { return root.dataset.theme || (mq.matches ? 'dark' : 'light'); }
+        function sync() {
+          btn.setAttribute('aria-checked', current() === 'dark');
+          var color = current() === 'dark' ? '#000000' : '#1a1a1a';
+          metas.forEach(function (m) { m.setAttribute('content', color); });
+        }
+        btn.addEventListener('click', function () {
+          var next = current() === 'dark' ? 'light' : 'dark';
+          root.dataset.theme = next;
+          try { localStorage.setItem('theme', next); } catch (e) {}
+          sync();
+        });
+        mq.addEventListener('change', sync);
+        btn.hidden = false;
+        sync();
+      })();
+    </script>
+    <script>
+      // Fresh art on every visit: redraw each cover and portrait with a random seed.
+      // The build-time SVG stays as the fallback if anything here fails.
+      import { renderSVG } from '../lib/cover.js';
+      import { renderPortrait, portraitThumb } from '../lib/portrait.js';
+
+      const seed = () => Math.floor(Math.random() * 999999) + 1;
+      const show = (img: HTMLImageElement, draw: () => string) => {
+        try {
+          img.src = URL.createObjectURL(new Blob([draw()], { type: 'image/svg+xml' }));
+        } finally {
+          img.dataset.ready = '';
+        }
+      };
+      const yieldToBrowser = () => new Promise((r) => setTimeout(r));
+
+      (async () => {
+        for (const img of document.querySelectorAll<HTMLImageElement>('img[data-cover]')) {
+          const { weight, ...options } = JSON.parse(img.dataset.cover!);
+          show(img, () => renderSVG({ ...options, seed: seed() }, weight));
+          await yieldToBrowser();
+        }
+        const portraits = document.querySelectorAll<HTMLImageElement>('img[data-portrait]');
+        if (!portraits.length) return;
+        try {
+          const field = new Uint8Array(await (await fetch('/img/portrait-field.bin')).arrayBuffer());
+          for (const img of portraits) {
+            const size = img.dataset.portrait === 'thumb' ? portraitThumb : {};
+            show(img, () => renderPortrait(field, { ...size, seed: seed() }));
+            await yieldToBrowser();
+          }
+        } catch {
+          portraits.forEach((img) => (img.dataset.ready = ''));
+        }
+      })();
+    </script>
   </body>
 </html>

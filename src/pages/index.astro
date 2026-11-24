@@ -2,13 +2,19 @@
 import Base from '../layouts/Base.astro';
 import AuthorStrip from '../components/AuthorStrip.astro';
 import { highlights, works } from '../data/site';
-import { getPosts, postUrl, dayDate, sectionOf, lengthOf } from '../lib/posts';
+import { getPosts, postUrl, sectionOf } from '../lib/posts';
 
 const posts = await getPosts();
 const [lead, ...others] = posts;
 const rail = others.slice(0, 4);
 const notes = posts.filter((p) => sectionOf(p) === 'Notes').slice(0, 2);
 const shown = works.filter((w) => w.img).slice(0, 4);
+import Icon from '../components/Icon.astro';
+import PostMeta from '../components/PostMeta.astro';
+import Cover from '../components/Cover.astro';
+import { Image } from 'astro:assets';
+const workImages = import.meta.glob<{ default: ImageMetadata }>('../assets/work/*.webp', { eager: true });
+const work = (file: string) => workImages[`../assets/work/${file}`].default;
 ---
 <Base>
   {
@@ -23,11 +29,10 @@ const shown = works.filter((w) => w.img).slice(0, 4);
             {lead.data.title} <span>› {lead.data.description}</span>
           </h1>
           <div class="meta mono">
-            <time datetime={lead.data.date.toISOString().slice(0, 10)}>{dayDate(lead.data.date)}</time>
-            <span>{lengthOf(lead)}</span>
+            <PostMeta post={lead} />
           </div>
           <figure>
-            <img src={`/covers/${lead.id}.svg`} alt="" width="1600" height="900" />
+            <Cover post={lead} />
           </figure>
         </a>
         <div class="rail">
@@ -38,11 +43,10 @@ const shown = works.filter((w) => w.img).slice(0, 4);
                   <span class="chip mono">{sectionOf(p)}</span>
                   <h2>{p.data.title}</h2>
                   <div class="meta mono">
-                    <time datetime={p.data.date.toISOString().slice(0, 10)}>{dayDate(p.data.date)}</time>
-                    <span>{lengthOf(p)}</span>
+                    <PostMeta post={p} />
                   </div>
                 </div>
-                <img src={`/covers/${p.id}-thumb.svg`} alt="" width="1600" height="900" loading="lazy" />
+                <Cover post={p} thumb lazy />
               </a>
             ))
           }
@@ -53,7 +57,7 @@ const shown = works.filter((w) => w.img).slice(0, 4);
 
   <div class="dept">
     <section>
-      <h2>Research <a href="/research/">All research</a></h2>
+      <h2><span class="ic"><Icon name="flask-conical" />Research</span> <a href="/research/">See all</a></h2>
       <ul class="list">
         {
           highlights.slice(0, 3).map((h) => (
@@ -66,19 +70,19 @@ const shown = works.filter((w) => w.img).slice(0, 4);
       </ul>
     </section>
     <section>
-      <h2>Design <a href="/creative/">All projects</a></h2>
+      <h2><span class="ic"><Icon name="palette" />Design</span> <a href="/creative/">See all</a></h2>
       <div class="quad">
         {
           shown.map((w) => (
             <a href={w.href} target="_blank" rel="noopener">
-              <img src={`/img/work/${w.img}`} alt={w.title} width="808" height="632" loading="lazy" />
+              <Image src={work(w.img!)} alt={w.title} widths={[300, 600]} sizes="(max-width: 860px) 45vw, 200px" />
             </a>
           ))
         }
       </div>
     </section>
     <section>
-      <h2>Notes <a href="/blog/">All articles</a></h2>
+      <h2><span class="ic"><Icon name="file-text" />Notes</span> <a href="/blog/">All articles</a></h2>
       <ul class="list">
         {
           notes.map((p) => (
@@ -92,8 +96,8 @@ const shown = works.filter((w) => w.img).slice(0, 4);
         }
         <li>
           <a href="/talks/">
-            <b>Talks &amp; decks</b>
-            <span>Pulse oximeters, ideation, biomedical innovation and graphic design.</span>
+            <b>Talks &amp; slides</b>
+            <span>Pulse oximeters, coming up with ideas, biomedical innovation and graphic design.</span>
           </a>
         </li>
       </ul>

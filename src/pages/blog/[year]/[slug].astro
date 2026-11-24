@@ -2,7 +2,7 @@
 import { render } from 'astro:content';
 import Base from '../../../layouts/Base.astro';
 import { site } from '../../../data/site';
-import { getPosts, postUrl, longDate, sectionOf, lengthOf } from '../../../lib/posts';
+import { getPosts, postUrl, sectionOf } from '../../../lib/posts';
 
 export async function getStaticPaths() {
   const posts = await getPosts();
@@ -16,19 +16,22 @@ export async function getStaticPaths() {
 const { post, newer, older } = Astro.props;
 const { Content } = await render(post);
 const interactive = post.data.interactive && `/interactive/${post.data.interactive}/index.html`;
+import Icon from '../../../components/Icon.astro';
+import PostMeta from '../../../components/PostMeta.astro';
+import Cover from '../../../components/Cover.astro';
+import { Image } from 'astro:assets';
 ---
 <Base title={post.data.title} description={post.data.description}>
   <article class="panel article">
     <header class="article__head">
-      <a class="back mono" href="/blog/">← All articles</a>
+      <a class="back mono ic" href="/blog/"><Icon name="arrow-left" />All articles</a>
       <h1 class="hl">
         {post.data.title} <span>› {post.data.description}</span>
       </h1>
       <p class="meta mono">
-        <a href="/about/">{site.name}</a>
-        <time datetime={post.data.date.toISOString().slice(0, 10)}>{longDate(post.data.date)}</time>
+        <a class="ic" href="/about/"><Icon name="user" />{site.name}</a>
+        <PostMeta post={post} long />
         <span>{sectionOf(post)}</span>
-        <span>{lengthOf(post)}</span>
       </p>
     </header>
 
@@ -37,13 +40,13 @@ const interactive = post.data.interactive && `/interactive/${post.data.interacti
         <div class="embed">
           <iframe src={interactive} title={post.data.title} allow="clipboard-write" />
           <div class="embed__bar mono">
-            <span>Interactive: search, pick a symbol, open any equation</span>
-            <a href={interactive} target="_blank" rel="noopener">Open full screen ↗</a>
+            <span>Try it: search, pick a symbol, open any equation</span>
+            <a class="ic" href={interactive} target="_blank" rel="noopener"><Icon name="maximize-2" />Open full screen</a>
           </div>
         </div>
       ) : (
         <figure class="article__cover">
-          <img src={`/covers/${post.id}.svg`} alt="" width="1600" height="900" />
+          <Cover post={post} />
         </figure>
       )
     }
@@ -54,17 +57,17 @@ const interactive = post.data.interactive && `/interactive/${post.data.interacti
 
     <footer class="article__foot">
       <div class="byline">
-        <img src="/img/portrait-thumb.svg" alt="" width="800" height="1000" loading="lazy" />
+        <Image src="/img/portrait-thumb.svg" alt="" width={800} height={1000} data-portrait="thumb" />
         <p>
           Written by <a href="/about/">{site.name}</a>, {site.byline}.
-          <a href={`mailto:${site.email}`}>Say hello</a> or <a href="/rss.xml">follow by RSS</a>.
+          Questions or corrections? <a href={`mailto:${site.email}`}>Say hello</a>, or <a href="/rss.xml">follow along by RSS</a>.
         </p>
       </div>
       <nav class="more" aria-label="More articles">
         {
           older && (
             <a href={postUrl(older)}>
-              <span class="mono">← Older</span>
+              <span class="mono ic"><Icon name="arrow-left" />Older</span>
               <b>{older.data.title}</b>
             </a>
           )
@@ -72,7 +75,7 @@ const interactive = post.data.interactive && `/interactive/${post.data.interacti
         {
           newer && (
             <a class="more__next" href={postUrl(newer)}>
-              <span class="mono">Newer →</span>
+              <span class="mono ic">Newer<Icon name="arrow-right" /></span>
               <b>{newer.data.title}</b>
             </a>
           )
